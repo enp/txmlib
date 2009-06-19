@@ -17,40 +17,39 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.dx;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import tx.common.Command;
 import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
+import tx.common.CommandTest;
+import tx.common.StreamCommandManagerDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
+public class DxCommandTest extends CommandTest {
 
-	CommandManager commandManager;
-	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
-	}
-
-	public void execute(Operation operation) {
+	public static void main(String[] args) throws Exception {
 		
-		Command command = new Command("");
+		CommandManager commandManager = new DxCommandManager();
 		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("host", "ats63-gw");
+		params.put("port", "1002");
+		params.put("password", "remont63");
+		params.put("dump", new StreamCommandManagerDump("dx.dump"));
 		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+		Command[] commands = { 
+			new Command("RESET"), 
+			new Command("ZPLM:SUB=2631000")
+		};
+		
+		new DxCommandTest().executeCommands(commandManager, params, commands);
+		
 	}
 
 }

@@ -17,40 +17,33 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.common;
 
-import java.io.IOException;
-
-import tx.common.Command;
-import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
+public class CommandError {
 
-	CommandManager commandManager;
+	private String text;	
+	private String trace;
 	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
+	public CommandError(StreamReadException e) {
+		this.text = e.getText();
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        e.printStackTrace(new PrintWriter(traceWriter));
+		this.trace = traceWriter.toString();
 	}
 
-	public void execute(Operation operation) {
-		
-		Command command = new Command("");
-		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+	public String getText() {
+		return text;
+	}
+	
+	public String getTrace() {
+		return trace;
 	}
 
 }

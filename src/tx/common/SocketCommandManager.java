@@ -17,40 +17,41 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.common;
 
 import java.io.IOException;
-
-import tx.common.Command;
-import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
+public abstract class SocketCommandManager extends StreamCommandManager implements CommandManager {
 
-	CommandManager commandManager;
+	private Socket socket = new Socket();
 	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
+	@Override
+	public void connect(Map<String,Object> params) throws IOException {
+		super.connect(params);
+		InetAddress addr = InetAddress.getByName((String)params.get("host"));
+		int port = Integer.parseInt((String)params.get("port"));
+		socket.connect(new InetSocketAddress(addr, port), 3000);
+		is = socket.getInputStream();
+		os = socket.getOutputStream();
 	}
 
-	public void execute(Operation operation) {
-		
-		Command command = new Command("");
-		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+	@Override
+	public void disconnect() throws IOException {
+		super.disconnect();
+		socket.close();
+	}
+	
+	@Override
+	protected void setTimeout(int timeout) throws IOException {
+		socket.setSoTimeout(timeout);
 	}
 
 }

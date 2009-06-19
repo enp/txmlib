@@ -3,3 +3,4 @@ dist/
 docs/api/
 startup.*
 *.init
+*.dump

@@ -19,16 +19,16 @@
  */
 package tx.common;
 
-import java.util.Properties;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public interface CommandManager {
-	void connect(Properties params);
-	void reset();
-	void execute(Command command);
+	void connect(Map<String,Object> params) throws IOException;
+	void execute(Command command) throws IOException;
 	boolean readNextResult(Command command);
-	void disconnect();
+	void disconnect() throws IOException;
 }

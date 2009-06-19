@@ -17,40 +17,28 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.common;
 
 import java.io.IOException;
-
-import tx.common.Command;
-import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
+import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
-
-	CommandManager commandManager;
+public class CommandTest {
 	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
-	}
-
-	public void execute(Operation operation) {
-		
-		Command command = new Command("");
-		
-		try {
+	protected void executeCommands(CommandManager commandManager, Map<String,Object> params, Command[] commands) throws IOException {
+		commandManager.connect(params);
+		for(Command command : commands) {
+			System.err.println("[ "+command.getText()+" ]");
 			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
+			for(CommandResult result : command.getResults()) {
+				System.err.println("<<<");
+				System.err.println(result.getText());
+				System.err.println(">>>");
+			}
 		}
-		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+		commandManager.disconnect();
 	}
-
 }

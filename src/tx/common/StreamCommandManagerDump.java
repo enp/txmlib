@@ -17,40 +17,36 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.common;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import tx.common.Command;
-import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
-
-	CommandManager commandManager;
+public class StreamCommandManagerDump implements CommandManagerDump {
 	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
+	private String fileName;
+	private FileOutputStream fos;
+	
+	public StreamCommandManagerDump(String fileName) throws FileNotFoundException {
+		this.fileName = fileName;
+		fos = new FileOutputStream(fileName);
 	}
-
-	public void execute(Operation operation) {
-		
-		Command command = new Command("");
-		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+	
+	public String getFileName() {
+		return fileName;
 	}
-
+	
+	public void write(int b) throws IOException {
+		fos.write(b);
+	}
+	
+	public void close() throws IOException {
+		fos.close();
+	}
+	
 }

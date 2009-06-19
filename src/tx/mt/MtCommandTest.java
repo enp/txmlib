@@ -19,38 +19,39 @@
  */
 package tx.mt;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import tx.common.Command;
 import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
+import tx.common.CommandTest;
+import tx.common.StreamCommandManagerDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
+public class MtCommandTest extends CommandTest {
 
-	CommandManager commandManager;
-	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
-	}
-
-	public void execute(Operation operation) {
+	public static void main(String[] args) throws Exception {
 		
-		Command command = new Command("");
+		CommandManager commandManager = new MtCommandManager();
 		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("host", "ats74-gw");
+		params.put("port", "2987");
+		params.put("dump", new StreamCommandManagerDump("mt.dump"));
 		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+		Command[] commands = { 
+			new Command("RESET"), 
+			new Command("ESAB"), 
+			new Command("ND=2740001"), 
+			new Command("PH=L"), 
+			new Command("PH=FIN")
+		};
+		
+		new MtCommandTest().executeCommands(commandManager, params, commands);
+		
 	}
 
 }

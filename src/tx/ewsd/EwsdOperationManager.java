@@ -19,6 +19,8 @@
  */
 package tx.ewsd;
 
+import java.io.IOException;
+
 import tx.common.Command;
 import tx.common.CommandManager;
 import tx.common.CommandResult;
@@ -39,9 +41,13 @@ public class EwsdOperationManager implements OperationManager {
 
 	public void execute(Operation operation) {
 		
-		Command command = new Command();
+		Command command = new Command("");
 		
-		commandManager.execute(command);
+		try {
+			commandManager.execute(command);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		while(commandManager.readNextResult(command)) {
 			CommandResult commandResult = command.getResult();

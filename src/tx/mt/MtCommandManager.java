@@ -19,40 +19,32 @@
  */
 package tx.mt;
 
-import java.util.Properties;
+import java.io.IOException;
 
 import tx.common.Command;
 import tx.common.CommandManager;
+import tx.common.SocketCommandManager;
+import tx.common.StreamReadException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtCommandManager implements CommandManager {
+public class MtCommandManager extends SocketCommandManager implements CommandManager {
 
 	@Override
-	public void connect(Properties params) {
+	public void reset(Command command) throws IOException, StreamReadException {
+		write(0x01);
+		command.addResult(read("@", 3000));
+	}
 	
-	}
-
 	@Override
-	public void disconnect() {
-	
+	public void run(Command command) throws IOException, StreamReadException {
+		for(byte b : (command.getText()+":").getBytes()) {
+			write(b);
+			read(b, 3000);
+		}			
+		command.addResult(read("\r\n(.+)\r\n@", 30000));
 	}
-
-	@Override
-	public void execute(Command command) {
-		
-	}
-
-	@Override
-	public boolean readNextResult(Command command) {
-		return false;
-	}
-
-	@Override
-	public void reset() {
-	
-	}	
 
 }

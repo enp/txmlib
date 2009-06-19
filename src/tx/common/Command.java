@@ -20,6 +20,7 @@
 package tx.common;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +29,21 @@ import java.util.List;
  */
 public class Command {
 	
+	private String text;
+
 	private List<CommandResult> results = new ArrayList<CommandResult>();
+	
+	private List<CommandError> errors = new ArrayList<CommandError>();
+	
+	private CommandManagerDump dump;
+
+	public Command(String text) {
+		this.text = text;
+	}
+	
+	public String getText() {
+		return text;
+	}
 
 	public CommandResult getResult() {
 		if (results.size() > 0)
@@ -37,8 +52,25 @@ public class Command {
 			return null;
 	}
 	
-	public void addResult(CommandResult result) {
-		results.add(result);
+	public List<CommandResult> getResults() {
+		return Collections.unmodifiableList(results);
+	}
+	
+	public void addResult(StreamReadResult result) {
+		if (result != null)
+			results.add(new CommandResult(result));
+	}
+
+	public void addError(StreamReadException e) {
+		errors.add(new CommandError(e));		
+	}
+
+	public void addDump(CommandManagerDump dump) {
+		this.dump = dump;
+	}
+	
+	public String getDumpFileName() {
+		return dump.getFileName();
 	}
 
 }

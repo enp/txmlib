@@ -17,40 +17,40 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.common;
 
-import java.io.IOException;
+public class StreamReadResult {	
 
-import tx.common.Command;
-import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
-import tx.common.OperationManager;
-
-/**
- * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
- *
- */
-public class MtOperationManager implements OperationManager {
-
-	CommandManager commandManager;
+	private int index;
+	private String text;
+	private int begin;
+	private int end;
 	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
+	public StreamReadResult(int index, String text, int begin, int end) {
+		this.index = index;
+		this.text = text;
+		this.begin = begin;
+		this.end = end;
+	}
+	
+	public String toString() {
+		return index + " : " + text;
 	}
 
-	public void execute(Operation operation) {
-		
-		Command command = new Command("");
-		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
+	public int getIndex() {
+		return index;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public int getBegin() {
+		return begin;
+	}
+
+	public int getEnd() {
+		return end;
 	}
 
 }

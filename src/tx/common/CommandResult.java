@@ -24,5 +24,19 @@ package tx.common;
  *
  */
 public class CommandResult {
+	
+	private String text;
+
+	/*public CommandResult(String text) {
+		this.text = text;
+	}*/
+
+	public CommandResult(StreamReadResult readResult) {
+		this.text = readResult.getText().trim();
+	}
+
+	public String getText() {
+		return text;
+	}	
 
 }
