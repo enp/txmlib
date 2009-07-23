@@ -19,6 +19,10 @@
  */
 package tx.common;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
@@ -26,10 +30,12 @@ package tx.common;
 public class CommandResult {
 	
 	private String text;
+	
+	private Map<String,String> attributes = new HashMap<String,String>();
 
-	/*public CommandResult(String text) {
+	public CommandResult(String text) {
 		this.text = text;
-	}*/
+	}
 
 	public CommandResult(StreamReadResult readResult) {
 		this.text = readResult.getText().trim();
@@ -37,6 +43,14 @@ public class CommandResult {
 
 	public String getText() {
 		return text;
-	}	
+	}
+	
+	public void addAttribute(String key, String value) {
+		attributes.put(key, value);
+	}
+	
+	public Map<String,String> getAttributes() {
+		return Collections.unmodifiableMap(attributes);
+	}
 
 }

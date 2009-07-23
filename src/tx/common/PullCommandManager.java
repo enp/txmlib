@@ -25,34 +25,6 @@ import java.io.IOException;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class StreamReadException extends IOException {
-
-	private static final long serialVersionUID = 5485195737568383806L;
-	
-	private String text;
-	private int begin;
-	private int end;
-	
-	public StreamReadException(String text, int begin, int end) {
-		this.text = text;
-		this.begin = begin;
-		this.end = end;
-	}
-	
-	public String toString() {
-		return text;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public int getBegin() {
-		return begin;
-	}
-
-	public int getEnd() {
-		return end;
-	}
-
+public interface PullCommandManager extends CommandManager {
+	void pullResult(Command command) throws IOException;
 }

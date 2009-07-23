@@ -31,6 +31,8 @@ public class Command {
 	
 	private String text;
 
+	private String number;
+	
 	private List<CommandResult> results = new ArrayList<CommandResult>();
 	
 	private List<CommandError> errors = new ArrayList<CommandError>();
@@ -45,6 +47,10 @@ public class Command {
 		return text;
 	}
 
+	public String getNumber() {
+		return number;
+	}
+
 	public CommandResult getResult() {
 		if (results.size() > 0)
 			return results.get(results.size()-1);
@@ -54,6 +60,11 @@ public class Command {
 	
 	public List<CommandResult> getResults() {
 		return Collections.unmodifiableList(results);
+	}
+	
+	public void addResult(String result) {
+		if (result != null)
+			results.add(new CommandResult(result));
 	}
 	
 	public void addResult(StreamReadResult result) {
@@ -71,6 +82,10 @@ public class Command {
 	
 	public String getDumpFileName() {
 		return dump.getFileName();
+	}
+
+	public void setNumber(StreamReadResult read) {
+		number = read.getText();		
 	}
 
 }

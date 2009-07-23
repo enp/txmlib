@@ -1,0 +1,7 @@
+host=192.168.0.1
+port=4568
+nm=NM01
+login=txman
+password=secret
+ug=TXUG
+ne=TXNE

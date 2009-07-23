@@ -24,7 +24,6 @@ import java.io.IOException;
 import tx.common.Command;
 import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
-import tx.common.StreamReadException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -33,13 +32,13 @@ import tx.common.StreamReadException;
 public class MtCommandManager extends SocketCommandManager implements CommandManager {
 
 	@Override
-	public void reset(Command command) throws IOException, StreamReadException {
+	public void reset(Command command) throws IOException {
 		write(0x01);
 		command.addResult(read("@", 3000));
 	}
 	
 	@Override
-	public void run(Command command) throws IOException, StreamReadException {
+	public void run(Command command) throws IOException {
 		for(byte b : (command.getText()+":").getBytes()) {
 			write(b);
 			read(b, 3000);

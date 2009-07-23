@@ -62,11 +62,6 @@ public abstract class StreamCommandManager implements CommandManager {
 	protected abstract void run(Command command) throws IOException, StreamReadException;
 
 	protected void reset(Command command) throws IOException, StreamReadException {}
-
-	@Override
-	public boolean readNextResult(Command command) {
-		return false;
-	}
 	
 	@Override
 	public void disconnect() throws IOException {

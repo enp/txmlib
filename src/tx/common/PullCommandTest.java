@@ -20,14 +20,29 @@
 package tx.common;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
-/**
- * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
- *
- */
-public interface CommandManager {
-	void connect(Properties params) throws IOException;
-	void execute(Command command) throws IOException;
-	void disconnect() throws IOException;
+public class PullCommandTest {
+	
+	protected void executeCommands(PullCommandManager commandManager, Properties params, Map<Command,String[]> commands) throws IOException {
+		commandManager.connect(params);
+		if (commands != null) {
+			for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
+				System.err.println("[ "+entry.getKey().getText()+" ]");
+				commandManager.execute(entry.getKey());
+				for(String pattern : entry.getValue()) {
+					commandManager.pullResult(entry.getKey());
+					System.err.println("<<<");
+					System.out.println(entry.getKey().getResult().getText());
+					System.err.println(">>>");
+					if (!entry.getKey().getResult().getText().contains(pattern)) {
+						System.err.println("<<< pattern check failed >>>");
+						System.exit(1);
+					}
+				}
+			}
+		}
+		commandManager.disconnect();
+	}
 }

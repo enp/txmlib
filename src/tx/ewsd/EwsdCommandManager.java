@@ -19,35 +19,61 @@
  */
 package tx.ewsd;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import tx.common.Command;
-import tx.common.CommandManager;
+import tx.common.PullCommandManager;
+import tx.common.SocketCommandManager;
+import tx.common.StreamReadResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class EwsdCommandManager implements CommandManager {
+public class EwsdCommandManager extends SocketCommandManager implements PullCommandManager {
 
-	@Override
-	public void connect(Properties params) {
+	List<String[]> unownedResults = new ArrayList<String[]>();
 	
+	@Override
+	public void connect(Properties params) throws IOException {
+		super.connect(params);
+		StreamReadResult result;
+		read("<<<\n(Welcome to FOS Gateway.+)\n<<<", 1000);
+		write(params.get("nm")+";"+params.get("login")+";RPPW-NO;"+params.get("password")+";\n");
+		result = read("<<<\n(.+)\n<<<", 1000);
+		if (!result.getText().equals("Authorized the client"))
+			throw new ConnectException(result.getText());
+		write("GW-SET-UGNE: "+params.get("ug")+","+params.get("ne")+";\n");
+		result = read("<<<\n(.+)\n<<<", 1000);
+		if (!result.getText().equals("Assigned UG & NE"))
+			throw new ConnectException(result.getText());
 	}
 
 	@Override
-	public void disconnect() {
-	
+	protected void run(Command command) throws IOException {
+		write("GW-TASK: "+command.getText()+";\n");
+		command.setNumber(read("<<<\n"+command.getText().split(":")[0]+":(.+):TASK SUBMITTED\n<<<", 1000));
 	}
 
 	@Override
-	public void execute(Command command) {
-		
-	}
-
-	@Override
-	public boolean readNextResult(Command command) {
-		return false;
+	public void pullResult(Command command) throws IOException {
+		for(String[] result : unownedResults) {
+			if (result[0].equals(command.getNumber())) {
+				command.addResult(result[1]);
+				return;
+			}
+		}
+		String[] result = read("<<<\n(.+:.+)\n<<<", 20000).getText().split(":",2);
+		if (result[0].equals(command.getNumber())) {
+			command.addResult(result[1]);
+		} else {
+			unownedResults.add(result);
+			pullResult(command);
+		}
 	}
 
 }

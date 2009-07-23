@@ -30,13 +30,15 @@ public class CommandTest {
 	
 	protected void executeCommands(CommandManager commandManager, Properties params, Command[] commands) throws IOException {
 		commandManager.connect(params);
-		for(Command command : commands) {
-			System.err.println("[ "+command.getText()+" ]");
-			commandManager.execute(command);
-			for(CommandResult result : command.getResults()) {
-				System.err.println("<<<");
-				System.err.println(result.getText());
-				System.err.println(">>>");
+		if (commands != null) {
+			for(Command command : commands) {
+				System.err.println("[ "+command.getText()+" ]");
+				commandManager.execute(command);
+				for(CommandResult result : command.getResults()) {
+					System.err.println("<<<");
+					System.out.println(result.getText());
+					System.err.println(">>>");
+				}
 			}
 		}
 		commandManager.disconnect();
