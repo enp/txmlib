@@ -19,16 +19,15 @@
  */
 package tx.ewsd;
 
-import java.io.IOException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import tx.common.Command;
+import tx.common.CommandException;
 import tx.common.PullCommandManager;
 import tx.common.SocketCommandManager;
-import tx.common.StreamReadResult;
+import tx.common.StreamCommandResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -39,28 +38,28 @@ public class EwsdCommandManager extends SocketCommandManager implements PullComm
 	List<String[]> unownedResults = new ArrayList<String[]>();
 	
 	@Override
-	public void connect(Properties params) throws IOException {
+	public void connect(Properties params) throws CommandException {
 		super.connect(params);
-		StreamReadResult result;
+		StreamCommandResult result;
 		read("<<<\n(Welcome to FOS Gateway.+)\n<<<", 1000);
 		write(params.get("nm")+";"+params.get("login")+";RPPW-NO;"+params.get("password")+";\n");
 		result = read("<<<\n(.+)\n<<<", 1000);
 		if (!result.getText().equals("Authorized the client"))
-			throw new ConnectException(result.getText());
+			throw new CommandException("Authorization error : "+result.getText());
 		write("GW-SET-UGNE: "+params.get("ug")+","+params.get("ne")+";\n");
 		result = read("<<<\n(.+)\n<<<", 1000);
 		if (!result.getText().equals("Assigned UG & NE"))
-			throw new ConnectException(result.getText());
+			throw new CommandException("Authentication error : " + result.getText());
 	}
 
 	@Override
-	protected void run(Command command) throws IOException {
+	protected void run(Command command) throws CommandException {
 		write("GW-TASK: "+command.getText()+";\n");
 		command.setNumber(read("<<<\n"+command.getText().split(":")[0]+":(.+):TASK SUBMITTED\n<<<", 1000));
 	}
 
 	@Override
-	public void pullResult(Command command) throws IOException {
+	public void pullResult(Command command) throws CommandException {
 		for(String[] result : unownedResults) {
 			if (result[0].equals(command.getNumber())) {
 				command.addResult(result[1]);

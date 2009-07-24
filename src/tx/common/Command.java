@@ -35,7 +35,7 @@ public class Command {
 	
 	private List<CommandResult> results = new ArrayList<CommandResult>();
 	
-	private List<CommandError> errors = new ArrayList<CommandError>();
+	private CommandException exception;
 	
 	private CommandManagerDump dump;
 
@@ -67,13 +67,17 @@ public class Command {
 			results.add(new CommandResult(result));
 	}
 	
-	public void addResult(StreamReadResult result) {
+	public void addResult(CommandResult result) {
 		if (result != null)
-			results.add(new CommandResult(result));
+			results.add(result);
 	}
 
-	public void addError(StreamReadException e) {
-		errors.add(new CommandError(e));		
+	public void addException(CommandException e) {
+		this.exception = e;		
+	}
+	
+	public CommandException getException() {
+		return exception;
 	}
 
 	public void addDump(CommandManagerDump dump) {
@@ -84,7 +88,7 @@ public class Command {
 		return dump.getFileName();
 	}
 
-	public void setNumber(StreamReadResult read) {
+	public void setNumber(StreamCommandResult read) {
 		number = read.getText();		
 	}
 

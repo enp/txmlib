@@ -19,9 +19,10 @@
  */
 package tx.ewsd;
 
-import java.util.HashMap;
+import java.io.FileInputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import tx.common.Command;
 import tx.common.PullCommandManager;
@@ -38,25 +39,9 @@ public class EwsdCommandTest extends PullCommandTest {
 		
 		PullCommandManager commandManager = new EwsdCommandManager();
 		
-		Map<String,Object> params = new HashMap<String,Object>();
-		
-		params.put("host", "192.168.100.102");
-		params.put("port", "4568");
-		params.put("nm", "NMSIM");
-		params.put("login", "argus");
-		params.put("password", "cbr#1234");
-		params.put("ug", "OPTS37");
-		params.put("ne", "RSTV3");
-		
-		/*params.put("host", "192.168.100.40");
-		params.put("port", "4568");
-		params.put("nm", "SIMOPTS4");
-		params.put("login", "enp");
-		params.put("password", "ewsdpwd-1");
-		params.put("ug", "ZTU-OPTS4");
-		params.put("ne", "TXROS");*/
-		
-		params.put("dump", new StreamCommandManagerDump("ewsd.dump"));
+		Properties params = new Properties();
+		params.load(new FileInputStream("conf/ewsd.conf"));
+		params.put("dump", new StreamCommandManagerDump("dump/ewsd.dump"));
 		
 		Map<Command,String[]> commands = new LinkedHashMap<Command,String[]>();
 		

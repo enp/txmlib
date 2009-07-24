@@ -19,12 +19,11 @@
  */
 package tx.common;
 
-import java.io.IOException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public interface PullCommandManager extends CommandManager {
-	void pullResult(Command command) throws IOException;
+	void pullResult(Command command) throws CommandException;
 }

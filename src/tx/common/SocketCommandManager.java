@@ -34,19 +34,27 @@ public abstract class SocketCommandManager extends StreamCommandManager implemen
 	private Socket socket = new Socket();
 	
 	@Override
-	public void connect(Properties params) throws IOException {
+	public void connect(Properties params) throws CommandException {
 		super.connect(params);
-		InetAddress addr = InetAddress.getByName((String)params.get("host"));
-		int port = Integer.parseInt((String)params.get("port"));
-		socket.connect(new InetSocketAddress(addr, port), 3000);
-		is = socket.getInputStream();
-		os = socket.getOutputStream();
+		try {
+			InetAddress addr = InetAddress.getByName((String)params.get("host"));
+			int port = Integer.parseInt((String)params.get("port"));
+			socket.connect(new InetSocketAddress(addr, port), 3000);
+			is = socket.getInputStream();
+			os = socket.getOutputStream();
+		} catch (Exception e) {
+			throw new CommandException(e);
+		}
 	}
 
 	@Override
-	public void disconnect() throws IOException {
+	public void disconnect() throws CommandException {
 		super.disconnect();
-		socket.close();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			throw new CommandException(e);
+		}
 	}
 	
 	@Override

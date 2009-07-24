@@ -19,8 +19,6 @@
  */
 package tx.dx;
 
-import java.io.IOException;
-
 import tx.common.Command;
 import tx.common.CommandManager;
 import tx.common.CommandResult;
@@ -45,7 +43,7 @@ public class DxOperationManager implements OperationManager {
 		
 		try {
 			commandManager.execute(command);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

@@ -19,7 +19,6 @@
  */
 package tx.common;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Properties;
  *
  */
 public interface CommandManager {
-	void connect(Properties params) throws IOException;
-	void execute(Command command) throws IOException;
-	void disconnect() throws IOException;
+	void connect(Properties params) throws CommandException;
+	void execute(Command command) throws CommandException;
+	void disconnect() throws CommandException;
 }

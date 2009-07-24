@@ -29,16 +29,12 @@ import java.util.Map;
  */
 public class CommandResult {
 	
-	private String text;
+	protected String text;
 	
-	private Map<String,String> attributes = new HashMap<String,String>();
+	protected Map<String,String> attributes = new HashMap<String,String>();
 
 	public CommandResult(String text) {
 		this.text = text;
-	}
-
-	public CommandResult(StreamReadResult readResult) {
-		this.text = readResult.getText().trim();
 	}
 
 	public String getText() {

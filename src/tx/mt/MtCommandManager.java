@@ -19,9 +19,8 @@
  */
 package tx.mt;
 
-import java.io.IOException;
-
 import tx.common.Command;
+import tx.common.CommandException;
 import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
 
@@ -32,13 +31,13 @@ import tx.common.SocketCommandManager;
 public class MtCommandManager extends SocketCommandManager implements CommandManager {
 
 	@Override
-	public void reset(Command command) throws IOException {
+	public void reset(Command command) throws CommandException {
 		write(0x01);
 		command.addResult(read("@", 3000));
 	}
 	
 	@Override
-	public void run(Command command) throws IOException {
+	public void run(Command command) throws CommandException {
 		for(byte b : (command.getText()+":").getBytes()) {
 			write(b);
 			read(b, 3000);

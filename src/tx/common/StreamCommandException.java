@@ -19,39 +19,45 @@
  */
 package tx.common;
 
-import java.io.IOException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class StreamReadException extends IOException {
+public class StreamCommandException extends CommandException {
 
 	private static final long serialVersionUID = 5485195737568383806L;
 	
+	private String[] patterns;
 	private String text;
-	private int begin;
-	private int end;
-	
-	public StreamReadException(String text, int begin, int end) {
+	private long begin;
+	private long end;
+
+	public StreamCommandException(String[] patterns, String text, long begin, long end) {
+		super("Unexpected stream read result");
+		this.patterns = patterns;
 		this.text = text;
 		this.begin = begin;
 		this.end = end;
 	}
-	
-	public String toString() {
-		return text;
+
+	public String getPatterns() {
+		String result = "[";
+		for(String pattern : patterns)
+			result += ("["+pattern+"]");
+		result += "]";
+		return result;
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public int getBegin() {
+	public long getBegin() {
 		return begin;
 	}
 
-	public int getEnd() {
+	public long getEnd() {
 		return end;
 	}
 

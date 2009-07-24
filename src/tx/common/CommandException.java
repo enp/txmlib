@@ -19,38 +19,35 @@
  */
 package tx.common;
 
-public class StreamReadResult {	
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 
-	private int index;
-	private String text;
-	private int begin;
-	private int end;
+/**
+ * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
+ *
+ */
+public class CommandException extends Exception {
+
+	private static final long serialVersionUID = 295539382772189883L;
 	
-	public StreamReadResult(int index, String text, int begin, int end) {
-		this.index = index;
-		this.text = text;
-		this.begin = begin;
-		this.end = end;
+	private String trace;
+	
+	public CommandException(String message) {
+		super(message);
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        printStackTrace(new PrintWriter(traceWriter));
+		trace = traceWriter.toString();
+	}
+
+	public CommandException(Exception e) {
+		super(e);
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        e.printStackTrace(new PrintWriter(traceWriter));
+		trace = traceWriter.toString();
 	}
 	
-	public String toString() {
-		return index + " : " + text;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public int getBegin() {
-		return begin;
-	}
-
-	public int getEnd() {
-		return end;
+	public String getTrace() {
+		return trace;
 	}
 
 }

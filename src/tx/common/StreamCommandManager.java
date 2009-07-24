@@ -40,44 +40,63 @@ public abstract class StreamCommandManager implements CommandManager {
 	protected InputStream is;
 	protected OutputStream os;
 	
+	private long currentChar = 0;
+	
 	@Override
-	public void connect(Properties params) throws IOException {
+	public void connect(Properties params) throws CommandException {
 		this.params = params;
 		this.dump = ((StreamCommandManagerDump)params.get("dump"));
 	}
 
 	@Override
-	public void execute(Command command) throws IOException {
+	public void execute(Command command) throws CommandException {
 		if (dump != null) command.addDump(dump);
 		try {
 			if (command.getText().equals("RESET"))
 				reset(command);
 			else
 				run(command);
-		} catch (StreamReadException e) {
-			command.addError(e);
+		} catch (CommandException e) {
+			command.addException(e);
+			throw e;
 		}
 	}
 
-	protected abstract void run(Command command) throws IOException, StreamReadException;
+	protected abstract void run(Command command) throws CommandException;
 
-	protected void reset(Command command) throws IOException, StreamReadException {}
+	protected void reset(Command command) throws CommandException {}
 	
 	@Override
-	public void disconnect() throws IOException {
-		if (dump != null) dump.close();
+	public void disconnect() throws CommandException {
+		try {
+			if (dump != null) dump.close();
+		} catch (IOException e) {
+			throw new CommandException(e);
+		}
 	}
 
-	protected void write(String text) throws IOException {
-		os.write(text.getBytes());
+	protected void write(String text) throws CommandException {
+		try {
+			os.write(text.getBytes());
+		} catch (IOException e) {
+			throw new CommandException(e);
+		}
 	}
 	
-	protected void write(byte[] bytes) throws IOException {
-		os.write(bytes);
+	protected void write(byte[] bytes) throws CommandException {
+		try {
+			os.write(bytes);
+		} catch (IOException e) {
+			throw new CommandException(e);
+		}
 	}
 	
-	protected void write(int b) throws IOException {
-		os.write(b);
+	protected void write(int b) throws CommandException {
+		try {
+			os.write(b);
+		} catch (IOException e) {
+			throw new CommandException(e);
+		}
 	}
 	
 	protected abstract void setTimeout(int timeout) throws IOException;
@@ -93,50 +112,54 @@ public abstract class StreamCommandManager implements CommandManager {
 		}
 	}
 	
-	protected StreamReadResult read(String[] patterns, int timeout, boolean exception) throws IOException, StreamReadException {
+	protected StreamCommandResult read(String[] patterns, int timeout, boolean exception) throws CommandException {
 		int c;
+		long beginChar = currentChar;
         StringBuilder buffer = new StringBuilder();
-		setTimeout(timeout);
 		try {
+			setTimeout(timeout);
 			while((c = is.read()) != -1) {
 				buffer.append((char)c);
 				if (dump != null) dump.write(c);
-	            for (int i=0; i<patterns.length; i++) {
+				currentChar++;				
+				for (int i=0; i<patterns.length; i++) {
 	            	Pattern pattern = Pattern.compile(patterns[i], Pattern.DOTALL);
 	            	Matcher matcher = pattern.matcher(buffer);
 	            	if (matcher.find())
 	            		if (matcher.groupCount() > 0)
-	            			return new StreamReadResult(i, matcher.group(1), 0, 0);
+	            			return new StreamCommandResult(i, matcher.group(1), beginChar, currentChar);
 	            		else
-	            			return new StreamReadResult(i, "", 0, 0);
+	            			return new StreamCommandResult(i, "", beginChar, currentChar);
 	            }
 			}
 		} catch (SocketTimeoutException e) {
 			// go end
+		} catch (IOException e) {
+			new CommandException(e);
 		}
 		if (exception)
-			throw new StreamReadException(buffer.toString(), 0, 0);
+			throw new StreamCommandException(patterns, buffer.toString(), beginChar, currentChar);
 		else
 			return null;
 	}
 	
-	protected StreamReadResult read(String[] patterns, int timeout) throws IOException, StreamReadException {
+	protected StreamCommandResult read(String[] patterns, int timeout) throws CommandException {
 		return read(patterns, timeout, true);
 	}
 	
-	protected StreamReadResult read(String pattern, int timeout, boolean exception) throws IOException, StreamReadException {
+	protected StreamCommandResult read(String pattern, int timeout, boolean exception) throws CommandException {
 		return read(new String[] { pattern }, timeout, exception);
 	}
 	
-	protected StreamReadResult read(String pattern, int timeout) throws IOException, StreamReadException {
+	protected StreamCommandResult read(String pattern, int timeout) throws CommandException {
 		return read(new String[] { pattern }, timeout, true);
 	}
 	
-	protected StreamReadResult read(byte b, int timeout, boolean exception) throws IOException, StreamReadException {
+	protected StreamCommandResult read(byte b, int timeout, boolean exception) throws CommandException {
 		return read(new String( new byte[] { b }), timeout, exception);
 	}
 	
-	protected StreamReadResult read(byte b, int timeout) throws IOException, StreamReadException {
+	protected StreamCommandResult read(byte b, int timeout) throws CommandException {
 		return read(new String( new byte[] { b }), timeout, true);
 	}
 

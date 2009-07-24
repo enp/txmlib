@@ -19,30 +19,33 @@
  */
 package tx.common;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
-public class PullCommandTest {
+public class PullCommandTest extends CommandTest {
 	
-	protected void executeCommands(PullCommandManager commandManager, Properties params, Map<Command,String[]> commands) throws IOException {
-		commandManager.connect(params);
-		if (commands != null) {
-			for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
-				System.err.println("[ "+entry.getKey().getText()+" ]");
-				commandManager.execute(entry.getKey());
-				for(String pattern : entry.getValue()) {
-					commandManager.pullResult(entry.getKey());
-					System.err.println("<<<");
-					System.out.println(entry.getKey().getResult().getText());
-					System.err.println(">>>");
-					if (!entry.getKey().getResult().getText().contains(pattern)) {
-						System.err.println("<<< pattern check failed >>>");
-						System.exit(1);
+	protected void executeCommands(PullCommandManager commandManager, Properties params, Map<Command,String[]> commands) throws CommandException {
+		try {
+			commandManager.connect(params);
+			if (commands != null) {
+				for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
+					System.out.println("[ "+entry.getKey().getText()+" ]");
+					commandManager.execute(entry.getKey());
+					for(String pattern : entry.getValue()) {
+						commandManager.pullResult(entry.getKey());
+						System.out.println("<<<");
+						System.out.println(entry.getKey().getResult().getText());
+						System.out.println(">>>");
+						if (!entry.getKey().getResult().getText().contains(pattern)) {
+							System.err.println("<<< pattern check failed >>>");
+							System.exit(1);
+						}
 					}
 				}
 			}
+			commandManager.disconnect();
+		} catch (StreamCommandException e) {
+			processReadError(e);
 		}
-		commandManager.disconnect();
 	}
 }

@@ -19,7 +19,6 @@
  */
 package tx.common;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -28,19 +27,34 @@ import java.util.Properties;
  */
 public class CommandTest {
 	
-	protected void executeCommands(CommandManager commandManager, Properties params, Command[] commands) throws IOException {
-		commandManager.connect(params);
-		if (commands != null) {
-			for(Command command : commands) {
-				System.err.println("[ "+command.getText()+" ]");
-				commandManager.execute(command);
-				for(CommandResult result : command.getResults()) {
-					System.err.println("<<<");
-					System.out.println(result.getText());
-					System.err.println(">>>");
+	protected void processReadError(StreamCommandException e) {
+		System.err.println("<<<");
+		System.err.println("STREAM READ ERROR");
+		System.err.println("-----------------");
+		System.err.println("Dump positions : ["+e.getBegin() + "," + e.getEnd() + "]");			
+		System.err.println("Expected       : "+e.getPatterns());
+		System.err.println("Actual         : "+e.getText());
+		System.err.println(">>>");
+		e.printStackTrace();
+	}
+	
+	protected void executeCommands(CommandManager commandManager, Properties params, Command[] commands) throws CommandException {
+		try {
+			commandManager.connect(params);
+			if (commands != null) {
+				for(Command command : commands) {
+					System.out.println("[ "+command.getText()+" ]");
+					commandManager.execute(command);
+					for(CommandResult result : command.getResults()) {
+						System.out.println("<<<");
+						System.out.println(result.getText());
+						System.out.println(">>>");
+					}
 				}
 			}
+			commandManager.disconnect();
+		} catch (StreamCommandException e) {
+			processReadError(e);
 		}
-		commandManager.disconnect();
 	}
 }

@@ -19,12 +19,11 @@
  */
 package tx.dx;
 
-import java.io.IOException;
-
 import tx.common.Command;
+import tx.common.CommandException;
 import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
-import tx.common.StreamReadResult;
+import tx.common.StreamCommandResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -33,19 +32,19 @@ import tx.common.StreamReadResult;
 public class DxCommandManager extends SocketCommandManager implements CommandManager {
 	
 	@Override
-	public void reset(Command command) throws IOException {
+	public void reset(Command command) throws CommandException {
 		write(0x19);
-		StreamReadResult readResult = read(
+		StreamCommandResult result = read(
 			new String[] { 
 				"(END OF DIALOGUE SESSION)\r\n\b\n",	// need to enter password
 				"([^\n]+>)\r\n< "						// command prompt is ready
 			}, 1000, false);
-		command.addResult(readResult);
-		if (readResult == null || readResult.getIndex() == 0) {
+		command.addResult(result);
+		if (result == null || result.getIndex() == 0) {
 			write(new byte[] { 0x0d, 0x00 });
-			readResult = read("(ENTER PASSWORD) < \b", 1000, false);
-			command.addResult(readResult);
-			if (readResult == null) {					// first password attempt fails sometimes  
+			result = read("(ENTER PASSWORD) < \b", 1000, false);
+			command.addResult(result);
+			if (result == null) {					// first password attempt fails sometimes  
 				write(new byte[] { 0x0d, 0x00 });
 				command.addResult(read("(ENTER PASSWORD) < \b", 1000));
 			}
@@ -55,7 +54,7 @@ public class DxCommandManager extends SocketCommandManager implements CommandMan
 	}
 
 	@Override
-	public void run(Command command) throws IOException {
+	public void run(Command command) throws CommandException {
 		write(command.getText()+";\r");
 		command.addResult(read("\r\n(\\S.+\\S)\\s+\r\n.+>\r\n< ", 30000));
 	}

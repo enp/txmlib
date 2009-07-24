@@ -19,31 +19,39 @@
  */
 package tx.common;
 
-import java.io.CharArrayWriter;
-import java.io.PrintWriter;
+public class StreamCommandResult extends CommandResult {	
 
-/**
- * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
- *
- */
-public class CommandError {
-
-	private String text;	
-	private String trace;
+	private int index;
+	private String text;
+	private long begin;
+	private long end;
 	
-	public CommandError(StreamReadException e) {
-		this.text = e.getText();
-		CharArrayWriter traceWriter = new CharArrayWriter();
-        e.printStackTrace(new PrintWriter(traceWriter));
-		this.trace = traceWriter.toString();
+	public StreamCommandResult(int index, String text, long begin, long end) {
+		super(text);
+		this.index = index;
+		this.text = text;
+		this.begin = begin;
+		this.end = end;
+	}
+	
+	public String toString() {
+		return index + " : " + text;
+	}
+
+	public int getIndex() {
+		return index;
 	}
 
 	public String getText() {
 		return text;
 	}
-	
-	public String getTrace() {
-		return trace;
+
+	public long getBegin() {
+		return begin;
+	}
+
+	public long getEnd() {
+		return end;
 	}
 
 }
