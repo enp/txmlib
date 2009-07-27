@@ -23,6 +23,8 @@ package tx.common;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class OperationResult {
-
+public class CommonOperationManager implements OperationManager {
+	public void execute(Operation operation) {
+		
+	}
 }

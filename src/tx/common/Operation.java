@@ -19,10 +19,37 @@
  */
 package tx.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public class Operation {
 
+	private String action;
+	private Map<String,String> attributes = new HashMap<String,String>();
+	private Map<String,Map<String,String>> devices = new HashMap<String,Map<String,String>>();
+
+	public Operation() {}
+	
+	public Operation(String action, Map<String, String> attributes, Map<String,Map<String,String>> devices) {
+		this.action = action;
+		this.attributes = attributes;
+		this.devices = devices;
+	}	
+	
+	public String getAction() {
+		return action;
+	}
+	
+	public Map<String, String> getAttributes() {
+		return attributes;
+	}
+	
+	public Map<String,Map<String,String>> getDevices() {
+		return devices;
+	}
+	
 }
