@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -34,7 +34,7 @@ public abstract class SocketCommandManager extends StreamCommandManager implemen
 	private Socket socket = new Socket();
 	
 	@Override
-	public void connect(Map<String,Object> params) throws IOException {
+	public void connect(Properties params) throws IOException {
 		super.connect(params);
 		InetAddress addr = InetAddress.getByName((String)params.get("host"));
 		int port = Integer.parseInt((String)params.get("port"));

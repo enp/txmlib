@@ -20,14 +20,14 @@
 package tx.common;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public interface CommandManager {
-	void connect(Map<String,Object> params) throws IOException;
+	void connect(Properties params) throws IOException;
 	void execute(Command command) throws IOException;
 	boolean readNextResult(Command command);
 	void disconnect() throws IOException;

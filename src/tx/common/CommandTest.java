@@ -20,7 +20,7 @@
 package tx.common;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class CommandTest {
 	
-	protected void executeCommands(CommandManager commandManager, Map<String,Object> params, Command[] commands) throws IOException {
+	protected void executeCommands(CommandManager commandManager, Properties params, Command[] commands) throws IOException {
 		commandManager.connect(params);
 		for(Command command : commands) {
 			System.err.println("[ "+command.getText()+" ]");

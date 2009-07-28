@@ -19,7 +19,7 @@
  */
 package tx.ewsd;
 
-import java.util.Map;
+import java.util.Properties;
 
 import tx.common.Command;
 import tx.common.CommandManager;
@@ -31,7 +31,7 @@ import tx.common.CommandManager;
 public class EwsdCommandManager implements CommandManager {
 
 	@Override
-	public void connect(Map<String,Object> params) {
+	public void connect(Properties params) {
 	
 	}
 

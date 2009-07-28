@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketTimeoutException;
-import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public abstract class StreamCommandManager implements CommandManager {
 	
-	protected Map<String,Object> params;
+	protected Properties params;
 	
 	protected StreamCommandManagerDump dump;
 	
@@ -41,7 +41,7 @@ public abstract class StreamCommandManager implements CommandManager {
 	protected OutputStream os;
 	
 	@Override
-	public void connect(Map<String,Object> params) throws IOException {
+	public void connect(Properties params) throws IOException {
 		this.params = params;
 		this.dump = ((StreamCommandManagerDump)params.get("dump"));
 	}

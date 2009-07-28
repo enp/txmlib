@@ -19,8 +19,8 @@
  */
 package tx.mt;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import tx.common.Command;
 import tx.common.CommandManager;
@@ -37,10 +37,9 @@ public class MtCommandTest extends CommandTest {
 		
 		CommandManager commandManager = new MtCommandManager();
 		
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("host", "ats74-gw");
-		params.put("port", "2987");
-		params.put("dump", new StreamCommandManagerDump("mt.dump"));
+		Properties params = new Properties();
+		params.load(new FileInputStream("conf/mt.conf"));
+		params.put("dump", new StreamCommandManagerDump("dump/mt.dump"));
 		
 		Command[] commands = { 
 			new Command("RESET"), 

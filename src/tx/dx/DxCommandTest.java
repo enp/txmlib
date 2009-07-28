@@ -19,8 +19,8 @@
  */
 package tx.dx;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import tx.common.Command;
 import tx.common.CommandManager;
@@ -37,11 +37,9 @@ public class DxCommandTest extends CommandTest {
 		
 		CommandManager commandManager = new DxCommandManager();
 		
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("host", "ats63-gw");
-		params.put("port", "1002");
-		params.put("password", "remont63");
-		params.put("dump", new StreamCommandManagerDump("dx.dump"));
+		Properties params = new Properties();
+		params.load(new FileInputStream("conf/mt.conf"));
+		params.put("dump", new StreamCommandManagerDump("dump/dx.dump"));
 		
 		Command[] commands = { 
 			new Command("RESET"), 
