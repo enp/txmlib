@@ -22,14 +22,14 @@ package tx.mt;
 import tx.common.Command;
 import tx.common.CommandManager;
 import tx.common.CommandResult;
+import tx.common.CommonOperationManager;
 import tx.common.Operation;
-import tx.common.OperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager implements OperationManager {
+public class MtOperationManager extends CommonOperationManager {
 
 	CommandManager commandManager;
 	

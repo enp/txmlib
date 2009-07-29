@@ -19,34 +19,21 @@
  */
 package tx.common;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class StreamCommandManagerDump implements CommandManagerDump {
+public class OperationException extends CommonException {
+
+	private static final long serialVersionUID = 295539382772189883L;
 	
-	private String fileName;
-	private FileOutputStream fos;
-	
-	public StreamCommandManagerDump(String fileName) throws FileNotFoundException {
-		this.fileName = fileName;
-		fos = new FileOutputStream(fileName);
+	public OperationException(String message) {
+		super(message);
 	}
-	
-	public String getFileName() {
-		return fileName;
+
+	public OperationException(Exception e) {
+		super(e);
 	}
-	
-	public void write(int b) throws IOException {
-		fos.write(b);
-	}
-	
-	public void close() throws IOException {
-		fos.close();
-	}
-	
+
 }

@@ -35,9 +35,9 @@ public class Command {
 	
 	private List<CommandResult> results = new ArrayList<CommandResult>();
 	
-	private CommandException exception;
+	private CommandDump dump;
 	
-	private CommandManagerDump dump;
+	private CommandException exception;
 
 	public Command(String text) {
 		this.text = text;
@@ -47,19 +47,12 @@ public class Command {
 		return text;
 	}
 
-	public String getNumber() {
-		return number;
+	public void setNumber(String number) {
+		this.number = number;		
 	}
 
-	public CommandResult getResult() {
-		if (results.size() > 0)
-			return results.get(results.size()-1);
-		else
-			return null;
-	}
-	
-	public List<CommandResult> getResults() {
-		return Collections.unmodifiableList(results);
+	public String getNumber() {
+		return number;
 	}
 	
 	public void addResult(String result) {
@@ -72,24 +65,31 @@ public class Command {
 			results.add(result);
 	}
 
-	public void addException(CommandException e) {
+	public CommandResult getResult() {
+		if (results.size() > 0)
+			return results.get(results.size()-1);
+		else
+			return null;
+	}
+	
+	public List<CommandResult> getResults() {
+		return Collections.unmodifiableList(results);
+	}
+
+	public CommandDump getDump() {
+		return dump;
+	}
+
+	public void setDump(CommandDump dump) {
+		this.dump = dump;
+	}
+
+	public void setException(CommandException e) {
 		this.exception = e;		
 	}
 	
 	public CommandException getException() {
 		return exception;
-	}
-
-	public void addDump(CommandManagerDump dump) {
-		this.dump = dump;
-	}
-	
-	public String getDumpFileName() {
-		return dump.getFileName();
-	}
-
-	public void setNumber(StreamCommandResult read) {
-		number = read.getText();		
 	}
 
 }

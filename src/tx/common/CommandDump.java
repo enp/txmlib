@@ -19,14 +19,10 @@
  */
 package tx.common;
 
-import java.util.Properties;
-
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface OperationManager {
-	void connect(Properties params, CommandDump commandDump, OperationDump operationDump) throws OperationException;
-	void execute(Operation operation);
-	void disconnect() throws OperationException;
+public interface CommandDump {
+	public String getFileName();
 }

@@ -19,14 +19,34 @@
  */
 package tx.common;
 
-import java.util.Properties;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface OperationManager {
-	void connect(Properties params, CommandDump commandDump, OperationDump operationDump) throws OperationException;
-	void execute(Operation operation);
-	void disconnect() throws OperationException;
+public class TextFileCommandDump implements StreamCommandDump {
+	
+	private String fileName;
+	private FileOutputStream fos;
+	
+	public TextFileCommandDump(String fileName) throws FileNotFoundException {
+		this.fileName = fileName;
+		fos = new FileOutputStream(fileName);
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	
+	public void write(int b) throws IOException {
+		fos.write(b);
+	}
+	
+	public void close() throws IOException {
+		fos.close();
+	}
+	
 }

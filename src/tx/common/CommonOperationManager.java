@@ -19,12 +19,52 @@
  */
 package tx.common;
 
+import java.lang.reflect.Method;
+import java.util.Properties;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public class CommonOperationManager implements OperationManager {
-	public void execute(Operation operation) {
+	
+	protected CommandManager commandManager;
+	
+	@Override
+	public void connect(Properties params, CommandDump commandDump, OperationDump operationDump) throws OperationException {
+		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
+		try {
+			commandManager = (CommandManager)Class.forName(commandManagerClass).getConstructor(new Class[] {}).newInstance(new Object[] {});
+			commandManager.connect(params, commandDump);
+		} catch (Exception e) {
+			throw new OperationException(e);
+		}
 		
+	}
+
+	@Override
+	public void execute(Operation operation) {
+		for (Method method : this.getClass().getDeclaredMethods()) {
+			if (method.getName() == operation.getAction()) {
+				try {
+					method.invoke(this, operation.getDevices(), operation.getOptions());
+					return;
+				} catch (Exception e) {
+					operation.setException(new OperationException(e));
+					e.printStackTrace();
+				}
+			}
+		}
+		operation.setException(new OperationException(
+			"Method ["+this.getClass().getCanonicalName()+"."+operation.getAction()+"] is not found"));
+	}
+
+	@Override
+	public void disconnect() throws OperationException {
+		try {
+			commandManager.disconnect();
+		} catch (Exception e) {
+			throw new OperationException(e);
+		}
 	}
 }

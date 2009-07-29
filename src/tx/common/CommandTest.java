@@ -38,9 +38,9 @@ public class CommandTest {
 		e.printStackTrace();
 	}
 	
-	protected void executeCommands(CommandManager commandManager, Properties params, Command[] commands) throws CommandException {
+	protected void executeCommands(CommandManager commandManager, Properties params, CommandDump dump, Command[] commands) throws CommandException {
 		try {
-			commandManager.connect(params);
+			commandManager.connect(params, dump);
 			if (commands != null) {
 				for(Command command : commands) {
 					System.out.println("[ "+command.getText()+" ]");

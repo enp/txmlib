@@ -35,7 +35,7 @@ public abstract class StreamCommandManager implements CommandManager {
 	
 	protected Properties params;
 	
-	protected StreamCommandManagerDump dump;
+	protected StreamCommandDump dump;
 	
 	protected InputStream is;
 	protected OutputStream os;
@@ -43,21 +43,21 @@ public abstract class StreamCommandManager implements CommandManager {
 	private long currentChar = 0;
 	
 	@Override
-	public void connect(Properties params) throws CommandException {
+	public void connect(Properties params, CommandDump dump) throws CommandException {
 		this.params = params;
-		this.dump = ((StreamCommandManagerDump)params.get("dump"));
+		this.dump = (StreamCommandDump)dump;
 	}
-
+	
 	@Override
 	public void execute(Command command) throws CommandException {
-		if (dump != null) command.addDump(dump);
+		if (dump != null) command.setDump(dump);
 		try {
 			if (command.getText().equals("RESET"))
 				reset(command);
 			else
 				run(command);
 		} catch (CommandException e) {
-			command.addException(e);
+			command.setException(e);
 			throw e;
 		}
 	}

@@ -25,9 +25,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import tx.common.Command;
+import tx.common.CommandDump;
 import tx.common.PullCommandManager;
 import tx.common.PullCommandTest;
-import tx.common.StreamCommandManagerDump;
+import tx.common.TextFileCommandDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -37,11 +38,12 @@ public class EwsdCommandTest extends PullCommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		PullCommandManager commandManager = new EwsdCommandManager();
+		PullCommandManager manager = new EwsdCommandManager();
 		
 		Properties params = new Properties();
 		params.load(new FileInputStream("conf/ewsd.conf"));
-		params.put("dump", new StreamCommandManagerDump("dump/ewsd.dump"));
+		
+		CommandDump dump = new TextFileCommandDump("dump/ewsd.dump");
 		
 		Map<Command,String[]> commands = new LinkedHashMap<Command,String[]>();
 		
@@ -75,7 +77,7 @@ public class EwsdCommandTest extends PullCommandTest {
 			"EXEC'D"
 		});
 		
-		new EwsdCommandTest().executeCommands(commandManager, params, commands);
+		new EwsdCommandTest().executeCommands(manager, params, dump, commands);
 		
 	}
 

@@ -23,9 +23,10 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 import tx.common.Command;
+import tx.common.CommandDump;
 import tx.common.CommandManager;
 import tx.common.CommandTest;
-import tx.common.StreamCommandManagerDump;
+import tx.common.TextFileCommandDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -35,18 +36,19 @@ public class DxCommandTest extends CommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		CommandManager commandManager = new DxCommandManager();
+		CommandManager manager = new DxCommandManager();
 		
 		Properties params = new Properties();
-		params.load(new FileInputStream("conf/mt.conf"));
-		params.put("dump", new StreamCommandManagerDump("dump/dx.dump"));
+		params.load(new FileInputStream("conf/dx.conf"));
+		
+		CommandDump dump = new TextFileCommandDump("dump/dx.dump");
 		
 		Command[] commands = { 
 			new Command("RESET"), 
 			new Command("ZPLM:SUB=2631000")
 		};
 		
-		new DxCommandTest().executeCommands(commandManager, params, commands);
+		new DxCommandTest().executeCommands(manager, params, dump, commands);
 		
 	}
 

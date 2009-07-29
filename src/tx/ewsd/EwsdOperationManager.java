@@ -20,14 +20,14 @@
 package tx.ewsd;
 
 import tx.common.CommandManager;
+import tx.common.CommonOperationManager;
 import tx.common.Operation;
-import tx.common.OperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class EwsdOperationManager implements OperationManager {
+public class EwsdOperationManager extends CommonOperationManager {
 
 	CommandManager commandManager;
 	

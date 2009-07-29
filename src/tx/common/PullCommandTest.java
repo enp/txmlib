@@ -24,9 +24,9 @@ import java.util.Properties;
 
 public class PullCommandTest extends CommandTest {
 	
-	protected void executeCommands(PullCommandManager commandManager, Properties params, Map<Command,String[]> commands) throws CommandException {
+	protected void executeCommands(PullCommandManager commandManager, Properties params, CommandDump dump, Map<Command,String[]> commands) throws CommandException {
 		try {
-			commandManager.connect(params);
+			commandManager.connect(params, dump);
 			if (commands != null) {
 				for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
 					System.out.println("[ "+entry.getKey().getText()+" ]");

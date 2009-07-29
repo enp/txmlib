@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 
 import tx.common.Command;
+import tx.common.CommandDump;
 import tx.common.CommandException;
 import tx.common.PullCommandManager;
 import tx.common.SocketCommandManager;
@@ -38,8 +39,8 @@ public class EwsdCommandManager extends SocketCommandManager implements PullComm
 	List<String[]> unownedResults = new ArrayList<String[]>();
 	
 	@Override
-	public void connect(Properties params) throws CommandException {
-		super.connect(params);
+	public void connect(Properties params, CommandDump dump) throws CommandException {
+		super.connect(params, dump);
 		StreamCommandResult result;
 		read("<<<\n(Welcome to FOS Gateway.+)\n<<<", 1000);
 		write(params.get("nm")+";"+params.get("login")+";RPPW-NO;"+params.get("password")+";\n");
@@ -55,7 +56,7 @@ public class EwsdCommandManager extends SocketCommandManager implements PullComm
 	@Override
 	protected void run(Command command) throws CommandException {
 		write("GW-TASK: "+command.getText()+";\n");
-		command.setNumber(read("<<<\n"+command.getText().split(":")[0]+":(.+):TASK SUBMITTED\n<<<", 1000));
+		command.setNumber(read("<<<\n"+command.getText().split(":")[0]+":(.+):TASK SUBMITTED\n<<<", 1000).getText());
 	}
 
 	@Override

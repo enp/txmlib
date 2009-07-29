@@ -19,36 +19,26 @@
  */
 package tx.dx;
 
+import java.util.Map;
+
 import tx.common.Command;
-import tx.common.CommandManager;
-import tx.common.CommandResult;
-import tx.common.Operation;
+import tx.common.CommandException;
+import tx.common.CommonOperationManager;
 import tx.common.OperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class DxOperationManager implements OperationManager {
+public class DxOperationManager extends CommonOperationManager implements OperationManager {
 
-	CommandManager commandManager;
-	
-	public DxOperationManager() {
-		commandManager = new DxCommandManager();
-	}
-
-	public void execute(Operation operation) {
+	public void linetest(Map<String,Map<String,String>> devices, Map<String, String> options) throws CommandException {
 		
-		Command command = new Command("");
-		
-		try {
-			commandManager.execute(command);
-		} catch (Exception e) {
-			e.printStackTrace();
+		for(String device : devices.keySet()) {
+			commandManager.execute(new Command("RESET"));
+			commandManager.execute(new Command("ZPLM:SUB="+device));
 		}
 		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
 	}
 
 }

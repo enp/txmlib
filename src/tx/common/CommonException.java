@@ -19,10 +19,35 @@
  */
 package tx.common;
 
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface CommandManagerDump {
-	public String getFileName();
+public class CommonException extends java.lang.Exception {
+
+	private static final long serialVersionUID = -3496293905790182660L;
+	
+	private String trace;
+	
+	public CommonException(String message) {
+		super(message);
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        printStackTrace(new PrintWriter(traceWriter));
+		trace = traceWriter.toString();
+	}
+
+	public CommonException(Exception e) {
+		super(e);
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        e.printStackTrace(new PrintWriter(traceWriter));
+		trace = traceWriter.toString();
+	}
+	
+	public String getTrace() {
+		return trace;
+	}
+
 }

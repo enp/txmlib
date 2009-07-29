@@ -26,7 +26,7 @@ import java.util.Properties;
  *
  */
 public interface CommandManager {
-	void connect(Properties params) throws CommandException;
+	void connect(Properties params, CommandDump dump) throws CommandException;
 	void execute(Command command) throws CommandException;
 	void disconnect() throws CommandException;
 }

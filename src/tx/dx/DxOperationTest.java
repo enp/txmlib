@@ -17,41 +17,45 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.dx;
 
 import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
-import tx.common.Command;
 import tx.common.CommandDump;
-import tx.common.CommandManager;
-import tx.common.CommandTest;
+import tx.common.Operation;
+import tx.common.OperationDump;
+import tx.common.OperationManager;
 import tx.common.TextFileCommandDump;
+import tx.common.XmlFileOperationDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtCommandTest extends CommandTest {
+public class DxOperationTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		CommandManager commandManager = new MtCommandManager();
+		OperationManager operationManager = new DxOperationManager();
 		
 		Properties params = new Properties();
-		params.load(new FileInputStream("conf/mt.conf"));
+		params.load(new FileInputStream("conf/dx.conf"));
 		
-		CommandDump dump = new TextFileCommandDump("dump/mt.dump");
+		CommandDump commandDump = new TextFileCommandDump("dump/dx.txt");
 		
-		Command[] commands = { 
-			new Command("RESET"), 
-			new Command("ESAB"), 
-			new Command("ND=2740001"), 
-			new Command("PH=L"), 
-			new Command("PH=FIN")
-		};
+		OperationDump operationDump = new XmlFileOperationDump("dump/dx.xml");
 		
-		new MtCommandTest().executeCommands(commandManager, params, dump, commands);
+		Map<String,Map<String,String>> devices = new HashMap<String,Map<String,String>>();
+		devices.put("2631000", null);
+		
+		operationManager.connect(params, commandDump, operationDump);	
+		
+		operationManager.execute(new Operation("linetest", devices, null));
+		
+		operationManager.disconnect();
 		
 	}
 

@@ -34,8 +34,8 @@ public abstract class SocketCommandManager extends StreamCommandManager implemen
 	private Socket socket = new Socket();
 	
 	@Override
-	public void connect(Properties params) throws CommandException {
-		super.connect(params);
+	public void connect(Properties params, CommandDump dump) throws CommandException {
+		super.connect(params, dump);
 		try {
 			InetAddress addr = InetAddress.getByName((String)params.get("host"));
 			int port = Integer.parseInt((String)params.get("port"));
@@ -52,7 +52,7 @@ public abstract class SocketCommandManager extends StreamCommandManager implemen
 		super.disconnect();
 		try {
 			socket.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new CommandException(e);
 		}
 	}
