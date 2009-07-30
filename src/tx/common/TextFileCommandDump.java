@@ -34,7 +34,7 @@ public class TextFileCommandDump implements StreamCommandDump {
 	
 	public TextFileCommandDump(String fileName) throws FileNotFoundException {
 		this.fileName = fileName;
-		fos = new FileOutputStream(fileName);
+		this.fos = new FileOutputStream(fileName);
 	}
 	
 	public String getFileName() {

@@ -19,19 +19,47 @@
  */
 package tx.common;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public class XmlFileOperationDump implements OperationDump {
 
-	public XmlFileOperationDump(String string) {
-		
+	private String fileName;
+	private FileOutputStream fos;
+	private XStream xstream;
+	
+	public XmlFileOperationDump(String fileName) throws FileNotFoundException {
+		this.fileName = fileName;
+		this.fos = new FileOutputStream(fileName);
+		this.xstream = new XStream();
+		xstream.setMode(XStream.NO_REFERENCES);
+		xstream.alias("operation", tx.common.Operation.class);
+		xstream.alias("command", tx.common.Command.class);
+		xstream.alias("result", tx.common.StreamCommandResult.class);
+		xstream.omitField(tx.common.TextFileCommandDump.class, "fos");
+		xstream.useAttributeFor(tx.common.Operation.class, "action");
+	}
+	
+	public String getFileName() {
+		return fileName;
 	}
 
 	@Override
 	public void dump(Operation operation) {
-		
+		//xstream.toXML(operation, fos);
+		xstream.marshal(operation, new PrettyPrintWriter(new OutputStreamWriter(fos)){
+			public void addAttribute(String key, String value) {
+				if (!key.equals("class")) super.addAttribute(key, value);
+			}
+		});
 	}
 
 }

@@ -22,7 +22,6 @@ package tx.common;
 public class StreamCommandResult extends CommandResult {	
 
 	private int index;
-	private String text;
 	private long begin;
 	private long end;
 	
@@ -40,10 +39,6 @@ public class StreamCommandResult extends CommandResult {
 
 	public int getIndex() {
 		return index;
-	}
-
-	public String getText() {
-		return text;
 	}
 
 	public long getBegin() {

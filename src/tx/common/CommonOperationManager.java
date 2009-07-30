@@ -29,9 +29,11 @@ import java.util.Properties;
 public class CommonOperationManager implements OperationManager {
 	
 	protected CommandManager commandManager;
+	protected OperationDump operationDump;
 	
 	@Override
 	public void connect(Properties params, CommandDump commandDump, OperationDump operationDump) throws OperationException {
+		this.operationDump = operationDump;
 		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
 		try {
 			commandManager = (CommandManager)Class.forName(commandManagerClass).getConstructor(new Class[] {}).newInstance(new Object[] {});
@@ -47,16 +49,23 @@ public class CommonOperationManager implements OperationManager {
 		for (Method method : this.getClass().getDeclaredMethods()) {
 			if (method.getName() == operation.getAction()) {
 				try {
-					method.invoke(this, operation.getDevices(), operation.getOptions());
-					return;
+					method.invoke(this, operation);
 				} catch (Exception e) {
 					operation.setException(new OperationException(e));
-					e.printStackTrace();
+				} finally {
+					operationDump.dump(operation);
 				}
+				return;
 			}
 		}
 		operation.setException(new OperationException(
 			"Method ["+this.getClass().getCanonicalName()+"."+operation.getAction()+"] is not found"));
+		operationDump.dump(operation);
+	}
+	
+	protected void executeCommand(Operation operation, Command command) throws CommandException {
+		operation.addCommand(command);
+		commandManager.execute(command);
 	}
 
 	@Override

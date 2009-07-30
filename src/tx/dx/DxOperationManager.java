@@ -19,11 +19,10 @@
  */
 package tx.dx;
 
-import java.util.Map;
-
 import tx.common.Command;
 import tx.common.CommandException;
 import tx.common.CommonOperationManager;
+import tx.common.Operation;
 import tx.common.OperationManager;
 
 /**
@@ -32,11 +31,11 @@ import tx.common.OperationManager;
  */
 public class DxOperationManager extends CommonOperationManager implements OperationManager {
 
-	public void linetest(Map<String,Map<String,String>> devices, Map<String, String> options) throws CommandException {
+	public void linetest(Operation operation) throws CommandException {
 		
-		for(String device : devices.keySet()) {
-			commandManager.execute(new Command("RESET"));
-			commandManager.execute(new Command("ZPLM:SUB="+device));
+		for(String device : operation.getDevices().keySet()) {
+			executeCommand(operation, new Command("RESET"));
+			executeCommand(operation, new Command("ZPLM:SUB="+device));
 		}
 		
 	}
