@@ -19,6 +19,7 @@
  */
 package tx.common;
 
+import java.io.FileInputStream;
 import java.util.Properties;
 
 /**
@@ -26,6 +27,10 @@ import java.util.Properties;
  *
  */
 public class CommandTest {
+	
+	protected String type(CommandManager commandManager) {
+		return commandManager.getClass().getSimpleName().replace("CommandManager", "").toLowerCase();
+	}
 	
 	protected void processReadError(StreamCommandException e) {
 		System.err.println("<<<");
@@ -38,8 +43,11 @@ public class CommandTest {
 		e.printStackTrace();
 	}
 	
-	protected void executeCommands(CommandManager commandManager, Properties params, CommandDump dump, Command[] commands) throws CommandException {
+	protected void execute(CommandManager commandManager, Command[] commands) throws Exception {
 		try {
+			Properties params = new Properties();
+			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
+			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
 			commandManager.connect(params, dump);
 			if (commands != null) {
 				for(Command command : commands) {

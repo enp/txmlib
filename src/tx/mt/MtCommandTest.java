@@ -19,14 +19,8 @@
  */
 package tx.mt;
 
-import java.io.FileInputStream;
-import java.util.Properties;
-
 import tx.common.Command;
-import tx.common.CommandDump;
-import tx.common.CommandManager;
 import tx.common.CommandTest;
-import tx.common.TextFileCommandDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -36,13 +30,6 @@ public class MtCommandTest extends CommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		CommandManager commandManager = new MtCommandManager();
-		
-		Properties params = new Properties();
-		params.load(new FileInputStream("conf/mt.conf"));
-		
-		CommandDump dump = new TextFileCommandDump("dump/mt.dump");
-		
 		Command[] commands = { 
 			new Command("RESET"), 
 			new Command("ESAB"), 
@@ -51,7 +38,7 @@ public class MtCommandTest extends CommandTest {
 			new Command("PH=FIN")
 		};
 		
-		new MtCommandTest().executeCommands(commandManager, params, dump, commands);
+		new MtCommandTest().execute(new MtCommandManager(), commands);
 		
 	}
 

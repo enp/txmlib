@@ -19,16 +19,11 @@
  */
 package tx.ewsd;
 
-import java.io.FileInputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import tx.common.Command;
-import tx.common.CommandDump;
-import tx.common.PullCommandManager;
 import tx.common.PullCommandTest;
-import tx.common.TextFileCommandDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -37,13 +32,6 @@ import tx.common.TextFileCommandDump;
 public class EwsdCommandTest extends PullCommandTest {
 
 	public static void main(String[] args) throws Exception {
-		
-		PullCommandManager manager = new EwsdCommandManager();
-		
-		Properties params = new Properties();
-		params.load(new FileInputStream("conf/ewsd.conf"));
-		
-		CommandDump dump = new TextFileCommandDump("dump/ewsd.dump");
 		
 		Map<Command,String[]> commands = new LinkedHashMap<Command,String[]>();
 		
@@ -77,7 +65,7 @@ public class EwsdCommandTest extends PullCommandTest {
 			"EXEC'D"
 		});
 		
-		new EwsdCommandTest().executeCommands(manager, params, dump, commands);
+		new EwsdCommandTest().execute(new EwsdCommandManager(), commands);
 		
 	}
 

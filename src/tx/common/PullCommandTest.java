@@ -19,13 +19,17 @@
  */
 package tx.common;
 
+import java.io.FileInputStream;
 import java.util.Map;
 import java.util.Properties;
 
 public class PullCommandTest extends CommandTest {
 	
-	protected void executeCommands(PullCommandManager commandManager, Properties params, CommandDump dump, Map<Command,String[]> commands) throws CommandException {
+	protected void execute(PullCommandManager commandManager, Map<Command,String[]> commands) throws Exception {
 		try {
+			Properties params = new Properties();
+			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
+			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
 			commandManager.connect(params, dump);
 			if (commands != null) {
 				for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
