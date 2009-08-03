@@ -31,16 +31,17 @@ import java.util.Map;
 public class Operation {
 
 	private String action;
-	private Map<String,Map<String,String>> devices;
+	private List<String> devices;
 	private Map<String,String> options;
 	private List<Command> commands;
 	private OperationException exception;
 	private OperationDump operationDump;
 	private CommandDump commandDump;
+	private OperationResult result;
 
 	public Operation() {}
 	
-	public Operation(String action, Map<String,Map<String,String>> devices, Map<String, String> options) {
+	public Operation(String action, List<String> devices, Map<String, String> options) {
 		this.action = action;
 		this.devices = devices;
 		this.options = options;
@@ -50,7 +51,7 @@ public class Operation {
 		return action;
 	}
 	
-	public Map<String,Map<String,String>> getDevices() {
+	public List<String> getDevices() {
 		return devices;
 	}
 	
@@ -91,6 +92,20 @@ public class Operation {
 
 	public void setOperationDump(OperationDump operationDump) {
 		this.operationDump = operationDump;
+	}
+	
+	public OperationResult getResult() {
+		return result;
+	}
+
+	public void setResult(OperationResult result) {
+		this.result = result;
+	}
+	
+	public void addResultEntry(String device, String name, String value) {
+		if (result == null)
+			result = new OperationResult();
+		result.addResultEntry(device, name, value);
 	}
 	
 }

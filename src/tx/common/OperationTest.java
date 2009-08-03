@@ -20,6 +20,7 @@
 package tx.common;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Properties;
 
 import com.thoughtworks.xstream.XStream;
@@ -46,11 +47,14 @@ public class OperationTest {
 		
 		XStream xstream = new XStream();
 		xstream.alias("operation", tx.common.Operation.class);
+		xstream.alias("result", tx.common.OperationResult.class);
 		xstream.useAttributeFor(tx.common.Operation.class, "action");
 		
 		Operation operation = (Operation)xstream.fromXML(new FileInputStream("exec/"+type(operationManager)+"-operation.xml"));		
 		
 		operationManager.execute(operation);
+		
+		xstream.toXML(operation.getResult(), new FileOutputStream("exec/"+type(operationManager)+"-result.xml"));
 		
 		operationManager.disconnect();
 		
