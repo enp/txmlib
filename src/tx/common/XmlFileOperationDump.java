@@ -33,19 +33,17 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 public class XmlFileOperationDump implements OperationDump {
 
 	private String fileName;
-	private FileOutputStream fos;
 	private XStream xstream;
 	
 	public XmlFileOperationDump(String fileName) throws FileNotFoundException {
 		this.fileName = fileName;
-		this.fos = new FileOutputStream(fileName);
 		this.xstream = new XStream();
-		xstream.setMode(XStream.NO_REFERENCES);
-		xstream.alias("operation", tx.common.Operation.class);
-		xstream.alias("command", tx.common.Command.class);
-		xstream.alias("result", tx.common.StreamCommandResult.class);
-		xstream.omitField(tx.common.TextFileCommandDump.class, "fos");
-		xstream.useAttributeFor(tx.common.Operation.class, "action");
+		this.xstream.setMode(XStream.NO_REFERENCES);
+		this.xstream.alias("operation", tx.common.Operation.class);
+		this.xstream.alias("command", tx.common.Command.class);
+		this.xstream.alias("result", tx.common.StreamCommandResult.class);
+		this.xstream.useAttributeFor(tx.common.Operation.class, "action");
+		this.xstream.omitField(tx.common.TextFileCommandDump.class, "fos");
 	}
 	
 	public String getFileName() {
@@ -55,11 +53,15 @@ public class XmlFileOperationDump implements OperationDump {
 	@Override
 	public void dump(Operation operation) {
 		//xstream.toXML(operation, fos);
-		xstream.marshal(operation, new PrettyPrintWriter(new OutputStreamWriter(fos)){
-			public void addAttribute(String key, String value) {
-				if (!key.equals("class")) super.addAttribute(key, value);
-			}
-		});
+		try {
+			xstream.marshal(operation, new PrettyPrintWriter(new OutputStreamWriter(new FileOutputStream(fileName))){
+				public void addAttribute(String key, String value) {
+					if (!key.equals("class")) super.addAttribute(key, value);
+				}
+			});
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

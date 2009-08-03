@@ -19,43 +19,17 @@
  */
 package tx.dx;
 
-import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import tx.common.CommandDump;
-import tx.common.Operation;
-import tx.common.OperationDump;
-import tx.common.OperationManager;
-import tx.common.TextFileCommandDump;
-import tx.common.XmlFileOperationDump;
+import tx.common.OperationTest;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class DxOperationTest {
+public class DxOperationTest extends OperationTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		OperationManager operationManager = new DxOperationManager();
-		
-		Properties params = new Properties();
-		params.load(new FileInputStream("conf/dx.conf"));
-		
-		CommandDump commandDump = new TextFileCommandDump("dump/dx.txt");
-		
-		OperationDump operationDump = new XmlFileOperationDump("dump/dx.xml");
-		
-		Map<String,Map<String,String>> devices = new HashMap<String,Map<String,String>>();
-		devices.put("2631000", null);
-		
-		operationManager.connect(params, commandDump, operationDump);	
-		
-		operationManager.execute(new Operation("linetest", devices, null));
-		
-		operationManager.disconnect();
+		new DxOperationTest().execute(new DxOperationManager());
 		
 	}
 

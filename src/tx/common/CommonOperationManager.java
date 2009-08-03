@@ -47,7 +47,7 @@ public class CommonOperationManager implements OperationManager {
 	@Override
 	public void execute(Operation operation) {
 		for (Method method : this.getClass().getDeclaredMethods()) {
-			if (method.getName() == operation.getAction()) {
+			if (method.getName().equals(operation.getAction())) {
 				try {
 					method.invoke(this, operation);
 				} catch (Exception e) {

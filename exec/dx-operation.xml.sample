@@ -1,0 +1,8 @@
+<operation action="linetest">
+  <devices>
+    <entry>
+      <string>2631000</string>
+      <null/>
+    </entry>
+  </devices>
+</operation>

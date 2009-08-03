@@ -5,3 +5,4 @@ startup.*
 *.init
 dump/*
 conf/*.conf
+exec/*.xml

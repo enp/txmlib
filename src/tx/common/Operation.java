@@ -21,7 +21,6 @@ package tx.common;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +31,9 @@ import java.util.Map;
 public class Operation {
 
 	private String action;
-	private Map<String,Map<String,String>> devices = new HashMap<String,Map<String,String>>();
-	private Map<String,String> options = new HashMap<String,String>();
-	private List<Command> commands = new ArrayList<Command>();
+	private Map<String,Map<String,String>> devices;
+	private Map<String,String> options;
+	private List<Command> commands;
 	private OperationException exception;
 	private OperationDump operationDump;
 	private CommandDump commandDump;
@@ -60,6 +59,8 @@ public class Operation {
 	}
 	
 	public void addCommand(Command command) {
+		if (commands == null)
+			commands = new ArrayList<Command>();
 		if (command != null)
 			commands.add(command);
 	}
