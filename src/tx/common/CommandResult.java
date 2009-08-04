@@ -49,7 +49,6 @@ public class CommandResult {
 	
 	public Map<String,String> getAttributes() {
 		return (attributes == null)?null:Collections.unmodifiableMap(attributes);
-		//return Collections.unmodifiableMap(attributes);
 	}
 	
 	public String getAttribute(String key) {

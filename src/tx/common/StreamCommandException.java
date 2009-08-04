@@ -19,38 +19,38 @@
  */
 package tx.common;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class StreamCommandException extends CommandException {
+public class StreamCommandException extends MatchException {
 
 	private static final long serialVersionUID = 5485195737568383806L;
 	
-	private String[] patterns;
-	private String text;
 	private long begin;
 	private long end;
 
-	public StreamCommandException(String[] patterns, String text, long begin, long end) {
-		super("Unexpected stream read result");
-		this.patterns = patterns;
-		this.text = text;
+	public StreamCommandException(Set<String> expected, String actual, long begin, long end) {
+		super(expected, actual);
 		this.begin = begin;
 		this.end = end;
 	}
-
-	public String getPatterns() {
-		String result = "[";
-		for(String pattern : patterns)
-			result += ("["+pattern+"]");
-		result += "]";
-		return result;
+	
+	private static Set<String> extectedFromArray(String[] expected) {
+		Set<String> e = new HashSet<String>();
+		for(String s : expected)
+			e.add(s);
+		return e;
 	}
 
-	public String getText() {
-		return text;
+	public StreamCommandException(String[] expected, String actual, long begin, long end) {
+		super(extectedFromArray(expected), actual);
+		this.begin = begin;
+		this.end = end;
 	}
 
 	public long getBegin() {

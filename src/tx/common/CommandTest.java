@@ -33,27 +33,6 @@ public class CommandTest {
 		return commandManager.getClass().getSimpleName().replace("CommandManager", "").toLowerCase();
 	}
 	
-	protected void processReadError(StreamCommandException e) {
-		System.err.println("<<<");
-		System.err.println("STREAM READ ERROR");
-		System.err.println("-----------------");
-		System.err.println("Dump positions : ["+e.getBegin() + "," + e.getEnd() + "]");			
-		System.err.println("Expected       : "+e.getPatterns());
-		System.err.println("Actual         : "+e.getText());
-		System.err.println(">>>");
-		e.printStackTrace();
-	}
-	
-	protected void processCommandError(CommandResultException e) {
-		System.err.println("<<<");
-		System.err.println("COMMAND RESULT ERROR");
-		System.err.println("-----------------");	
-		System.err.println("Expected       : "+e.getPattern());
-		System.err.println("Actual         : "+e.getText());
-		System.err.println(">>>");
-		e.printStackTrace();
-	}
-	
 	protected void processMatchError(MatchException e) {
 		System.err.println("<<<");
 		System.err.println("COMMAND RESULT ERROR");
@@ -62,34 +41,6 @@ public class CommandTest {
 		System.err.println("Actual         : "+e.getActual());
 		System.err.println(">>>");
 		e.printStackTrace();
-	}
-	
-	protected void execute(CommandManager commandManager, Command[] commands) throws Exception {
-		try {
-			Properties params = new Properties();
-			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
-			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
-			commandManager.connect(params, dump);
-			if (commands != null) {
-				for(Command command : commands) {
-					System.out.println("[ "+command.getText()+" ]");
-					commandManager.execute(command);
-					for(CommandResult result : command.getResults()) {
-						System.out.println("<<<");
-						System.out.println(result.getText());
-						System.out.println(">>>");
-						if (result.getAttributes() != null) {
-							for(String key : result.getAttributes().keySet())
-								System.out.println("> "+key+" : "+result.getAttribute(key));
-							System.out.println("> "+result.getAttributes());
-						}
-					}
-				}
-			}
-			commandManager.disconnect();
-		} catch (StreamCommandException e) {
-			processReadError(e);
-		}
 	}
 	
 	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands) throws Exception {
@@ -114,10 +65,6 @@ public class CommandTest {
 				}
 			}
 			commandManager.disconnect();
-		} catch (StreamCommandException e) {
-			processReadError(e);
-		} catch (CommandResultException e) {
-			processCommandError(e);
 		} catch (MatchException e) {
 			processMatchError(e);
 		}

@@ -19,30 +19,19 @@
  */
 package tx.common;
 
+import java.util.Set;
+
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandResultException extends CommandException {
+public class CommandResultException extends MatchException {
 
 	private static final long serialVersionUID = 8610496511164927426L;
-	
-	private String pattern;
-	private String text;
 
-	public CommandResultException(String pattern, String text) {
-		super("Unexpected command result");
-		this.pattern = pattern;
-		this.text = text;
-	}
-
-	public String getPattern() {
-		return pattern;
-	}
-
-	public String getText() {
-		return text;
+	public CommandResultException(Set<String> expected, String actual) {
+		super(expected, actual);
 	}
 
 }

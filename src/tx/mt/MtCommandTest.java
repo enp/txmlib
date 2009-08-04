@@ -19,7 +19,13 @@
  */
 package tx.mt;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import tx.common.Command;
+import tx.common.CommandExecution;
+import tx.common.CommandResult;
 import tx.common.CommandTest;
 
 /**
@@ -30,13 +36,38 @@ public class MtCommandTest extends CommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		Command[] commands = { 
-			new Command("RESET"), 
-			new Command("ESAB"), 
-			new Command("ND=2740001"), 
-			new Command("PH=L"), 
-			new Command("PH=FIN")
-		};
+		String phone = "2740001";
+		
+		Command command;
+		Map<String,CommandExecution> resultMatch;		
+		
+		Map<Command,Map<String,CommandExecution>> commands = new LinkedHashMap<Command,Map<String,CommandExecution>>();
+		
+		command = new Command("RESET");	
+		commands.put(command, null);
+		
+		command = new Command("ESAB");	
+		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch.put("ESSAI D\"UNE LIGNE D\"ABONNE", null);
+		commands.put(command, resultMatch);
+		
+		command = new Command("ND="+phone);	
+		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch.put("EXC", null);
+		commands.put(command, resultMatch);
+		
+		command = new Command("PH=L");	
+		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch.put("L1.+R = (.+)\r\n.+L2.+R = (.+)\r\n.+L3.+R = (.+)\r\n.+L4.+R = (.+)\r\n.+L5.+R = (.+)\r\n.+L6.+R = (.+)\r\n.+L7.+R = (.+)\r\n.+L8.+R = (.+)\r\nEXC", new CommandExecution() {
+			public void executed(CommandResult result) {
+				System.out.println(result.getAttributes().toString().replace(" ", ""));
+			}});
+		commands.put(command, resultMatch);
+		
+		command = new Command("PH=FIN");	
+		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch.put("EXC", null);
+		commands.put(command, resultMatch);		
 		
 		new MtCommandTest().execute(new MtCommandManager(), commands);
 		

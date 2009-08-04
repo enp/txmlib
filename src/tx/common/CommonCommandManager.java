@@ -19,6 +19,7 @@
  */
 package tx.common;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -79,6 +80,12 @@ public abstract class CommonCommandManager implements CommandManager {
 			command.setException(e);
 			throw e;
 		}
+	}
+	
+	public void execute(Command command, String pattern, CommandExecution execution) throws CommandException {
+		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch.put(pattern, execution);
+		execute(command, resultMatch);
 	}
 
 }

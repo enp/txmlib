@@ -48,8 +48,8 @@ public class PullCommandTest extends CommandTest {
 				}
 			}
 			commandManager.disconnect();
-		} catch (StreamCommandException e) {
-			processReadError(e);
+		} catch (MatchException e) {
+			processMatchError(e);
 		}
 	}
 }
