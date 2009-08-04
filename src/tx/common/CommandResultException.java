@@ -19,41 +19,30 @@
  */
 package tx.common;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandResult {
-	
-	protected String text;
-	
-	protected Map<String,String> attributes;
+public class CommandResultException extends CommandException {
 
-	public CommandResult(String text) {
+	private static final long serialVersionUID = 8610496511164927426L;
+	
+	private String pattern;
+	private String text;
+
+	public CommandResultException(String pattern, String text) {
+		super("Unexpected command result");
+		this.pattern = pattern;
 		this.text = text;
+	}
+
+	public String getPattern() {
+		return pattern;
 	}
 
 	public String getText() {
 		return text;
-	}
-	
-	public void addAttribute(String key, String value) {
-		if (attributes == null)
-			attributes = new HashMap<String,String>();
-		attributes.put(key, value);
-	}
-	
-	public Map<String,String> getAttributes() {
-		return (attributes == null)?null:Collections.unmodifiableMap(attributes);
-		//return Collections.unmodifiableMap(attributes);
-	}
-	
-	public String getAttribute(String key) {
-		return attributes.get(key);
 	}
 
 }

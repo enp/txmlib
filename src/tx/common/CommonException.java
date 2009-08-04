@@ -26,7 +26,7 @@ import java.io.PrintWriter;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommonException extends java.lang.Exception {
+public class CommonException extends Exception {
 
 	private static final long serialVersionUID = -3496293905790182660L;
 	

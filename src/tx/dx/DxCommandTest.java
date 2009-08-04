@@ -19,7 +19,12 @@
  */
 package tx.dx;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import tx.common.Command;
+import tx.common.CommandExecution;
+import tx.common.CommandResult;
 import tx.common.CommandTest;
 
 /**
@@ -30,10 +35,28 @@ public class DxCommandTest extends CommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		Command[] commands = { 
-			new Command("RESET"), 
-			new Command("ZPLM:SUB=2631000")
-		};
+		String phone = "2631000";
+		
+		Map<Command,Map<String,CommandExecution>> commands = new LinkedHashMap<Command,Map<String,CommandExecution>>();
+		
+		commands.put(new Command("RESET"), null);
+		
+		Command command = new Command("ZPLM:SUB="+phone);
+		
+		Map<String,CommandExecution> resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+phone+".+)\r\n", new CommandExecution() {
+			public void executed(CommandResult result) {
+				System.out.println("{{{ units  : "+result.getAttribute("1")+"}}}");
+				System.out.println("{{{ values : "+result.getAttribute("2")+"}}}");
+			}
+		});
+		resultMatch.put("BUSY", new CommandExecution() {
+			public void executed(CommandResult result) {
+				System.out.println("{{{ BUSY }}}");
+			}
+		});
+		
+		commands.put(command, resultMatch);
 		
 		new DxCommandTest().execute(new DxCommandManager(), commands);
 		

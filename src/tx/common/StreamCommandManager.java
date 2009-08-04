@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketTimeoutException;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,9 +30,7 @@ import java.util.regex.Pattern;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public abstract class StreamCommandManager implements CommandManager {
-	
-	protected Properties params;
+public abstract class StreamCommandManager extends CommonCommandManager implements CommandManager {
 	
 	protected StreamCommandDump dump;
 	
@@ -43,28 +40,14 @@ public abstract class StreamCommandManager implements CommandManager {
 	private long currentChar = 0;
 	
 	@Override
-	public void connect(Properties params, CommandDump dump) throws CommandException {
-		this.params = params;
+	protected void setDump(CommandDump dump) {
 		this.dump = (StreamCommandDump)dump;
 	}
 	
 	@Override
-	public void execute(Command command) throws CommandException {
-		if (dump != null) command.setDump(dump);
-		try {
-			if (command.getText().equals("RESET"))
-				reset(command);
-			else
-				run(command);
-		} catch (CommandException e) {
-			command.setException(e);
-			throw e;
-		}
+	protected CommandDump getDump() {
+		return dump;
 	}
-
-	protected abstract void run(Command command) throws CommandException;
-
-	protected void reset(Command command) throws CommandException {}
 	
 	@Override
 	public void disconnect() throws CommandException {

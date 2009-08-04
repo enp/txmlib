@@ -19,6 +19,7 @@
  */
 package tx.common;
 
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -28,5 +29,6 @@ import java.util.Properties;
 public interface CommandManager {
 	void connect(Properties params, CommandDump dump) throws CommandException;
 	void execute(Command command) throws CommandException;
+	void execute(Command command, Map<String,CommandExecution> resultMatch) throws CommandException;
 	void disconnect() throws CommandException;
 }

@@ -19,41 +19,10 @@
  */
 package tx.common;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandResult {
-	
-	protected String text;
-	
-	protected Map<String,String> attributes;
-
-	public CommandResult(String text) {
-		this.text = text;
-	}
-
-	public String getText() {
-		return text;
-	}
-	
-	public void addAttribute(String key, String value) {
-		if (attributes == null)
-			attributes = new HashMap<String,String>();
-		attributes.put(key, value);
-	}
-	
-	public Map<String,String> getAttributes() {
-		return (attributes == null)?null:Collections.unmodifiableMap(attributes);
-		//return Collections.unmodifiableMap(attributes);
-	}
-	
-	public String getAttribute(String key) {
-		return attributes.get(key);
-	}
-
+public interface CommandExecution {	
+	void executed(CommandResult result);
 }

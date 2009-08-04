@@ -20,6 +20,7 @@
 package tx.common;
 
 import java.io.FileInputStream;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -43,6 +44,26 @@ public class CommandTest {
 		e.printStackTrace();
 	}
 	
+	protected void processCommandError(CommandResultException e) {
+		System.err.println("<<<");
+		System.err.println("COMMAND RESULT ERROR");
+		System.err.println("-----------------");	
+		System.err.println("Expected       : "+e.getPattern());
+		System.err.println("Actual         : "+e.getText());
+		System.err.println(">>>");
+		e.printStackTrace();
+	}
+	
+	protected void processMatchError(MatchException e) {
+		System.err.println("<<<");
+		System.err.println("COMMAND RESULT ERROR");
+		System.err.println("-----------------");	
+		System.err.println("Expected       : "+e.getExpected());
+		System.err.println("Actual         : "+e.getActual());
+		System.err.println(">>>");
+		e.printStackTrace();
+	}
+	
 	protected void execute(CommandManager commandManager, Command[] commands) throws Exception {
 		try {
 			Properties params = new Properties();
@@ -57,12 +78,48 @@ public class CommandTest {
 						System.out.println("<<<");
 						System.out.println(result.getText());
 						System.out.println(">>>");
+						if (result.getAttributes() != null) {
+							for(String key : result.getAttributes().keySet())
+								System.out.println("> "+key+" : "+result.getAttribute(key));
+							System.out.println("> "+result.getAttributes());
+						}
 					}
 				}
 			}
 			commandManager.disconnect();
 		} catch (StreamCommandException e) {
 			processReadError(e);
+		}
+	}
+	
+	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands) throws Exception {
+		try {
+			Properties params = new Properties();
+			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
+			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
+			commandManager.connect(params, dump);
+			if (commands != null) {
+				for(Command command : commands.keySet()) {
+					System.out.println("[ "+command.getText()+" ]");
+					commandManager.execute(command, commands.get(command));
+					for(CommandResult result : command.getResults()) {
+						System.out.println("<<<");
+						System.out.println(result.getText());
+						System.out.println(">>>");
+						if (result.getAttributes() != null) {
+							System.out.println(result.getAttributes());
+							System.out.println(">>>");
+						}
+					}
+				}
+			}
+			commandManager.disconnect();
+		} catch (StreamCommandException e) {
+			processReadError(e);
+		} catch (CommandResultException e) {
+			processCommandError(e);
+		} catch (MatchException e) {
+			processMatchError(e);
 		}
 	}
 }
