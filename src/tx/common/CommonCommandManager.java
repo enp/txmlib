@@ -82,6 +82,7 @@ public abstract class CommonCommandManager implements CommandManager {
 		}
 	}
 	
+	@Override
 	public void execute(Command command, String pattern, CommandExecution execution) throws CommandException {
 		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);
