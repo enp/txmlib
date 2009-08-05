@@ -62,9 +62,7 @@ public abstract class CommonCommandManager implements CommandManager {
 		}
 	}
 	
-	@Override
-	public void execute(Command command, Map<String,CommandExecution> resultMatch) throws CommandException {
-		execute(command);
+	private void match(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
 		if (resultMatch != null) {
 			CommandResult result = command.getResult();
 			if (result != null) {
@@ -89,6 +87,12 @@ public abstract class CommonCommandManager implements CommandManager {
 	}
 	
 	@Override
+	public void execute(Command command, Map<String,CommandExecution> resultMatch) throws CommandException {
+		execute(command);
+		match(command, resultMatch);
+	}
+	
+	@Override
 	public void execute(Command command, String pattern, CommandExecution execution) throws CommandException {
 		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);
@@ -109,14 +113,16 @@ public abstract class CommonCommandManager implements CommandManager {
 
 	@Override
 	public void pull(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
-		
+		for(String pattern : resultMatch.keySet())
+			pull(command, pattern, resultMatch.get(pattern));
 	}
 
 	@Override
 	public void pull(Command command, String pattern, CommandExecution execution) throws CommandException {
-		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
+		pull(command);
+		Map<String, CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);
-		pull(command, resultMatch);
+		match(command, resultMatch);
 	}
 
 }

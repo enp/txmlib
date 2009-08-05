@@ -29,11 +29,11 @@ import java.util.Properties;
  */
 public class CommandTest {
 	
-	protected String type(CommandManager commandManager) {
+	private String type(CommandManager commandManager) {
 		return commandManager.getClass().getSimpleName().replace("CommandManager", "").toLowerCase();
 	}
 	
-	protected void processMatchError(MatchException e) {
+	private void processMatchError(MatchException e) {
 		System.err.println("<<<");
 		System.err.println("COMMAND RESULT ERROR");
 		System.err.println("-----------------");	
@@ -43,7 +43,7 @@ public class CommandTest {
 		e.printStackTrace();
 	}
 	
-	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands) throws Exception {
+	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands, boolean pool) throws Exception {
 		try {
 			Properties params = new Properties();
 			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
@@ -52,7 +52,12 @@ public class CommandTest {
 			if (commands != null) {
 				for(Command command : commands.keySet()) {
 					System.out.println("[ "+command.getText()+" ]");
-					commandManager.execute(command, commands.get(command));
+					if (pool) {
+						commandManager.execute(command, null);
+						commandManager.pull(command, commands.get(command));
+					} else {
+						commandManager.execute(command, commands.get(command));
+					}
 					for(CommandResult result : command.getResults()) {
 						System.out.println("<<<");
 						System.out.println(result.getText());
@@ -70,31 +75,7 @@ public class CommandTest {
 		}
 	}
 	
-	protected void executeAndPull(CommandManager commandManager, Map<Command,String[]> commands) throws Exception {
-		try {
-			Properties params = new Properties();
-			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
-			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
-			commandManager.connect(params, dump);
-			if (commands != null) {
-				for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
-					System.out.println("[ "+entry.getKey().getText()+" ]");
-					commandManager.execute(entry.getKey());
-					for(String pattern : entry.getValue()) {
-						commandManager.pull(entry.getKey());
-						System.out.println("<<<");
-						System.out.println(entry.getKey().getResult().getText());
-						System.out.println(">>>");
-						if (!entry.getKey().getResult().getText().contains(pattern)) {
-							System.err.println("<<< pattern check failed >>>");
-							System.exit(1);
-						}
-					}
-				}
-			}
-			commandManager.disconnect();
-		} catch (MatchException e) {
-			processMatchError(e);
-		}
+	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands) throws Exception {
+		execute(commandManager, commands, false);
 	}
 }
