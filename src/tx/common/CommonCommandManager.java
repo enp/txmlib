@@ -66,6 +66,8 @@ public abstract class CommonCommandManager implements CommandManager {
 		if (resultMatch != null) {
 			CommandResult result = command.getResult();
 			for(String pattern : resultMatch.keySet()) {
+				if (pattern == null)
+					pattern = "";
 				Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
 	        	Matcher m = p.matcher(result.getText());
 	        	if (m.find()) {

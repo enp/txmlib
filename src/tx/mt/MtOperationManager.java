@@ -19,36 +19,44 @@
  */
 package tx.mt;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import tx.common.Command;
-import tx.common.CommandManager;
+import tx.common.CommandException;
+import tx.common.CommandExecution;
 import tx.common.CommandResult;
 import tx.common.CommonOperationManager;
 import tx.common.Operation;
+import tx.common.OperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager extends CommonOperationManager {
+public class MtOperationManager extends CommonOperationManager implements OperationManager {
 
-	CommandManager commandManager;
-	
-	public MtOperationManager() {
-		commandManager = new MtCommandManager();
-	}
-
-	public void execute(Operation operation) {
+	public void linetest(final Operation operation) throws CommandException {
 		
-		Command command = new Command("");
-		
-		try {
-			commandManager.execute(command);
-		} catch (Exception e) {
-			e.printStackTrace();
+		for(final String device : operation.getDevices()) {			
+			executeCommand(operation, new Command("RESET"));
+			executeCommand(operation, new Command("ESAB"),"ESSAI D\"UNE LIGNE D\"ABONNE",null);
+			executeCommand(operation, new Command("ND="+device),"EXC",null);
+			executeCommand(operation, new Command("PH=L"),"(.+L1.+)\r\nEXC",new CommandExecution(){
+				public void executed(CommandResult result) {
+					String names[] = new String[] {"AC A/G","AC B/G","DC A/G","DC B/G","R A/G","R B/G","R A/B","C A/B"};
+					String values[] = result.getAttribute("1").split("\r\n");
+					Pattern p = Pattern.compile("\\s+L\\d\\s+R = (\\S+)\\s+(\\S+)", Pattern.DOTALL);
+					for(int i=0;i<8;i++) {
+						Matcher m = p.matcher(values[i]);
+						if (m.find())
+							operation.addResultEntry(device, names[i], m.group(1)+" "+m.group(2));							
+					}
+				}
+			});
+			executeCommand(operation, new Command("PH=FIN"),"EXC",null);
 		}
 		
-		CommandResult commandResult = command.getResult();
-		System.out.print(commandResult);
 	}
 
 }

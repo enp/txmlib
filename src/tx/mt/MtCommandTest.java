@@ -54,14 +54,20 @@ public class MtCommandTest extends CommandTest {
 		command = new Command("ND="+phone);	
 		resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put("EXC", null);
-		commands.put(command, resultMatch);
+		commands.put(command, null);
 		
 		command = new Command("PH=L");	
-		resultMatch = new HashMap<String,CommandExecution>();
-		resultMatch.put("L1.+R = (.+)\r\n.+L2.+R = (.+)\r\n.+L3.+R = (.+)\r\n.+L4.+R = (.+)\r\n.+L5.+R = (.+)\r\n.+L6.+R = (.+)\r\n.+L7.+R = (.+)\r\n.+L8.+R = (.+)\r\nEXC", new CommandExecution() {
+		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch.put("(.+L1.+)\r\nEXC", new CommandExecution() {
 			public void executed(CommandResult result) {
 				System.out.println(result.getAttributes().toString().replace(" ", ""));
-			}});
+			}
+		});
+		/*resultMatch.put("L1.+R = (.+)\r\n.+L2.+R = (.+)\r\n.+L3.+R = (.+)\r\n.+L4.+R = (.+)\r\n.+L5.+R = (.+)\r\n.+L6.+R = (.+)\r\n.+L7.+R = (.+)\r\n.+L8.+R = (.+)\r\nEXC", new CommandExecution() {
+			public void executed(CommandResult result) {
+				System.out.println(result.getAttributes().toString().replace(" ", ""));
+			}
+		});*/
 		commands.put(command, resultMatch);
 		
 		command = new Command("PH=FIN");	

@@ -50,11 +50,11 @@ public class OperationTest {
 		xstream.alias("result", tx.common.OperationResult.class);
 		xstream.useAttributeFor(tx.common.Operation.class, "action");
 		
-		Operation operation = (Operation)xstream.fromXML(new FileInputStream("exec/"+type(operationManager)+"-operation.xml"));		
+		Operation operation = (Operation)xstream.fromXML(new FileInputStream("exec/operation.xml"));		
 		
 		operationManager.execute(operation);
 		
-		xstream.toXML(operation.getResult(), new FileOutputStream("exec/"+type(operationManager)+"-result.xml"));
+		xstream.toXML(operation.getResult(), new FileOutputStream("exec/result.xml"));
 		
 		operationManager.disconnect();
 		
