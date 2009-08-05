@@ -47,17 +47,17 @@ public class DxCommandTest extends CommandTest {
 		
 		command = new Command("ZPLM:SUB="+phone);		
 		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch.put("BUSY", new CommandExecution() {
+			public void executed(CommandResult result) {
+				System.out.println("{{{ BUSY }}}");
+			}
+		});
 		resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+phone+".+)\r\n", new CommandExecution() {
 			public void executed(CommandResult result) {
 				System.out.println("{{{ units  : "+result.getAttribute("1")+"}}}");
 				System.out.println("{{{ values : "+result.getAttribute("2")+"}}}");
 			}
-		});
-		resultMatch.put("BUSY", new CommandExecution() {
-			public void executed(CommandResult result) {
-				System.out.println("{{{ BUSY }}}");
-			}
-		});		
+		});	
 		commands.put(command, resultMatch);
 		
 		new DxCommandTest().execute(new DxCommandManager(), commands);

@@ -27,10 +27,8 @@ import tx.common.OperationTest;
  */
 public class DxOperationTest extends OperationTest {
 
-	public static void main(String[] args) throws Exception {
-		
-		new DxOperationTest().execute(new DxOperationManager());
-		
+	public static void main(String[] args) throws Exception {		
+		new DxOperationTest().execute(new DxOperationManager());		
 	}
 
 }

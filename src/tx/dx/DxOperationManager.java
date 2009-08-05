@@ -19,8 +19,13 @@
  */
 package tx.dx;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import tx.common.Command;
 import tx.common.CommandException;
+import tx.common.CommandExecution;
+import tx.common.CommandResult;
 import tx.common.CommonOperationManager;
 import tx.common.Operation;
 import tx.common.OperationManager;
@@ -31,12 +36,31 @@ import tx.common.OperationManager;
  */
 public class DxOperationManager extends CommonOperationManager implements OperationManager {
 
-	public void linetest(Operation operation) throws CommandException {
+	public void linetest(final Operation operation) throws CommandException {
 		
-		for(String device : operation.getDevices()) {
+		for(final String device : operation.getDevices()) {
+			
 			executeCommand(operation, new Command("RESET"));
-			executeCommand(operation, new Command("ZPLM:SUB="+device));
-			operation.addResultEntry(device, "X", "Y");
+			
+			Map<String,CommandExecution> resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch.put("BUSY", new CommandExecution() {
+				public void executed(CommandResult result) {
+					operation.addResultEntry(device, "STATE", "BUSY");
+				}
+			});
+			resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+device+".+)\r\n", new CommandExecution() {
+				public void executed(CommandResult result) {
+					operation.addResultEntry(device, "STATE", "IDLE");
+					String[] names = new String[] {"AC A/G","AC B/G","DC A/G","DC B/G","R A/B","R A/G","R B/G","C A/B"};
+					String[] units = result.getAttribute("1").split("\\s+");
+					String[] values = result.getAttribute("2").split("\\s+");
+					for(int i=0;i<8;i++)
+						operation.addResultEntry(device, names[i], values[i+2]+" "+units[i+1]);
+					operation.addResultEntry(device, "INTERFACE", values[10]);
+				}
+			});	
+			
+			executeCommand(operation, new Command("ZPLM:SUB="+device), resultMatch);
 		}
 		
 	}

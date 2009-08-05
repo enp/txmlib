@@ -20,6 +20,7 @@
 package tx.common;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -66,6 +67,11 @@ public class CommonOperationManager implements OperationManager {
 	protected void executeCommand(Operation operation, Command command) throws CommandException {
 		operation.addCommand(command);
 		commandManager.execute(command);
+	}
+
+	protected void executeCommand(Operation operation, Command command, Map<String,CommandExecution> resultMatch) throws CommandException {
+		operation.addCommand(command);
+		commandManager.execute(command, resultMatch);
 	}
 
 	@Override
