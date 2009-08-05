@@ -19,14 +19,12 @@
  */
 package tx.ewsd;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import tx.common.Command;
 import tx.common.CommandDump;
 import tx.common.CommandException;
-import tx.common.PullCommandManager;
+import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
 import tx.common.StreamCommandResult;
 
@@ -34,10 +32,8 @@ import tx.common.StreamCommandResult;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class EwsdCommandManager extends SocketCommandManager implements PullCommandManager {
+public class EwsdCommandManager extends SocketCommandManager implements CommandManager {
 
-	List<String[]> unownedResults = new ArrayList<String[]>();
-	
 	@Override
 	public void connect(Properties params, CommandDump dump) throws CommandException {
 		super.connect(params, dump);
@@ -60,19 +56,14 @@ public class EwsdCommandManager extends SocketCommandManager implements PullComm
 	}
 
 	@Override
-	public void pullResult(Command command) throws CommandException {
-		for(String[] result : unownedResults) {
-			if (result[0].equals(command.getNumber())) {
-				command.addResult(result[1]);
-				return;
-			}
-		}
+	public void pull(Command command) throws CommandException {
+		super.pull(command);
 		String[] result = read("<<<\n(.+:.+)\n<<<", 20000).getText().split(":",2);
 		if (result[0].equals(command.getNumber())) {
 			command.addResult(result[1]);
 		} else {
 			unownedResults.add(result);
-			pullResult(command);
+			pull(command);
 		}
 	}
 

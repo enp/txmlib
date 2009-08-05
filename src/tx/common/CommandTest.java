@@ -69,4 +69,32 @@ public class CommandTest {
 			processMatchError(e);
 		}
 	}
+	
+	protected void executeAndPull(CommandManager commandManager, Map<Command,String[]> commands) throws Exception {
+		try {
+			Properties params = new Properties();
+			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
+			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
+			commandManager.connect(params, dump);
+			if (commands != null) {
+				for(Map.Entry<Command, String[]> entry : commands.entrySet()) {
+					System.out.println("[ "+entry.getKey().getText()+" ]");
+					commandManager.execute(entry.getKey());
+					for(String pattern : entry.getValue()) {
+						commandManager.pull(entry.getKey());
+						System.out.println("<<<");
+						System.out.println(entry.getKey().getResult().getText());
+						System.out.println(">>>");
+						if (!entry.getKey().getResult().getText().contains(pattern)) {
+							System.err.println("<<< pattern check failed >>>");
+							System.exit(1);
+						}
+					}
+				}
+			}
+			commandManager.disconnect();
+		} catch (MatchException e) {
+			processMatchError(e);
+		}
+	}
 }

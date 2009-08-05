@@ -31,5 +31,8 @@ public interface CommandManager {
 	void execute(Command command) throws CommandException;
 	void execute(Command command, Map<String,CommandExecution> resultMatch) throws CommandException;
 	void execute(Command command, String pattern, CommandExecution execution) throws CommandException;
+	void pull(Command command) throws CommandException;
+	void pull(Command command, Map<String,CommandExecution> resultMatch) throws CommandException;
+	void pull(Command command, String pattern, CommandExecution execution) throws CommandException;
 	void disconnect() throws CommandException;
 }

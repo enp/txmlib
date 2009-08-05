@@ -19,7 +19,9 @@
  */
 package tx.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -65,18 +67,20 @@ public abstract class CommonCommandManager implements CommandManager {
 		execute(command);
 		if (resultMatch != null) {
 			CommandResult result = command.getResult();
-			for(String pattern : resultMatch.keySet()) {
-				if (pattern == null)
-					pattern = "";
-				Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
-	        	Matcher m = p.matcher(result.getText());
-	        	if (m.find()) {
-	        		for(int i=1; i<=m.groupCount(); i++)
-	        			result.addAttribute(Integer.toString(i), m.group(i));
-	        		if (resultMatch.get(pattern) != null)
-	        			resultMatch.get(pattern).executed(result);
-	        		return;
-	        	} 
+			if (result != null) {
+				for(String pattern : resultMatch.keySet()) {
+					if (pattern == null)
+						pattern = "";
+					Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
+		        	Matcher m = p.matcher(result.getText());
+		        	if (m.find()) {
+		        		for(int i=1; i<=m.groupCount(); i++)
+		        			result.addAttribute(Integer.toString(i), m.group(i));
+		        		if (resultMatch.get(pattern) != null)
+		        			resultMatch.get(pattern).executed(result);
+		        		return;
+		        	} 
+				}
 			}
 			CommandException e = new MatchException(resultMatch.keySet(), result.getText());
 			command.setException(e);
@@ -89,6 +93,30 @@ public abstract class CommonCommandManager implements CommandManager {
 		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);
 		execute(command, resultMatch);
+	}
+	
+	protected List<String[]> unownedResults = new ArrayList<String[]>();
+	
+	@Override
+	public void pull(Command command) throws CommandException {
+		for(String[] result : unownedResults) {
+			if (result[0].equals(command.getNumber())) {
+				command.addResult(result[1]);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void pull(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
+		
+	}
+
+	@Override
+	public void pull(Command command, String pattern, CommandExecution execution) throws CommandException {
+		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch.put(pattern, execution);
+		pull(command, resultMatch);
 	}
 
 }

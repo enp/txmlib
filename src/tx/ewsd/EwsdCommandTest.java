@@ -23,13 +23,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import tx.common.Command;
-import tx.common.PullCommandTest;
+import tx.common.CommandTest;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class EwsdCommandTest extends PullCommandTest {
+public class EwsdCommandTest extends CommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
@@ -65,7 +65,7 @@ public class EwsdCommandTest extends PullCommandTest {
 			"EXEC'D"
 		});
 		
-		new EwsdCommandTest().execute(new EwsdCommandManager(), commands);
+		new EwsdCommandTest().executeAndPull(new EwsdCommandManager(), commands);
 		
 	}
 
