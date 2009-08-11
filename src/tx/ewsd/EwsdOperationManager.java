@@ -19,7 +19,15 @@
  */
 package tx.ewsd;
 
-import tx.common.CommandManager;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import tx.common.Command;
+import tx.common.CommandException;
+import tx.common.CommandExecution;
+import tx.common.CommandResult;
 import tx.common.CommonOperationManager;
 import tx.common.Operation;
 
@@ -29,26 +37,75 @@ import tx.common.Operation;
  */
 public class EwsdOperationManager extends CommonOperationManager {
 
-	CommandManager commandManager;
-	
-	public EwsdOperationManager() {
-		commandManager = new EwsdCommandManager();
-	}
-
-	public void execute(Operation operation) {
+	public void linetest(final Operation operation) throws CommandException {
 		
-		/*Command command = new Command("");
+		Command command;
+		Map<String,CommandExecution> resultMatch;		
 		
-		try {
-			commandManager.execute(command);
-		} catch (IOException e) {
-			e.printStackTrace();
+		for(final String device : operation.getDevices()) {			
+			
+			command = new Command("ACTWST:DN=2687534");			
+			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch.put("COMMAND SUBMITTED", null);
+			resultMatch.put("ACCEPTED", null);
+			resultMatch.put("EXEC'D", null);
+			resultMatch.put("NEXT CALLTYPE FOR ACCEPTANCE", null);
+			executeCommand(operation, command);
+			pullCommand(command, resultMatch);
+			
+			command = new Command("STARTLTEST:LAC=8863,DN="+device);
+			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch.put("COMMAND SUBMITTED", null);
+			resultMatch.put("EXEC'D", null);
+			executeCommand(operation, command);
+			pullCommand(command, resultMatch);
+			
+			command = new Command("TESTLINE:FCT=GT");
+			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch.put("COMMAND SUBMITTED", null);
+			resultMatch.put("ACCEPTED", null);
+			resultMatch.put("EXEC'D", new CommandExecution() {
+				public void executed(CommandResult result) {
+					Pattern p = Pattern.compile("--- \n(.+)\n\r\nEND TEXT", Pattern.DOTALL);
+					Matcher m = p.matcher(result.getText());
+					if (m.find()) {
+						String[] names = new String[] {"DC","AC","R","C"};
+						String[] rows = m.group(1).split("\n");
+						for(int i=0;i<4;i++) {
+							operation.addResultEntry(device, names[i]+" A/B", removeWhitespaces(rows[i].substring(5, 23).trim()));
+							operation.addResultEntry(device, names[i]+" A/G", removeWhitespaces(rows[i].substring(25, 43).trim()));
+							operation.addResultEntry(device, names[i]+" B/G", removeWhitespaces(rows[i].substring(45, 60).trim()));
+						}
+					}
+				}
+				private String removeWhitespaces(String source) {
+					StringBuilder result = new StringBuilder();
+					for(int i=0;i<source.length();i++) {
+						if (source.charAt(i) != ' ' || source.charAt(i-1) != ' ')
+							result.append(source.charAt(i));
+					}
+					return result.toString();
+				}
+			});
+			executeCommand(operation, command);
+			pullCommand(command, resultMatch);
+			
+			command = new Command("TESTLINE:FCT=GR");
+			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch.put("COMMAND SUBMITTED", null);
+			resultMatch.put("EXEC'D", null);
+			executeCommand(operation, command);
+			pullCommand(command, resultMatch);
+			
+			command = new Command("DACTWST");
+			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch.put("COMMAND SUBMITTED", null);
+			resultMatch.put("EXEC'D", null);
+			executeCommand(operation, command);
+			pullCommand(command, resultMatch);
+			
 		}
 		
-		while(commandManager.readNextResult(command)) {
-			CommandResult commandResult = command.getResult();
-			System.out.print(commandResult);
-		}*/
 	}
 
 }

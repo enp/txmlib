@@ -78,7 +78,11 @@ public class CommonOperationManager implements OperationManager {
 		operation.addCommand(command);
 		commandManager.execute(command, pattern, execution);
 	}
-
+	
+	public void pullCommand(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
+		commandManager.pull(command, resultMatch);
+	}
+	
 	@Override
 	public void disconnect() throws OperationException {
 		try {

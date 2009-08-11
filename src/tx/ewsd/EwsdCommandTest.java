@@ -68,7 +68,7 @@ public class EwsdCommandTest extends CommandTest {
 		resultMatch = new LinkedHashMap<String,CommandExecution>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
-		commands.put(new Command("STARTLTEST:LAC=8863,DN=2310000"), resultMatch);
+		commands.put(new Command("STARTLTEST:LAC=8863,DN=2310550"), resultMatch);
 		
 		resultMatch = new LinkedHashMap<String,CommandExecution>();
 		resultMatch.put("COMMAND SUBMITTED", null);
