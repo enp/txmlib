@@ -43,20 +43,23 @@ public class OperationTest {
 		Properties params = new Properties();
 		params.load(new FileInputStream("conf/"+type(operationManager)+".conf"));
 		
-		CommandDump commandDump = new CommandDump("dump/"+type(operationManager)+".txt");		
-		OperationDump operationDump = new XmlFileOperationDump("dump/"+type(operationManager)+".xml");
+		CommandDump commandDump = new CommandDump("dump/"+type(operationManager)+".txt");
 		
-		operationManager.connect(params, commandDump, operationDump);
+		operationManager.connect(params, commandDump);
 		
 		XStream xstream = new XStream();
+		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias("operation", tx.common.Operation.class);
-		xstream.alias("result", tx.common.OperationResult.class);
+		xstream.alias("command", tx.common.core.Command.class);
+		xstream.alias("result", tx.common.StreamCommandResult.class);
 		xstream.useAttributeFor(tx.common.Operation.class, "action");
+		xstream.omitField(tx.common.core.CommandDump.class, "fos");
 		
 		Operation operation = (Operation)xstream.fromXML(new FileInputStream("exec/operation.xml"));		
 		
 		operationManager.execute(operation);
 		
+		xstream.toXML(operation, new FileOutputStream("dump/"+type(operationManager)+".txt"));		
 		xstream.toXML(operation.getResult(), new FileOutputStream("exec/result.xml"));
 		
 		operationManager.disconnect();

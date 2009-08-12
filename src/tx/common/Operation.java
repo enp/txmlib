@@ -38,7 +38,6 @@ public class Operation {
 	private Map<String,String> options;
 	private List<Command> commands;
 	private OperationException exception;
-	private OperationDump operationDump;
 	private CommandDump commandDump;
 	private OperationResult result;
 
@@ -87,14 +86,6 @@ public class Operation {
 
 	public void setCommandDump(CommandDump commandDump) {
 		this.commandDump = commandDump;
-	}
-
-	public OperationDump getOperationDump() {
-		return operationDump;
-	}
-
-	public void setOperationDump(OperationDump operationDump) {
-		this.operationDump = operationDump;
 	}
 	
 	public OperationResult getResult() {

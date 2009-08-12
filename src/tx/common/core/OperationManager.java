@@ -26,7 +26,6 @@ import java.util.Properties;
 import tx.common.CommandException;
 import tx.common.CommandExecution;
 import tx.common.Operation;
-import tx.common.OperationDump;
 import tx.common.OperationException;
 
 /**
@@ -36,10 +35,8 @@ import tx.common.OperationException;
 public class OperationManager {
 	
 	protected CommandManager commandManager;
-	protected OperationDump operationDump;
 	
-	public void connect(Properties params, CommandDump commandDump, OperationDump operationDump) throws OperationException {
-		this.operationDump = operationDump;
+	public void connect(Properties params, CommandDump commandDump) throws OperationException {
 		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
 		try {
 			commandManager = (CommandManager)Class.forName(commandManagerClass).getConstructor(new Class[] {}).newInstance(new Object[] {});
@@ -57,15 +54,12 @@ public class OperationManager {
 					method.invoke(this, operation);
 				} catch (Exception e) {
 					operation.setException(new OperationException(e));
-				} finally {
-					operationDump.dump(operation);
 				}
 				return;
 			}
 		}
 		operation.setException(new OperationException(
 			"Method ["+this.getClass().getCanonicalName()+"."+operation.getAction()+"] is not found"));
-		operationDump.dump(operation);
 	}
 	
 	protected void executeCommand(Operation operation, Command command) throws CommandException {
