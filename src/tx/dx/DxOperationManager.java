@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import tx.common.core.Command;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
 import tx.common.core.Error;
 import tx.common.core.Operation;
@@ -41,14 +41,14 @@ public class DxOperationManager extends OperationManager {
 			
 			executeCommand(operation, new Command("RESET"));
 			
-			Map<String,CommandExecution> resultMatch = new LinkedHashMap<String,CommandExecution>();
-			resultMatch.put("BUSY", new CommandExecution() {
-				public void executed(CommandResult result) {
+			Map<String,CommandResultReader> resultMatch = new LinkedHashMap<String,CommandResultReader>();
+			resultMatch.put("BUSY", new CommandResultReader() {
+				public void read(CommandResult result) {
 					operation.addResultEntry(device, "STATE", "BUSY");
 				}
 			});
-			resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+device+".+)\r\n", new CommandExecution() {
-				public void executed(CommandResult result) {
+			resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+device+".+)\r\n", new CommandResultReader() {
+				public void read(CommandResult result) {
 					operation.addResultEntry(device, "STATE", "IDLE");
 					String[] names = new String[] {"AC A/G","AC B/G","DC A/G","DC B/G","R A/B","R A/G","R B/G","C A/B"};
 					String[] units = result.getAttribute("1").split("\\s+");

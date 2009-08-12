@@ -23,12 +23,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx.common.core.CommandDump;
 import tx.common.core.CommandManager;
 import tx.common.core.Error;
+import tx.common.core.MatchError;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -41,7 +44,7 @@ public abstract class StreamCommandManager extends CommandManager {
 	protected InputStream is;
 	protected OutputStream os;
 	
-	private long currentChar = 0;
+	//private long currentChar = 0;
 	
 	@Override
 	protected void setDump(CommandDump dump) {
@@ -99,7 +102,47 @@ public abstract class StreamCommandManager extends CommandManager {
 		}
 	}
 	
-	protected StreamReadResult read(String[] patterns, int timeout, boolean exception) throws Error {
+	protected String read(Map<String,StreamReader> resultMatch, int timeout, boolean exception) throws Error {
+		int c;
+		//long beginChar = currentChar;
+        StringBuilder buffer = new StringBuilder();
+		try {
+			setTimeout(timeout);
+			while((c = is.read()) != -1) {
+				buffer.append((char)c);
+				if (dump != null) dump.write(c);
+				//currentChar++;
+				for(String pattern : resultMatch.keySet()) {
+					Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
+	            	Matcher m = p.matcher(buffer);
+	            	if (m.find()) {
+	            		if (m.groupCount() > 0) {
+	            			//resultMatch.get(pattern).read(m.group(1), beginChar, currentChar);
+	            			if (resultMatch.get(pattern) != null)
+	            				resultMatch.get(pattern).read(m.group(1));
+	            			return m.group(1);
+	            		} else {
+	            			//resultMatch.get(pattern).read(m.group(), beginChar, currentChar);
+	            			if (resultMatch.get(pattern) != null)
+	            				resultMatch.get(pattern).read(m.group());
+	            			return m.group();
+	            		}
+	            	}
+				}
+			}
+		} catch (SocketTimeoutException e) {
+			// go end
+		} catch (IOException e) {
+			new Error(e);
+		}
+		if (exception) {
+			throw new MatchError(resultMatch.keySet(), buffer.toString());
+		} else {
+			return null;
+		}
+	}
+	
+	/*protected StreamReadResult read(String[] patterns, int timeout, boolean exception) throws Error {
 		int c;
 		long beginChar = currentChar;
         StringBuilder buffer = new StringBuilder();
@@ -124,29 +167,34 @@ public abstract class StreamCommandManager extends CommandManager {
 		} catch (IOException e) {
 			new Error(e);
 		}
-		if (exception)
+		if (exception) {
+			//Error e = new MatchError();
 			throw new StreamReadError(patterns, buffer.toString(), beginChar, currentChar);
-		else
+		} else {
 			return null;
+		}
+	}*/
+	
+	protected String read(String[] patterns, int timeout, boolean exception) throws Error {
+		Map<String,StreamReader> resultMatch = new HashMap<String,StreamReader>();
+		for (String pattern : patterns)
+			resultMatch.put(pattern, null);
+		return read(resultMatch, timeout, exception);
 	}
 	
-	protected StreamReadResult read(String[] patterns, int timeout) throws Error {
-		return read(patterns, timeout, true);
-	}
-	
-	protected StreamReadResult read(String pattern, int timeout, boolean exception) throws Error {
+	protected String read(String pattern, int timeout, boolean exception) throws Error {
 		return read(new String[] { pattern }, timeout, exception);
 	}
 	
-	protected StreamReadResult read(String pattern, int timeout) throws Error {
+	protected String read(String pattern, int timeout) throws Error {
 		return read(new String[] { pattern }, timeout, true);
 	}
 	
-	protected StreamReadResult read(byte b, int timeout, boolean exception) throws Error {
+	protected String read(byte b, int timeout, boolean exception) throws Error {
 		return read(new String( new byte[] { b }), timeout, exception);
 	}
 	
-	protected StreamReadResult read(byte b, int timeout) throws Error {
+	protected String read(byte b, int timeout) throws Error {
 		return read(new String( new byte[] { b }), timeout, true);
 	}
 

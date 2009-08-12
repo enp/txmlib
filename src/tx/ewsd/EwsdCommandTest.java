@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 import tx.common.CommandTest;
 import tx.common.core.Command;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
 
 /**
@@ -37,9 +37,9 @@ public class EwsdCommandTest extends CommandTest {
 
 	public static void main(String[] args) throws Exception {
 		
-		Map<Command,Map<String,CommandExecution>> commands = new LinkedHashMap<Command,Map<String,CommandExecution>>();
+		Map<Command,Map<String,CommandResultReader>> commands = new LinkedHashMap<Command,Map<String,CommandResultReader>>();
 		
-		Map<String,CommandExecution> resultMatch;
+		Map<String,CommandResultReader> resultMatch;
 		
 		//resultMatch = new LinkedHashMap<String,CommandExecution>();
 		//resultMatch.put("TASK SUBMITTED", null);
@@ -58,23 +58,23 @@ public class EwsdCommandTest extends CommandTest {
 		//});
 		//commands.put(new Command("DISPTIME"), resultMatch);
 		
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("ACCEPTED", null);
 		resultMatch.put("EXEC'D", null);
 		resultMatch.put("NEXT CALLTYPE FOR ACCEPTANCE", null);
 		commands.put(new Command("ACTWST:DN=2687534"), resultMatch);
 		
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("STARTLTEST:LAC=8863,DN=2310550"), resultMatch);
 		
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("ACCEPTED", null);
-		resultMatch.put("EXEC'D", new CommandExecution() {
-			public void executed(CommandResult result) {
+		resultMatch.put("EXEC'D", new CommandResultReader() {
+			public void read(CommandResult result) {
 				Pattern p = Pattern.compile("RESULT OF LINE PARAM TEST\\s+(.+)\nEND TEXT", Pattern.DOTALL);
 				Matcher m = p.matcher(result.getText());
 				System.out.println("{{{ "+(m.find()?m.group(1):"not found")+" }}}");
@@ -82,12 +82,12 @@ public class EwsdCommandTest extends CommandTest {
 		});
 		commands.put(new Command("TESTLINE:FCT=GT"), resultMatch);
 		
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("TESTLINE:FCT=GR"), resultMatch);
 		
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("DACTWST"), resultMatch);

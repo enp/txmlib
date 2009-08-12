@@ -19,10 +19,13 @@
  */
 package tx.dx;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tx.common.core.Command;
 import tx.common.core.Error;
 import tx.common.stream.SocketCommandManager;
-import tx.common.stream.StreamReadResult;
+import tx.common.stream.StreamReader;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -30,16 +33,14 @@ import tx.common.stream.StreamReadResult;
  */
 public class DxCommandManager extends SocketCommandManager {
 	
-	@Override
 	public void reset(Command command) throws Error {
 		write(0x19);
-		StreamReadResult result = read(
-			new String[] { 
-				"(END OF DIALOGUE SESSION)\r\n\b\n",	// need to enter password
-				"([^\n]+>)\r\n< "						// command prompt is ready
-			}, 1000, false);
+		Map<String,StreamReader> resultMatch = new HashMap<String,StreamReader>();
+		resultMatch.put("(END OF DIALOGUE SESSION)\r\n\b\n", null);
+		resultMatch.put("([^\n]+>)\r\n< ", null);
+		String result = read(resultMatch, 1000, false);
 		command.addResult(result);
-		if (result == null || result.getIndex() == 0) {
+		if (result == null || result == "END OF DIALOGUE SESSION") {
 			write(new byte[] { 0x0d, 0x00 });
 			result = read("(ENTER PASSWORD) < \b", 1000, false);
 			command.addResult(result);

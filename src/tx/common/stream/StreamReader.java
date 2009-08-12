@@ -17,13 +17,13 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common.core;
+package tx.common.stream;
 
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface CommandExecution {	
-	public void executed(CommandResult result);
+public interface StreamReader {	
+	public void read(String result);
 }

@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx.common.core.Command;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
 import tx.common.core.Operation;
 import tx.common.core.OperationManager;
@@ -41,8 +41,8 @@ public class MtOperationManager extends OperationManager {
 			executeCommand(operation, new Command("RESET"));
 			executeCommand(operation, new Command("ESAB"),"ESSAI D\"UNE LIGNE D\"ABONNE",null);
 			executeCommand(operation, new Command("ND="+device),"EXC",null);
-			executeCommand(operation, new Command("PH=L"),"(.+L1.+)\r\nEXC",new CommandExecution(){
-				public void executed(CommandResult result) {
+			executeCommand(operation, new Command("PH=L"),"(.+L1.+)\r\nEXC",new CommandResultReader(){
+				public void read(CommandResult result) {
 					String names[] = new String[] {"AC A/G","AC B/G","DC A/G","DC B/G","R A/G","R B/G","R A/B","C A/B"};
 					String values[] = result.getAttribute("1").split("\r\n");
 					Pattern p = Pattern.compile("\\s+L\\d\\s+R = (\\S+)\\s+(\\S+)", Pattern.DOTALL);

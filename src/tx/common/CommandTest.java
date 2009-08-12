@@ -25,7 +25,7 @@ import java.util.Properties;
 
 import tx.common.core.Command;
 import tx.common.core.CommandDump;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandManager;
 import tx.common.core.CommandResult;
 import tx.common.core.MatchError;
@@ -50,7 +50,7 @@ public class CommandTest {
 		e.printStackTrace();
 	}
 	
-	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands, boolean pool) throws Exception {
+	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandResultReader>> commands, boolean pool) throws Exception {
 		try {
 			Properties params = new Properties();
 			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
@@ -82,7 +82,7 @@ public class CommandTest {
 		}
 	}
 	
-	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandExecution>> commands) throws Exception {
+	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandResultReader>> commands) throws Exception {
 		execute(commandManager, commands, false);
 	}
 }

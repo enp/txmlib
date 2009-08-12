@@ -64,17 +64,17 @@ public class OperationManager {
 		commandManager.execute(command);
 	}
 
-	protected void executeCommand(Operation operation, Command command, Map<String,CommandExecution> resultMatch) throws Error {
+	protected void executeCommand(Operation operation, Command command, Map<String,CommandResultReader> resultMatch) throws Error {
 		operation.addCommand(command);
 		commandManager.execute(command, resultMatch);
 	}
 
-	protected void executeCommand(Operation operation, Command command, String pattern, CommandExecution execution) throws Error {
+	protected void executeCommand(Operation operation, Command command, String pattern, CommandResultReader execution) throws Error {
 		operation.addCommand(command);
 		commandManager.execute(command, pattern, execution);
 	}
 	
-	public void pullCommand(Command command, Map<String, CommandExecution> resultMatch) throws Error {
+	public void pullCommand(Command command, Map<String, CommandResultReader> resultMatch) throws Error {
 		commandManager.pull(command, resultMatch);
 	}
 	

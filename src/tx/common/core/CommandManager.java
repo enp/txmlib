@@ -62,7 +62,7 @@ public abstract class CommandManager {
 	
 	protected abstract void run(Command command) throws Error;
 	
-	private void match(Command command, Map<String, CommandExecution> resultMatch) throws Error {
+	private void match(Command command, Map<String, CommandResultReader> resultMatch) throws Error {
 		if (resultMatch != null) {
 			CommandResult result = command.getResult();
 			if (result != null) {
@@ -75,7 +75,7 @@ public abstract class CommandManager {
 		        		for(int i=1; i<=m.groupCount(); i++)
 		        			result.addAttribute(Integer.toString(i), m.group(i));
 		        		if (resultMatch.get(pattern) != null)
-		        			resultMatch.get(pattern).executed(result);
+		        			resultMatch.get(pattern).read(result);
 		        		return;
 		        	} 
 				}
@@ -86,13 +86,13 @@ public abstract class CommandManager {
 		}
 	}
 	
-	public void execute(Command command, Map<String,CommandExecution> resultMatch) throws Error {
+	public void execute(Command command, Map<String,CommandResultReader> resultMatch) throws Error {
 		execute(command);
 		match(command, resultMatch);
 	}
 	
-	public void execute(Command command, String pattern, CommandExecution execution) throws Error {
-		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
+	public void execute(Command command, String pattern, CommandResultReader execution) throws Error {
+		Map<String,CommandResultReader> resultMatch = new HashMap<String,CommandResultReader>();
 		resultMatch.put(pattern, execution);
 		execute(command, resultMatch);
 	}
@@ -108,14 +108,14 @@ public abstract class CommandManager {
 		}
 	}
 
-	public void pull(Command command, Map<String, CommandExecution> resultMatch) throws Error {
+	public void pull(Command command, Map<String, CommandResultReader> resultMatch) throws Error {
 		for(String pattern : resultMatch.keySet())
 			pull(command, pattern, resultMatch.get(pattern));
 	}
 
-	public void pull(Command command, String pattern, CommandExecution execution) throws Error {
+	public void pull(Command command, String pattern, CommandResultReader execution) throws Error {
 		pull(command);
-		Map<String, CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
+		Map<String, CommandResultReader> resultMatch = new HashMap<String,CommandResultReader>();
 		resultMatch.put(pattern, execution);
 		match(command, resultMatch);
 	}

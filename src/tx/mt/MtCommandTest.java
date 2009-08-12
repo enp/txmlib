@@ -25,7 +25,7 @@ import java.util.Map;
 
 import tx.common.CommandTest;
 import tx.common.core.Command;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
 
 /**
@@ -39,27 +39,27 @@ public class MtCommandTest extends CommandTest {
 		String phone = "2740001";
 		
 		Command command;
-		Map<String,CommandExecution> resultMatch;		
+		Map<String,CommandResultReader> resultMatch;		
 		
-		Map<Command,Map<String,CommandExecution>> commands = new LinkedHashMap<Command,Map<String,CommandExecution>>();
+		Map<Command,Map<String,CommandResultReader>> commands = new LinkedHashMap<Command,Map<String,CommandResultReader>>();
 		
 		command = new Command("RESET");	
 		commands.put(command, null);
 		
 		command = new Command("ESAB");	
-		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch = new HashMap<String,CommandResultReader>();
 		resultMatch.put("ESSAI D\"UNE LIGNE D\"ABONNE", null);
 		commands.put(command, resultMatch);
 		
 		command = new Command("ND="+phone);	
-		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch = new HashMap<String,CommandResultReader>();
 		resultMatch.put("EXC", null);
 		commands.put(command, null);
 		
 		command = new Command("PH=L");	
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
-		resultMatch.put("(.+L1.+)\r\nEXC", new CommandExecution() {
-			public void executed(CommandResult result) {
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
+		resultMatch.put("(.+L1.+)\r\nEXC", new CommandResultReader() {
+			public void read(CommandResult result) {
 				System.out.println(result.getAttributes().toString().replace(" ", ""));
 			}
 		});
@@ -71,7 +71,7 @@ public class MtCommandTest extends CommandTest {
 		commands.put(command, resultMatch);
 		
 		command = new Command("PH=FIN");	
-		resultMatch = new HashMap<String,CommandExecution>();
+		resultMatch = new HashMap<String,CommandResultReader>();
 		resultMatch.put("EXC", null);
 		commands.put(command, resultMatch);		
 		

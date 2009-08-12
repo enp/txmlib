@@ -24,7 +24,7 @@ import java.util.Map;
 
 import tx.common.CommandTest;
 import tx.common.core.Command;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
 
 /**
@@ -38,22 +38,22 @@ public class DxCommandTest extends CommandTest {
 		String phone = "2631000";
 		
 		Command command;
-		Map<String,CommandExecution> resultMatch;		
+		Map<String,CommandResultReader> resultMatch;		
 		
-		Map<Command,Map<String,CommandExecution>> commands = new LinkedHashMap<Command,Map<String,CommandExecution>>();
+		Map<Command,Map<String,CommandResultReader>> commands = new LinkedHashMap<Command,Map<String,CommandResultReader>>();
 		
 		command = new Command("RESET");	
 		commands.put(command, null);
 		
 		command = new Command("ZPLM:SUB="+phone);		
-		resultMatch = new LinkedHashMap<String,CommandExecution>();
-		resultMatch.put("BUSY", new CommandExecution() {
-			public void executed(CommandResult result) {
+		resultMatch = new LinkedHashMap<String,CommandResultReader>();
+		resultMatch.put("BUSY", new CommandResultReader() {
+			public void read(CommandResult result) {
 				System.out.println("{{{ BUSY }}}");
 			}
 		});
-		resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+phone+".+)\r\n", new CommandExecution() {
-			public void executed(CommandResult result) {
+		resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+phone+".+)\r\n", new CommandResultReader() {
+			public void read(CommandResult result) {
 				System.out.println("{{{ units  : "+result.getAttribute("1")+"}}}");
 				System.out.println("{{{ values : "+result.getAttribute("2")+"}}}");
 			}

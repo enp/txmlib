@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx.common.core.Command;
-import tx.common.core.CommandExecution;
+import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
 import tx.common.core.Error;
 import tx.common.core.Operation;
@@ -40,12 +40,12 @@ public class EwsdOperationManager extends OperationManager {
 	public void linetest(final Operation operation) throws Error {
 		
 		Command command;
-		Map<String,CommandExecution> resultMatch;		
+		Map<String,CommandResultReader> resultMatch;		
 		
 		for(final String device : operation.getDevices()) {			
 			
 			command = new Command("ACTWST:DN=2687534");			
-			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch = new LinkedHashMap<String,CommandResultReader>();
 			resultMatch.put("COMMAND SUBMITTED", null);
 			resultMatch.put("ACCEPTED", null);
 			resultMatch.put("EXEC'D", null);
@@ -54,18 +54,18 @@ public class EwsdOperationManager extends OperationManager {
 			pullCommand(command, resultMatch);
 			
 			command = new Command("STARTLTEST:LAC=8863,DN="+device);
-			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch = new LinkedHashMap<String,CommandResultReader>();
 			resultMatch.put("COMMAND SUBMITTED", null);
 			resultMatch.put("EXEC'D", null);
 			executeCommand(operation, command);
 			pullCommand(command, resultMatch);
 			
 			command = new Command("TESTLINE:FCT=GT");
-			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch = new LinkedHashMap<String,CommandResultReader>();
 			resultMatch.put("COMMAND SUBMITTED", null);
 			resultMatch.put("ACCEPTED", null);
-			resultMatch.put("EXEC'D", new CommandExecution() {
-				public void executed(CommandResult result) {
+			resultMatch.put("EXEC'D", new CommandResultReader() {
+				public void read(CommandResult result) {
 					Pattern p = Pattern.compile("--- \n(.+)\n\r\nEND TEXT", Pattern.DOTALL);
 					Matcher m = p.matcher(result.getText());
 					if (m.find()) {
@@ -91,14 +91,14 @@ public class EwsdOperationManager extends OperationManager {
 			pullCommand(command, resultMatch);
 			
 			command = new Command("TESTLINE:FCT=GR");
-			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch = new LinkedHashMap<String,CommandResultReader>();
 			resultMatch.put("COMMAND SUBMITTED", null);
 			resultMatch.put("EXEC'D", null);
 			executeCommand(operation, command);
 			pullCommand(command, resultMatch);
 			
 			command = new Command("DACTWST");
-			resultMatch = new LinkedHashMap<String,CommandExecution>();
+			resultMatch = new LinkedHashMap<String,CommandResultReader>();
 			resultMatch.put("COMMAND SUBMITTED", null);
 			resultMatch.put("EXEC'D", null);
 			executeCommand(operation, command);
