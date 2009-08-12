@@ -104,7 +104,7 @@ public abstract class CommonCommandManager implements CommandManager {
 	@Override
 	public void pull(Command command) throws CommandException {
 		for(String[] result : unownedResults) {
-			if (result[0].equals(command.getNumber())) {
+			if (result[0].equals(command.getPullGroup())) {
 				command.addResult(result[1]);
 				return;
 			}

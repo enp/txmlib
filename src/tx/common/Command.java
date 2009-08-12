@@ -31,7 +31,7 @@ public class Command {
 	
 	private String text;
 
-	private String number;
+	private String pullGroup;
 	
 	private List<CommandResult> results = new ArrayList<CommandResult>();
 	
@@ -47,12 +47,12 @@ public class Command {
 		return text;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;		
+	public void setPullGroup(String number) {
+		this.pullGroup = number;		
 	}
 
-	public String getNumber() {
-		return number;
+	public String getPullGroup() {
+		return pullGroup;
 	}
 	
 	public void addResult(String result) {
