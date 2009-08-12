@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import tx.common.CommandException;
-import tx.common.CommandExecution;
-import tx.common.Operation;
 import tx.common.OperationException;
 
 /**

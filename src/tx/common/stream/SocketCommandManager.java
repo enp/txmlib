@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.stream;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Properties;
 
+import tx.common.CommandException;
 import tx.common.core.CommandDump;
 
 /**

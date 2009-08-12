@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.CommandExecution;
 import tx.common.CommandTest;
 import tx.common.core.Command;
+import tx.common.core.CommandExecution;
 import tx.common.core.CommandResult;
 
 /**

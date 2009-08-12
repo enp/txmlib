@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 import tx.common.core.CommandDump;
+import tx.common.core.Operation;
 import tx.common.core.OperationManager;
 
 import com.thoughtworks.xstream.XStream;
@@ -49,10 +50,10 @@ public class OperationTest {
 		
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.NO_REFERENCES);
-		xstream.alias("operation", tx.common.Operation.class);
+		xstream.alias("operation", tx.common.core.Operation.class);
 		xstream.alias("command", tx.common.core.Command.class);
-		xstream.alias("result", tx.common.StreamCommandResult.class);
-		xstream.useAttributeFor(tx.common.Operation.class, "action");
+		xstream.alias("result", tx.common.stream.StreamCommandResult.class);
+		xstream.useAttributeFor(tx.common.core.Operation.class, "action");
 		xstream.omitField(tx.common.core.CommandDump.class, "fos");
 		
 		Operation operation = (Operation)xstream.fromXML(new FileInputStream("exec/operation.xml"));		

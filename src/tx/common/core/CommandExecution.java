@@ -17,30 +17,13 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class OperationResult {
-
-	private Map<String,Map<String,String>> devices;
-	
-	public Map<String,Map<String,String>> getDevices() {
-		return Collections.unmodifiableMap(devices);
-	}
-	
-	public void addResultEntry(String device, String name, String value) {
-		if (devices == null)
-			devices = new HashMap<String,Map<String,String>>();
-		if (!devices.containsKey(device))
-			devices.put(device, new HashMap<String,String>());
-		devices.get(device).put(name, value);		
-	}
-	
+public interface CommandExecution {	
+	public void executed(CommandResult result);
 }

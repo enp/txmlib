@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import tx.common.CommandExecution;
 import tx.common.CommandTest;
 import tx.common.core.Command;
+import tx.common.core.CommandExecution;
 import tx.common.core.CommandResult;
 
 /**

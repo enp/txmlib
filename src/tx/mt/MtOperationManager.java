@@ -23,10 +23,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx.common.CommandException;
-import tx.common.CommandExecution;
-import tx.common.Operation;
 import tx.common.core.Command;
+import tx.common.core.CommandExecution;
 import tx.common.core.CommandResult;
+import tx.common.core.Operation;
 import tx.common.core.OperationManager;
 
 /**

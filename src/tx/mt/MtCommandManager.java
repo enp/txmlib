@@ -20,8 +20,8 @@
 package tx.mt;
 
 import tx.common.CommandException;
-import tx.common.SocketCommandManager;
 import tx.common.core.Command;
+import tx.common.stream.SocketCommandManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

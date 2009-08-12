@@ -17,30 +17,42 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.stream;
 
-import tx.common.core.CommandResult;
+import java.util.HashSet;
+import java.util.Set;
 
-public class StreamCommandResult extends CommandResult {	
+import tx.common.MatchException;
 
-	private int index;
+
+/**
+ * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
+ *
+ */
+public class StreamCommandException extends MatchException {
+
+	private static final long serialVersionUID = 5485195737568383806L;
+	
 	private long begin;
 	private long end;
-	
-	public StreamCommandResult(int index, String text, long begin, long end) {
-		super(text);
-		this.index = index;
-		this.text = text;
+
+	public StreamCommandException(Set<String> expected, String actual, long begin, long end) {
+		super(expected, actual);
 		this.begin = begin;
 		this.end = end;
 	}
 	
-	public String toString() {
-		return index + " : " + text;
+	private static Set<String> extectedFromArray(String[] expected) {
+		Set<String> e = new HashSet<String>();
+		for(String s : expected)
+			e.add(s);
+		return e;
 	}
 
-	public int getIndex() {
-		return index;
+	public StreamCommandException(String[] expected, String actual, long begin, long end) {
+		super(extectedFromArray(expected), actual);
+		this.begin = begin;
+		this.end = end;
 	}
 
 	public long getBegin() {

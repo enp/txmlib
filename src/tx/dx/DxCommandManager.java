@@ -20,9 +20,9 @@
 package tx.dx;
 
 import tx.common.CommandException;
-import tx.common.SocketCommandManager;
-import tx.common.StreamCommandResult;
 import tx.common.core.Command;
+import tx.common.stream.SocketCommandManager;
+import tx.common.stream.StreamCommandResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
