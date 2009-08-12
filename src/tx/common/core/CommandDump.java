@@ -17,13 +17,48 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public abstract class CommandDump {
-	public CommandDump() {}
-	public abstract String getFileName();
+public class CommandDump {
+	
+	private String fileName;
+	private FileOutputStream fos;
+	
+	public CommandDump(String fileName) throws FileNotFoundException {
+		this.fileName = fileName;
+		this.fos = new FileOutputStream(fileName);
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	
+	public void write(int b) throws IOException {
+		fos.write(b);
+	}
+	
+	public void write(byte b) throws IOException {
+		fos.write(b);
+	}
+	
+	public void write(byte[] b) throws IOException {
+		fos.write(b);
+	}
+	
+	public void write(String s) throws IOException {
+		fos.write(s.getBytes());
+	}
+	
+	public void close() throws IOException {
+		fos.close();
+	}
+	
 }

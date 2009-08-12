@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx.common.core.Command;
+import tx.common.core.CommandDump;
 import tx.common.core.CommandResult;
 
 /**

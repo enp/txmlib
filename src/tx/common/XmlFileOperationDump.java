@@ -43,7 +43,7 @@ public class XmlFileOperationDump extends OperationDump {
 		this.xstream.alias("command", tx.common.core.Command.class);
 		this.xstream.alias("result", tx.common.StreamCommandResult.class);
 		this.xstream.useAttributeFor(tx.common.Operation.class, "action");
-		this.xstream.omitField(tx.common.TextFileCommandDump.class, "fos");
+		this.xstream.omitField(tx.common.core.CommandDump.class, "fos");
 	}
 	
 	public String getFileName() {

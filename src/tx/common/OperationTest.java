@@ -23,6 +23,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
+import tx.common.core.CommandDump;
+
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -40,7 +42,7 @@ public class OperationTest {
 		Properties params = new Properties();
 		params.load(new FileInputStream("conf/"+type(operationManager)+".conf"));
 		
-		CommandDump commandDump = new TextFileCommandDump("dump/"+type(operationManager)+".txt");		
+		CommandDump commandDump = new CommandDump("dump/"+type(operationManager)+".txt");		
 		OperationDump operationDump = new XmlFileOperationDump("dump/"+type(operationManager)+".xml");
 		
 		operationManager.connect(params, commandDump, operationDump);

@@ -26,13 +26,15 @@ import java.net.SocketTimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tx.common.core.CommandDump;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
 public abstract class StreamCommandManager extends CommonCommandManager implements CommandManager {
 	
-	protected StreamCommandDump dump;
+	protected CommandDump dump;
 	
 	protected InputStream is;
 	protected OutputStream os;
@@ -41,7 +43,7 @@ public abstract class StreamCommandManager extends CommonCommandManager implemen
 	
 	@Override
 	protected void setDump(CommandDump dump) {
-		this.dump = (StreamCommandDump)dump;
+		this.dump = dump;
 	}
 	
 	@Override

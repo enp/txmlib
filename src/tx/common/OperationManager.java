@@ -21,6 +21,8 @@ package tx.common;
 
 import java.util.Properties;
 
+import tx.common.core.CommandDump;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *

@@ -25,6 +25,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Properties;
 
+import tx.common.core.CommandDump;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *

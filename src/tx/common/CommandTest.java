@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import tx.common.core.Command;
+import tx.common.core.CommandDump;
 import tx.common.core.CommandResult;
 
 /**
@@ -50,7 +51,7 @@ public class CommandTest {
 		try {
 			Properties params = new Properties();
 			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
-			CommandDump dump = new TextFileCommandDump("dump/"+type(commandManager)+".txt");
+			CommandDump dump = new CommandDump("dump/"+type(commandManager)+".txt");
 			commandManager.connect(params, dump);
 			if (commands != null) {
 				for(Command command : commands.keySet()) {

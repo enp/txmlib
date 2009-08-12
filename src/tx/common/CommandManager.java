@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import tx.common.core.Command;
+import tx.common.core.CommandDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

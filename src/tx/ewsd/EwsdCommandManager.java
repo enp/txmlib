@@ -21,12 +21,12 @@ package tx.ewsd;
 
 import java.util.Properties;
 
-import tx.common.CommandDump;
 import tx.common.CommandException;
 import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
 import tx.common.StreamCommandResult;
 import tx.common.core.Command;
+import tx.common.core.CommandDump;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
