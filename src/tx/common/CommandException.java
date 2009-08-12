@@ -28,6 +28,8 @@ public class CommandException extends CommonException {
 
 	private static final long serialVersionUID = 295539382772189883L;
 	
+	public CommandException() {}
+	
 	public CommandException(String message) {
 		super(message);
 	}

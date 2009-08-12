@@ -30,7 +30,7 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class XmlFileOperationDump implements OperationDump {
+public class XmlFileOperationDump extends OperationDump {
 
 	private String fileName;
 	private XStream xstream;

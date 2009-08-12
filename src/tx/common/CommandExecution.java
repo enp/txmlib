@@ -24,5 +24,5 @@ package tx.common;
  *
  */
 public interface CommandExecution {	
-	void executed(CommandResult result);
+	public void executed(CommandResult result);
 }

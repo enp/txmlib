@@ -25,7 +25,7 @@ import java.io.IOException;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface StreamCommandDump extends CommandDump {
-	public void write(int b) throws IOException;
-	public void close() throws IOException;
+public abstract class StreamCommandDump extends CommandDump {
+	public abstract void write(int b) throws IOException;
+	public abstract void close() throws IOException;
 }

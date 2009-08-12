@@ -23,6 +23,7 @@ package tx.common;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface CommandDump {
-	public String getFileName();
+public abstract class CommandDump {
+	public CommandDump() {}
+	public abstract String getFileName();
 }

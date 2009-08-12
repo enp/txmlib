@@ -32,6 +32,8 @@ public class CommonException extends Exception {
 	
 	private String trace;
 	
+	public CommonException() {}
+	
 	public CommonException(String message) {
 		super(message);
 		CharArrayWriter traceWriter = new CharArrayWriter();

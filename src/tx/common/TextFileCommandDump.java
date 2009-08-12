@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class TextFileCommandDump implements StreamCommandDump {
+public class TextFileCommandDump extends StreamCommandDump {
 	
 	private String fileName;
 	private FileOutputStream fos;

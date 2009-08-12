@@ -28,6 +28,8 @@ public class OperationException extends CommonException {
 
 	private static final long serialVersionUID = 295539382772189883L;
 	
+	public OperationException() {}
+	
 	public OperationException(String message) {
 		super(message);
 	}

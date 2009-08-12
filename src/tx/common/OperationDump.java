@@ -24,6 +24,7 @@ package tx.common;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public interface OperationDump {
-	void dump(Operation operation);
+public abstract class OperationDump {
+	public OperationDump() {}
+	public abstract void dump(Operation operation);
 }

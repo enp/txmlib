@@ -32,6 +32,8 @@ public class CommandResult {
 	protected String text;
 	
 	protected Map<String,String> attributes;
+	
+	public CommandResult() {}
 
 	public CommandResult(String text) {
 		this.text = text;
