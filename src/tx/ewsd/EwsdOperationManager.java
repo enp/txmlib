@@ -24,10 +24,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.CommandException;
 import tx.common.core.Command;
 import tx.common.core.CommandExecution;
 import tx.common.core.CommandResult;
+import tx.common.core.Error;
 import tx.common.core.Operation;
 import tx.common.core.OperationManager;
 
@@ -37,7 +37,7 @@ import tx.common.core.OperationManager;
  */
 public class EwsdOperationManager extends OperationManager {
 
-	public void linetest(final Operation operation) throws CommandException {
+	public void linetest(final Operation operation) throws Error {
 		
 		Command command;
 		Map<String,CommandExecution> resultMatch;		

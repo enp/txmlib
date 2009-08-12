@@ -22,21 +22,21 @@ package tx.common.stream;
 import java.util.HashSet;
 import java.util.Set;
 
-import tx.common.MatchException;
+import tx.common.core.MatchError;
 
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class StreamCommandException extends MatchException {
+public class StreamReadError extends MatchError {
 
 	private static final long serialVersionUID = 5485195737568383806L;
 	
 	private long begin;
 	private long end;
 
-	public StreamCommandException(Set<String> expected, String actual, long begin, long end) {
+	public StreamReadError(Set<String> expected, String actual, long begin, long end) {
 		super(expected, actual);
 		this.begin = begin;
 		this.end = end;
@@ -49,7 +49,7 @@ public class StreamCommandException extends MatchException {
 		return e;
 	}
 
-	public StreamCommandException(String[] expected, String actual, long begin, long end) {
+	public StreamReadError(String[] expected, String actual, long begin, long end) {
 		super(extectedFromArray(expected), actual);
 		this.begin = begin;
 		this.end = end;

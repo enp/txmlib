@@ -17,25 +17,40 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
+
+import java.util.Set;
 
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandException extends CommonException {
+public class MatchError extends Error {
 
-	private static final long serialVersionUID = 295539382772189883L;
+	private static final long serialVersionUID = -8382392967318903080L;
 	
-	public CommandException() {}
+	private Set<String> expected;
+	private String actual;
 	
-	public CommandException(String message) {
-		super(message);
+	public MatchError() {}
+
+	public MatchError(Set<String> expected, String actual) {
+		super("Unexpected result");
+		this.expected = expected;
+		this.actual = actual;
 	}
 
-	public CommandException(Exception e) {
-		super(e);
+	public String getExpected() {
+		String result = "[";
+		for(String pattern : expected)
+			result += ("["+pattern+"]");
+		result += "]";
+		return result;
+	}
+
+	public String getActual() {
+		return actual;
 	}
 
 }

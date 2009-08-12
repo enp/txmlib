@@ -25,8 +25,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Properties;
 
-import tx.common.CommandException;
 import tx.common.core.CommandDump;
+import tx.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -37,7 +37,7 @@ public abstract class SocketCommandManager extends StreamCommandManager {
 	private Socket socket = new Socket();
 	
 	@Override
-	public void connect(Properties params, CommandDump dump) throws CommandException {
+	public void connect(Properties params, CommandDump dump) throws Error {
 		super.connect(params, dump);
 		try {
 			InetAddress addr = InetAddress.getByName((String)params.get("host"));
@@ -46,17 +46,17 @@ public abstract class SocketCommandManager extends StreamCommandManager {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
 		} catch (Exception e) {
-			throw new CommandException(e);
+			throw new Error(e);
 		}
 	}
 
 	@Override
-	public void disconnect() throws CommandException {
+	public void disconnect() throws Error {
 		super.disconnect();
 		try {
 			socket.close();
 		} catch (Exception e) {
-			throw new CommandException(e);
+			throw new Error(e);
 		}
 	}
 	

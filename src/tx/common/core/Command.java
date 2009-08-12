@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import tx.common.CommandException;
-
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
@@ -39,7 +37,7 @@ public class Command {
 	
 	private CommandDump dump;
 	
-	private CommandException exception;
+	private Error error;
 
 	public Command(String text) {
 		this.text = text;
@@ -86,12 +84,12 @@ public class Command {
 		this.dump = dump;
 	}
 
-	public void setException(CommandException e) {
-		this.exception = e;		
+	public void setError(Error e) {
+		this.error = e;		
 	}
 	
-	public CommandException getException() {
-		return exception;
+	public Error getError() {
+		return error;
 	}
 
 }

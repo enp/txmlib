@@ -27,9 +27,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.CommandException;
-import tx.common.MatchException;
-
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
@@ -41,31 +38,31 @@ public abstract class CommandManager {
 	protected abstract void setDump(CommandDump dump);
 	protected abstract CommandDump getDump();
 
-	protected void reset(Command command) throws CommandException {}
+	protected void reset(Command command) throws Error {}
 	
-	public void connect(Properties params, CommandDump dump) throws CommandException {
+	public void connect(Properties params, CommandDump dump) throws Error {
 		this.params = params;
 		setDump(dump);
 	}
 	
-	public abstract void disconnect() throws CommandException;
+	public abstract void disconnect() throws Error;
 	
-	public void execute(Command command) throws CommandException {
+	public void execute(Command command) throws Error {
 		command.setDump(getDump());
 		try {
 			if (command.getText().equals("RESET"))
 				reset(command);
 			else
 				run(command);
-		} catch (CommandException e) {
-			command.setException(e);
+		} catch (Error e) {
+			command.setError(e);
 			throw e;
 		}
 	}
 	
-	protected abstract void run(Command command) throws CommandException;
+	protected abstract void run(Command command) throws Error;
 	
-	private void match(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
+	private void match(Command command, Map<String, CommandExecution> resultMatch) throws Error {
 		if (resultMatch != null) {
 			CommandResult result = command.getResult();
 			if (result != null) {
@@ -83,18 +80,18 @@ public abstract class CommandManager {
 		        	} 
 				}
 			}
-			CommandException e = new MatchException(resultMatch.keySet(), result.getText());
-			command.setException(e);
+			Error e = new MatchError(resultMatch.keySet(), result.getText());
+			command.setError(e);
 			throw e;
 		}
 	}
 	
-	public void execute(Command command, Map<String,CommandExecution> resultMatch) throws CommandException {
+	public void execute(Command command, Map<String,CommandExecution> resultMatch) throws Error {
 		execute(command);
 		match(command, resultMatch);
 	}
 	
-	public void execute(Command command, String pattern, CommandExecution execution) throws CommandException {
+	public void execute(Command command, String pattern, CommandExecution execution) throws Error {
 		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);
 		execute(command, resultMatch);
@@ -102,7 +99,7 @@ public abstract class CommandManager {
 	
 	protected List<String[]> unownedResults = new ArrayList<String[]>();
 	
-	public void pull(Command command) throws CommandException {
+	public void pull(Command command) throws Error {
 		for(String[] result : unownedResults) {
 			if (result[0].equals(command.getPullGroup())) {
 				command.addResult(result[1]);
@@ -111,12 +108,12 @@ public abstract class CommandManager {
 		}
 	}
 
-	public void pull(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
+	public void pull(Command command, Map<String, CommandExecution> resultMatch) throws Error {
 		for(String pattern : resultMatch.keySet())
 			pull(command, pattern, resultMatch.get(pattern));
 	}
 
-	public void pull(Command command, String pattern, CommandExecution execution) throws CommandException {
+	public void pull(Command command, String pattern, CommandExecution execution) throws Error {
 		pull(command);
 		Map<String, CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);

@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import tx.common.OperationException;
+import tx.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -36,7 +36,7 @@ public class Operation {
 	private List<String> devices;
 	private Map<String,String> options;
 	private List<Command> commands;
-	private OperationException exception;
+	private Error error;
 	private CommandDump commandDump;
 	private OperationResult result;
 
@@ -71,12 +71,12 @@ public class Operation {
 		return Collections.unmodifiableList(commands);
 	}
 	
-	public void setException(OperationException e) {
-		this.exception = e;		
+	public void setError(Error e) {
+		this.error = e;		
 	}
 	
-	public OperationException getException() {
-		return exception;
+	public Error getError() {
+		return error;
 	}
 
 	public CommandDump getCommandDump() {

@@ -26,9 +26,9 @@ import java.net.SocketTimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.CommandException;
 import tx.common.core.CommandDump;
 import tx.common.core.CommandManager;
+import tx.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -54,35 +54,35 @@ public abstract class StreamCommandManager extends CommandManager {
 	}
 	
 	@Override
-	public void disconnect() throws CommandException {
+	public void disconnect() throws Error {
 		try {
 			if (dump != null) dump.close();
 		} catch (IOException e) {
-			throw new CommandException(e);
+			throw new Error(e);
 		}
 	}
 
-	protected void write(String text) throws CommandException {
+	protected void write(String text) throws Error {
 		try {
 			os.write(text.getBytes());
 		} catch (IOException e) {
-			throw new CommandException(e);
+			throw new Error(e);
 		}
 	}
 	
-	protected void write(byte[] bytes) throws CommandException {
+	protected void write(byte[] bytes) throws Error {
 		try {
 			os.write(bytes);
 		} catch (IOException e) {
-			throw new CommandException(e);
+			throw new Error(e);
 		}
 	}
 	
-	protected void write(int b) throws CommandException {
+	protected void write(int b) throws Error {
 		try {
 			os.write(b);
 		} catch (IOException e) {
-			throw new CommandException(e);
+			throw new Error(e);
 		}
 	}
 	
@@ -99,7 +99,7 @@ public abstract class StreamCommandManager extends CommandManager {
 		}
 	}
 	
-	protected StreamCommandResult read(String[] patterns, int timeout, boolean exception) throws CommandException {
+	protected StreamReadResult read(String[] patterns, int timeout, boolean exception) throws Error {
 		int c;
 		long beginChar = currentChar;
         StringBuilder buffer = new StringBuilder();
@@ -114,39 +114,39 @@ public abstract class StreamCommandManager extends CommandManager {
 	            	Matcher matcher = pattern.matcher(buffer);
 	            	if (matcher.find())
 	            		if (matcher.groupCount() > 0)
-	            			return new StreamCommandResult(i, matcher.group(1), beginChar, currentChar);
+	            			return new StreamReadResult(i, matcher.group(1), beginChar, currentChar);
 	            		else
-	            			return new StreamCommandResult(i, "", beginChar, currentChar);
+	            			return new StreamReadResult(i, "", beginChar, currentChar);
 	            }
 			}
 		} catch (SocketTimeoutException e) {
 			// go end
 		} catch (IOException e) {
-			new CommandException(e);
+			new Error(e);
 		}
 		if (exception)
-			throw new StreamCommandException(patterns, buffer.toString(), beginChar, currentChar);
+			throw new StreamReadError(patterns, buffer.toString(), beginChar, currentChar);
 		else
 			return null;
 	}
 	
-	protected StreamCommandResult read(String[] patterns, int timeout) throws CommandException {
+	protected StreamReadResult read(String[] patterns, int timeout) throws Error {
 		return read(patterns, timeout, true);
 	}
 	
-	protected StreamCommandResult read(String pattern, int timeout, boolean exception) throws CommandException {
+	protected StreamReadResult read(String pattern, int timeout, boolean exception) throws Error {
 		return read(new String[] { pattern }, timeout, exception);
 	}
 	
-	protected StreamCommandResult read(String pattern, int timeout) throws CommandException {
+	protected StreamReadResult read(String pattern, int timeout) throws Error {
 		return read(new String[] { pattern }, timeout, true);
 	}
 	
-	protected StreamCommandResult read(byte b, int timeout, boolean exception) throws CommandException {
+	protected StreamReadResult read(byte b, int timeout, boolean exception) throws Error {
 		return read(new String( new byte[] { b }), timeout, exception);
 	}
 	
-	protected StreamCommandResult read(byte b, int timeout) throws CommandException {
+	protected StreamReadResult read(byte b, int timeout) throws Error {
 		return read(new String( new byte[] { b }), timeout, true);
 	}
 

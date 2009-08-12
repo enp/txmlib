@@ -17,21 +17,39 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
 
-import java.util.Set;
-
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandResultException extends MatchException {
+public class Error extends Exception {
 
-	private static final long serialVersionUID = 8610496511164927426L;
+	private static final long serialVersionUID = -3496293905790182660L;
+	
+	private String trace;
+	
+	public Error() {}
+	
+	public Error(String message) {
+		super(message);
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        printStackTrace(new PrintWriter(traceWriter));
+		trace = traceWriter.toString();
+	}
 
-	public CommandResultException(Set<String> expected, String actual) {
-		super(expected, actual);
+	public Error(Exception e) {
+		super(e);
+		CharArrayWriter traceWriter = new CharArrayWriter();
+        e.printStackTrace(new PrintWriter(traceWriter));
+		trace = traceWriter.toString();
+	}
+	
+	public String getTrace() {
+		return trace;
 	}
 
 }

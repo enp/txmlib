@@ -19,8 +19,8 @@
  */
 package tx.mt;
 
-import tx.common.CommandException;
 import tx.common.core.Command;
+import tx.common.core.Error;
 import tx.common.stream.SocketCommandManager;
 
 /**
@@ -30,13 +30,13 @@ import tx.common.stream.SocketCommandManager;
 public class MtCommandManager extends SocketCommandManager {
 
 	@Override
-	public void reset(Command command) throws CommandException {
+	public void reset(Command command) throws Error {
 		write(0x01);
 		command.addResult(read("@", 3000));
 	}
 	
 	@Override
-	public void run(Command command) throws CommandException {
+	public void run(Command command) throws Error {
 		for(byte b : (command.getText()+":").getBytes()) {
 			write(b);
 			read(b, 3000);

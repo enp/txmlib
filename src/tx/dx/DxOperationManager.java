@@ -22,10 +22,10 @@ package tx.dx;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import tx.common.CommandException;
 import tx.common.core.Command;
 import tx.common.core.CommandExecution;
 import tx.common.core.CommandResult;
+import tx.common.core.Error;
 import tx.common.core.Operation;
 import tx.common.core.OperationManager;
 
@@ -35,7 +35,7 @@ import tx.common.core.OperationManager;
  */
 public class DxOperationManager extends OperationManager {
 
-	public void linetest(final Operation operation) throws CommandException {
+	public void linetest(final Operation operation) throws Error {
 		
 		for(final String device : operation.getDevices()) {
 			

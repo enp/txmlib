@@ -52,7 +52,7 @@ public class OperationTest {
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias("operation", tx.common.core.Operation.class);
 		xstream.alias("command", tx.common.core.Command.class);
-		xstream.alias("result", tx.common.stream.StreamCommandResult.class);
+		xstream.alias("result", tx.common.stream.StreamReadResult.class);
 		xstream.useAttributeFor(tx.common.core.Operation.class, "action");
 		xstream.omitField(tx.common.core.CommandDump.class, "fos");
 		
@@ -60,7 +60,7 @@ public class OperationTest {
 		
 		operationManager.execute(operation);
 		
-		xstream.toXML(operation, new FileOutputStream("dump/"+type(operationManager)+".txt"));		
+		xstream.toXML(operation, new FileOutputStream("dump/"+type(operationManager)+".xml"));		
 		xstream.toXML(operation.getResult(), new FileOutputStream("exec/result.xml"));
 		
 		operationManager.disconnect();

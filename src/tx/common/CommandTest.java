@@ -28,6 +28,7 @@ import tx.common.core.CommandDump;
 import tx.common.core.CommandExecution;
 import tx.common.core.CommandManager;
 import tx.common.core.CommandResult;
+import tx.common.core.MatchError;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -39,7 +40,7 @@ public class CommandTest {
 		return commandManager.getClass().getSimpleName().replace("CommandManager", "").toLowerCase();
 	}
 	
-	private void processMatchError(MatchException e) {
+	private void processMatchError(MatchError e) {
 		System.err.println("<<<");
 		System.err.println("COMMAND RESULT ERROR");
 		System.err.println("-----------------");	
@@ -76,7 +77,7 @@ public class CommandTest {
 				}
 			}
 			commandManager.disconnect();
-		} catch (MatchException e) {
+		} catch (MatchError e) {
 			processMatchError(e);
 		}
 	}

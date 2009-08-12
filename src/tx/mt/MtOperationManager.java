@@ -22,12 +22,12 @@ package tx.mt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.CommandException;
 import tx.common.core.Command;
 import tx.common.core.CommandExecution;
 import tx.common.core.CommandResult;
 import tx.common.core.Operation;
 import tx.common.core.OperationManager;
+import tx.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -35,7 +35,7 @@ import tx.common.core.OperationManager;
  */
 public class MtOperationManager extends OperationManager {
 
-	public void linetest(final Operation operation) throws CommandException {
+	public void linetest(final Operation operation) throws Error {
 		
 		for(final String device : operation.getDevices()) {			
 			executeCommand(operation, new Command("RESET"));

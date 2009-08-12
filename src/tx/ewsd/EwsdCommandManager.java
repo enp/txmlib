@@ -21,11 +21,11 @@ package tx.ewsd;
 
 import java.util.Properties;
 
-import tx.common.CommandException;
 import tx.common.core.Command;
 import tx.common.core.CommandDump;
+import tx.common.core.Error;
 import tx.common.stream.SocketCommandManager;
-import tx.common.stream.StreamCommandResult;
+import tx.common.stream.StreamReadResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -34,28 +34,28 @@ import tx.common.stream.StreamCommandResult;
 public class EwsdCommandManager extends SocketCommandManager {
 
 	@Override
-	public void connect(Properties params, CommandDump dump) throws CommandException {
+	public void connect(Properties params, CommandDump dump) throws Error {
 		super.connect(params, dump);
-		StreamCommandResult result;
+		StreamReadResult result;
 		read("<<<\n(Welcome to FOS Gateway.+)\n<<<", 1000);
 		write(params.get("nm")+";"+params.get("login")+";RPPW-NO;"+params.get("password")+";\n");
 		result = read("<<<\n(.+)\n<<<", 1000);
 		if (!result.getText().equals("Authorized the client"))
-			throw new CommandException("Authorization error : "+result.getText());
+			throw new Error("Authorization error : "+result.getText());
 		write("GW-SET-UGNE: "+params.get("ug")+","+params.get("ne")+";\n");
 		result = read("<<<\n(.+)\n<<<", 1000);
 		if (!result.getText().equals("Assigned UG & NE"))
-			throw new CommandException("Authentication error : " + result.getText());
+			throw new Error("Authentication error : " + result.getText());
 	}
 
 	@Override
-	protected void run(Command command) throws CommandException {
+	protected void run(Command command) throws Error {
 		write("GW-TASK: "+command.getText()+";\n");
 		command.setPullGroup(read("<<<\n"+command.getText().split(":")[0]+":(.+):TASK SUBMITTED\n<<<", 1000).getText());
 	}
 
 	@Override
-	public void pull(Command command) throws CommandException {
+	public void pull(Command command) throws Error {
 		super.pull(command);
 		String[] result = read("<<<\n(.+:.+)\n<<<", 20000).getText().split(":",2);
 		if (result[0].equals(command.getPullGroup())) {

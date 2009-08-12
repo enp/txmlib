@@ -23,8 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Properties;
 
-import tx.common.CommandException;
-import tx.common.OperationException;
+import tx.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -34,13 +33,13 @@ public class OperationManager {
 	
 	protected CommandManager commandManager;
 	
-	public void connect(Properties params, CommandDump commandDump) throws OperationException {
+	public void connect(Properties params, CommandDump commandDump) throws Error {
 		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
 		try {
 			commandManager = (CommandManager)Class.forName(commandManagerClass).getConstructor(new Class[] {}).newInstance(new Object[] {});
 			commandManager.connect(params, commandDump);
 		} catch (Exception e) {
-			throw new OperationException(e);
+			throw new Error(e);
 		}
 		
 	}
@@ -51,39 +50,39 @@ public class OperationManager {
 				try {
 					method.invoke(this, operation);
 				} catch (Exception e) {
-					operation.setException(new OperationException(e));
+					operation.setError(new Error(e));
 				}
 				return;
 			}
 		}
-		operation.setException(new OperationException(
+		operation.setError(new Error(
 			"Method ["+this.getClass().getCanonicalName()+"."+operation.getAction()+"] is not found"));
 	}
 	
-	protected void executeCommand(Operation operation, Command command) throws CommandException {
+	protected void executeCommand(Operation operation, Command command) throws Error {
 		operation.addCommand(command);
 		commandManager.execute(command);
 	}
 
-	protected void executeCommand(Operation operation, Command command, Map<String,CommandExecution> resultMatch) throws CommandException {
+	protected void executeCommand(Operation operation, Command command, Map<String,CommandExecution> resultMatch) throws Error {
 		operation.addCommand(command);
 		commandManager.execute(command, resultMatch);
 	}
 
-	protected void executeCommand(Operation operation, Command command, String pattern, CommandExecution execution) throws CommandException {
+	protected void executeCommand(Operation operation, Command command, String pattern, CommandExecution execution) throws Error {
 		operation.addCommand(command);
 		commandManager.execute(command, pattern, execution);
 	}
 	
-	public void pullCommand(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
+	public void pullCommand(Command command, Map<String, CommandExecution> resultMatch) throws Error {
 		commandManager.pull(command, resultMatch);
 	}
 	
-	public void disconnect() throws OperationException {
+	public void disconnect() throws Error {
 		try {
 			commandManager.disconnect();
 		} catch (Exception e) {
-			throw new OperationException(e);
+			throw new Error(e);
 		}
 	}
 }

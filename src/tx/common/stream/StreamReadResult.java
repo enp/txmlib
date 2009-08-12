@@ -21,13 +21,13 @@ package tx.common.stream;
 
 import tx.common.core.CommandResult;
 
-public class StreamCommandResult extends CommandResult {	
+public class StreamReadResult extends CommandResult {	
 
 	private int index;
 	private long begin;
 	private long end;
 	
-	public StreamCommandResult(int index, String text, long begin, long end) {
+	public StreamReadResult(int index, String text, long begin, long end) {
 		super(text);
 		this.index = index;
 		this.text = text;

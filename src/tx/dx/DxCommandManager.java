@@ -19,10 +19,10 @@
  */
 package tx.dx;
 
-import tx.common.CommandException;
 import tx.common.core.Command;
+import tx.common.core.Error;
 import tx.common.stream.SocketCommandManager;
-import tx.common.stream.StreamCommandResult;
+import tx.common.stream.StreamReadResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -31,9 +31,9 @@ import tx.common.stream.StreamCommandResult;
 public class DxCommandManager extends SocketCommandManager {
 	
 	@Override
-	public void reset(Command command) throws CommandException {
+	public void reset(Command command) throws Error {
 		write(0x19);
-		StreamCommandResult result = read(
+		StreamReadResult result = read(
 			new String[] { 
 				"(END OF DIALOGUE SESSION)\r\n\b\n",	// need to enter password
 				"([^\n]+>)\r\n< "						// command prompt is ready
@@ -53,7 +53,7 @@ public class DxCommandManager extends SocketCommandManager {
 	}
 
 	@Override
-	public void run(Command command) throws CommandException {
+	public void run(Command command) throws Error {
 		write(command.getText()+";\r");
 		command.addResult(read("\r\n(\\S.+\\S)\\s+\r\n.+>\r\n< ", 30000));
 	}
