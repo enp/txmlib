@@ -20,7 +20,6 @@
 package tx.dx;
 
 import tx.common.CommandException;
-import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
 import tx.common.StreamCommandResult;
 import tx.common.core.Command;
@@ -29,7 +28,7 @@ import tx.common.core.Command;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class DxCommandManager extends SocketCommandManager implements CommandManager {
+public class DxCommandManager extends SocketCommandManager {
 	
 	@Override
 	public void reset(Command command) throws CommandException {

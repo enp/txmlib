@@ -31,7 +31,7 @@ import tx.common.core.CommandDump;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public abstract class SocketCommandManager extends StreamCommandManager implements CommandManager {
+public abstract class SocketCommandManager extends StreamCommandManager {
 
 	private Socket socket = new Socket();
 	

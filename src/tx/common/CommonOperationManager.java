@@ -25,6 +25,7 @@ import java.util.Properties;
 
 import tx.common.core.Command;
 import tx.common.core.CommandDump;
+import tx.common.core.CommandManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

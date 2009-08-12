@@ -27,12 +27,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx.common.core.CommandDump;
+import tx.common.core.CommandManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public abstract class StreamCommandManager extends CommonCommandManager implements CommandManager {
+public abstract class StreamCommandManager extends CommandManager {
 	
 	protected CommandDump dump;
 	

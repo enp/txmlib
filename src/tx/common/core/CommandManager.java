@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,32 +27,30 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.core.Command;
-import tx.common.core.CommandDump;
-import tx.common.core.CommandResult;
+import tx.common.CommandException;
+import tx.common.CommandExecution;
+import tx.common.MatchException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public abstract class CommonCommandManager implements CommandManager {
+public abstract class CommandManager {
 
 	protected Properties params;
 	
 	protected abstract void setDump(CommandDump dump);
 	protected abstract CommandDump getDump();
-	
-	protected abstract void run(Command command) throws CommandException;
 
 	protected void reset(Command command) throws CommandException {}
 	
-	@Override
 	public void connect(Properties params, CommandDump dump) throws CommandException {
 		this.params = params;
 		setDump(dump);
 	}
 	
-	@Override
+	public abstract void disconnect() throws CommandException;
+	
 	public void execute(Command command) throws CommandException {
 		command.setDump(getDump());
 		try {
@@ -65,6 +63,8 @@ public abstract class CommonCommandManager implements CommandManager {
 			throw e;
 		}
 	}
+	
+	protected abstract void run(Command command) throws CommandException;
 	
 	private void match(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
 		if (resultMatch != null) {
@@ -90,13 +90,11 @@ public abstract class CommonCommandManager implements CommandManager {
 		}
 	}
 	
-	@Override
 	public void execute(Command command, Map<String,CommandExecution> resultMatch) throws CommandException {
 		execute(command);
 		match(command, resultMatch);
 	}
 	
-	@Override
 	public void execute(Command command, String pattern, CommandExecution execution) throws CommandException {
 		Map<String,CommandExecution> resultMatch = new HashMap<String,CommandExecution>();
 		resultMatch.put(pattern, execution);
@@ -105,7 +103,6 @@ public abstract class CommonCommandManager implements CommandManager {
 	
 	protected List<String[]> unownedResults = new ArrayList<String[]>();
 	
-	@Override
 	public void pull(Command command) throws CommandException {
 		for(String[] result : unownedResults) {
 			if (result[0].equals(command.getPullGroup())) {
@@ -115,13 +112,11 @@ public abstract class CommonCommandManager implements CommandManager {
 		}
 	}
 
-	@Override
 	public void pull(Command command, Map<String, CommandExecution> resultMatch) throws CommandException {
 		for(String pattern : resultMatch.keySet())
 			pull(command, pattern, resultMatch.get(pattern));
 	}
 
-	@Override
 	public void pull(Command command, String pattern, CommandExecution execution) throws CommandException {
 		pull(command);
 		Map<String, CommandExecution> resultMatch = new HashMap<String,CommandExecution>();

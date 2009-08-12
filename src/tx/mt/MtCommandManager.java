@@ -20,7 +20,6 @@
 package tx.mt;
 
 import tx.common.CommandException;
-import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
 import tx.common.core.Command;
 
@@ -28,7 +27,7 @@ import tx.common.core.Command;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtCommandManager extends SocketCommandManager implements CommandManager {
+public class MtCommandManager extends SocketCommandManager {
 
 	@Override
 	public void reset(Command command) throws CommandException {
