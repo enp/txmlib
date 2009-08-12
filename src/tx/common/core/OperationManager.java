@@ -17,26 +17,27 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
 
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Properties;
 
-import tx.common.core.Command;
-import tx.common.core.CommandDump;
-import tx.common.core.CommandManager;
+import tx.common.CommandException;
+import tx.common.CommandExecution;
+import tx.common.Operation;
+import tx.common.OperationDump;
+import tx.common.OperationException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommonOperationManager implements OperationManager {
+public class OperationManager {
 	
 	protected CommandManager commandManager;
 	protected OperationDump operationDump;
 	
-	@Override
 	public void connect(Properties params, CommandDump commandDump, OperationDump operationDump) throws OperationException {
 		this.operationDump = operationDump;
 		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
@@ -49,7 +50,6 @@ public class CommonOperationManager implements OperationManager {
 		
 	}
 
-	@Override
 	public void execute(Operation operation) {
 		for (Method method : this.getClass().getDeclaredMethods()) {
 			if (method.getName().equals(operation.getAction())) {
@@ -87,7 +87,6 @@ public class CommonOperationManager implements OperationManager {
 		commandManager.pull(command, resultMatch);
 	}
 	
-	@Override
 	public void disconnect() throws OperationException {
 		try {
 			commandManager.disconnect();

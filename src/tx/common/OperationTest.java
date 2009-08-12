@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 import tx.common.core.CommandDump;
+import tx.common.core.OperationManager;
 
 import com.thoughtworks.xstream.XStream;
 

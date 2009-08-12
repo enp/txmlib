@@ -24,17 +24,16 @@ import java.util.regex.Pattern;
 
 import tx.common.CommandException;
 import tx.common.CommandExecution;
-import tx.common.CommonOperationManager;
 import tx.common.Operation;
-import tx.common.OperationManager;
 import tx.common.core.Command;
 import tx.common.core.CommandResult;
+import tx.common.core.OperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtOperationManager extends CommonOperationManager implements OperationManager {
+public class MtOperationManager extends OperationManager {
 
 	public void linetest(final Operation operation) throws CommandException {
 		
