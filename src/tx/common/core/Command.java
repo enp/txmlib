@@ -17,11 +17,14 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import tx.common.CommandDump;
+import tx.common.CommandException;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

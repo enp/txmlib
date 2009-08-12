@@ -40,7 +40,7 @@ public class XmlFileOperationDump extends OperationDump {
 		this.xstream = new XStream();
 		this.xstream.setMode(XStream.NO_REFERENCES);
 		this.xstream.alias("operation", tx.common.Operation.class);
-		this.xstream.alias("command", tx.common.Command.class);
+		this.xstream.alias("command", tx.common.core.Command.class);
 		this.xstream.alias("result", tx.common.StreamCommandResult.class);
 		this.xstream.useAttributeFor(tx.common.Operation.class, "action");
 		this.xstream.omitField(tx.common.TextFileCommandDump.class, "fos");

@@ -24,12 +24,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.Command;
 import tx.common.CommandException;
 import tx.common.CommandExecution;
-import tx.common.CommandResult;
 import tx.common.CommonOperationManager;
 import tx.common.Operation;
+import tx.common.core.Command;
+import tx.common.core.CommandResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

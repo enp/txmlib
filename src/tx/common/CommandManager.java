@@ -22,6 +22,8 @@ package tx.common;
 import java.util.Map;
 import java.util.Properties;
 
+import tx.common.core.Command;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *

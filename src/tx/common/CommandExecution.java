@@ -19,6 +19,8 @@
  */
 package tx.common;
 
+import tx.common.core.CommandResult;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *

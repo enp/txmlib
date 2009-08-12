@@ -24,10 +24,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.Command;
 import tx.common.CommandExecution;
-import tx.common.CommandResult;
 import tx.common.CommandTest;
+import tx.common.core.Command;
+import tx.common.core.CommandResult;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

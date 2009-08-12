@@ -19,11 +19,11 @@
  */
 package tx.dx;
 
-import tx.common.Command;
 import tx.common.CommandException;
 import tx.common.CommandManager;
 import tx.common.SocketCommandManager;
 import tx.common.StreamCommandResult;
+import tx.common.core.Command;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>

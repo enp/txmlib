@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import tx.common.core.Command;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *

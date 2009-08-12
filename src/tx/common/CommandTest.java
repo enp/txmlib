@@ -23,6 +23,9 @@ import java.io.FileInputStream;
 import java.util.Map;
 import java.util.Properties;
 
+import tx.common.core.Command;
+import tx.common.core.CommandResult;
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *

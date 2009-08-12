@@ -19,6 +19,8 @@
  */
 package tx.common;
 
+import tx.common.core.CommandResult;
+
 public class StreamCommandResult extends CommandResult {	
 
 	private int index;

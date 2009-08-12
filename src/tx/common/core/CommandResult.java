@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.common.core;
 
 import java.util.Collections;
 import java.util.HashMap;
