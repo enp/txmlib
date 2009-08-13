@@ -17,38 +17,31 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common.stream;
+package tx.impl.mt;
 
-import tx.common.core.CommandResult;
+import tx.common.core.Command;
+import tx.common.core.Error;
+import tx.common.stream.SocketCommandManager;
 
-public class StreamReadResult extends CommandResult {	
+/**
+ * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
+ *
+ */
+public class MtCommandManager extends SocketCommandManager {
 
-	private int index;
-	private long begin;
-	private long end;
-	
-	public StreamReadResult(int index, String text, long begin, long end) {
-		super(text);
-		this.index = index;
-		this.text = text;
-		this.begin = begin;
-		this.end = end;
+	@Override
+	public void reset(Command command) throws Error {
+		write(0x01);
+		command.addResult(read("@", 3000));
 	}
 	
-	public String toString() {
-		return index + " : " + text;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public long getBegin() {
-		return begin;
-	}
-
-	public long getEnd() {
-		return end;
+	@Override
+	public void run(Command command) throws Error {
+		for(byte b : (command.getText()+":").getBytes()) {
+			write(b);
+			read(b, 3000);
+		}			
+		command.addResult(read("\r\n(.+)\r\n@", 30000));
 	}
 
 }

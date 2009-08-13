@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.impl.mt;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

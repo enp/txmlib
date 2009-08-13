@@ -17,31 +17,18 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.mt;
+package tx.examples;
 
-import tx.common.core.Command;
-import tx.common.core.Error;
-import tx.common.stream.SocketCommandManager;
+import tx.impl.ewsd.EwsdOperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class MtCommandManager extends SocketCommandManager {
+public class EwsdOperationTest extends OperationTest {
 
-	@Override
-	public void reset(Command command) throws Error {
-		write(0x01);
-		command.addResult(read("@", 3000));
-	}
-	
-	@Override
-	public void run(Command command) throws Error {
-		for(byte b : (command.getText()+":").getBytes()) {
-			write(b);
-			read(b, 3000);
-		}			
-		command.addResult(read("\r\n(.+)\r\n@", 30000));
+	public static void main(String[] args) throws Exception {		
+		new EwsdOperationTest().execute(new EwsdOperationManager());		
 	}
 
 }

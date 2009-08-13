@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.dx;
+package tx.impl.dx;
 
 import java.util.HashMap;
 import java.util.Map;

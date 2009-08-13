@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.examples;
 
 import java.io.FileInputStream;
 import java.util.Map;
@@ -25,16 +25,29 @@ import java.util.Properties;
 
 import tx.common.core.Command;
 import tx.common.core.CommandDump;
-import tx.common.core.CommandResultReader;
 import tx.common.core.CommandManager;
 import tx.common.core.CommandResult;
+import tx.common.core.CommandResultReader;
 import tx.common.core.MatchError;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandTest {
+public class CommandExample {
+	
+	private Properties params;
+	private CommandManager commandManager;
+	
+	public CommandExample(CommandManager commandManager) throws Exception {
+		this.commandManager = commandManager;
+		params = new Properties();
+		params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));	
+	}
+	
+	public String getParam(String param) {
+		return (String)params.get(param);
+	}
 	
 	private String type(CommandManager commandManager) {
 		return commandManager.getClass().getSimpleName().replace("CommandManager", "").toLowerCase();
@@ -50,7 +63,7 @@ public class CommandTest {
 		e.printStackTrace();
 	}
 	
-	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandResultReader>> commands, boolean pool) throws Exception {
+	public void execute(Map<Command,Map<String,CommandResultReader>> commands, boolean pool) throws Exception {
 		try {
 			Properties params = new Properties();
 			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
@@ -82,7 +95,7 @@ public class CommandTest {
 		}
 	}
 	
-	protected void execute(CommandManager commandManager, Map<Command,Map<String,CommandResultReader>> commands) throws Exception {
-		execute(commandManager, commands, false);
+	public void execute(Map<Command,Map<String,CommandResultReader>> commands) throws Exception {
+		execute(commands, false);
 	}
 }

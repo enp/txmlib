@@ -17,18 +17,18 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.dx;
+package tx.examples;
 
-import tx.common.OperationTest;
+import tx.impl.mt.MtOperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class DxOperationTest extends OperationTest {
+public class MtOperationTest extends OperationTest {
 
 	public static void main(String[] args) throws Exception {		
-		new DxOperationTest().execute(new DxOperationManager());		
+		new MtOperationTest().execute(new MtOperationManager());		
 	}
 
 }

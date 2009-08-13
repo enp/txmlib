@@ -17,25 +17,31 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.ewsd;
+package tx.examples;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tx.common.CommandTest;
 import tx.common.core.Command;
 import tx.common.core.CommandResultReader;
 import tx.common.core.CommandResult;
+import tx.impl.ewsd.EwsdCommandManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class EwsdCommandTest extends CommandTest {
+public class EwsdCommandExample {
 
 	public static void main(String[] args) throws Exception {
+		
+		CommandExample commandExample = new CommandExample(new EwsdCommandManager());
+		
+		String wst = commandExample.getParam("wst");
+		String lac = commandExample.getParam("lac");
+		String dn  = commandExample.getParam("dn");		
 		
 		Map<Command,Map<String,CommandResultReader>> commands = new LinkedHashMap<Command,Map<String,CommandResultReader>>();
 		
@@ -63,12 +69,12 @@ public class EwsdCommandTest extends CommandTest {
 		resultMatch.put("ACCEPTED", null);
 		resultMatch.put("EXEC'D", null);
 		resultMatch.put("NEXT CALLTYPE FOR ACCEPTANCE", null);
-		commands.put(new Command("ACTWST:DN=2687534"), resultMatch);
+		commands.put(new Command("ACTWST:DN="+wst), resultMatch);
 		
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
-		commands.put(new Command("STARTLTEST:LAC=8863,DN=2310550"), resultMatch);
+		commands.put(new Command("STARTLTEST:LAC="+lac+",DN="+dn), resultMatch);
 		
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
@@ -92,7 +98,7 @@ public class EwsdCommandTest extends CommandTest {
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("DACTWST"), resultMatch);
 		
-		new EwsdCommandTest().execute(new EwsdCommandManager(), commands, true);
+		commandExample.execute(commands, true);
 		
 	}
 

@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.ewsd;
+package tx.impl.ewsd;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

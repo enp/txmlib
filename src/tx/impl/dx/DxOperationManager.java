@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.dx;
+package tx.impl.dx;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -42,6 +42,11 @@ public class DxOperationManager extends OperationManager {
 			executeCommand(operation, new Command("RESET"));
 			
 			Map<String,CommandResultReader> resultMatch = new LinkedHashMap<String,CommandResultReader>();
+			resultMatch.put("INCORRECT DIRECTORY NUMBER", new CommandResultReader() {
+				public void read(CommandResult result) {
+					operation.setError(new Error("Wrong device number"));
+				}
+			});
 			resultMatch.put("BUSY", new CommandResultReader() {
 				public void read(CommandResult result) {
 					operation.addResultEntry(device, "STATE", "BUSY");

@@ -5,3 +5,6 @@ login=txman
 password=secret
 ug=TXUG
 ne=TXNE
+wst=1234567
+lac=8123
+dn=2345678

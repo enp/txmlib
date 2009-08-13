@@ -17,18 +17,18 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.ewsd;
+package tx.examples;
 
-import tx.common.OperationTest;
+import tx.impl.dx.DxOperationManager;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class EwsdOperationTest extends OperationTest {
+public class DxOperationTest extends OperationTest {
 
 	public static void main(String[] args) throws Exception {		
-		new EwsdOperationTest().execute(new EwsdOperationManager());		
+		new DxOperationTest().execute(new DxOperationManager());		
 	}
 
 }

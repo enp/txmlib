@@ -17,7 +17,7 @@
  * along with TXManager. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package tx.common;
+package tx.examples;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -52,7 +52,6 @@ public class OperationTest {
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias("operation", tx.common.core.Operation.class);
 		xstream.alias("command", tx.common.core.Command.class);
-		xstream.alias("result", tx.common.stream.StreamReadResult.class);
 		xstream.useAttributeFor(tx.common.core.Operation.class, "action");
 		xstream.omitField(tx.common.core.CommandDump.class, "fos");
 		
