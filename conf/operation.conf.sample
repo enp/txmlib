@@ -1,0 +1,3 @@
+type=Ewsd
+action=testline
+device=1234567

@@ -21,6 +21,8 @@ package tx.examples;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import tx.common.core.CommandDump;
@@ -33,36 +35,39 @@ import com.thoughtworks.xstream.XStream;
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class OperationTest {
+public class OperationExample {
 	
-	private String type(OperationManager operationManager) {
-		return operationManager.getClass().getSimpleName().replace("OperationManager", "").toLowerCase();
-	}
-	
-	protected void execute(OperationManager operationManager) throws Exception {
+	public static void main(String[] args) throws Exception {
 		
-		Properties params = new Properties();
-		params.load(new FileInputStream("conf/"+type(operationManager)+".conf"));
+		Properties params;
 		
-		CommandDump commandDump = new CommandDump("dump/"+type(operationManager)+".txt");
+		params = new Properties();
+		params.load(new FileInputStream("conf/operation.conf"));
 		
-		operationManager.connect(params, commandDump);
+		String type = params.getProperty("type");
+		String operationManagerName = "tx.impl."+type.toLowerCase()+"."+type+"OperationManager";		
+		String action = params.getProperty("action");
+		String device = params.getProperty("device");
 		
-		XStream xstream = new XStream();
-		xstream.setMode(XStream.NO_REFERENCES);
-		xstream.alias("operation", tx.common.core.Operation.class);
-		xstream.alias("command", tx.common.core.Command.class);
-		xstream.useAttributeFor(tx.common.core.Operation.class, "action");
-		xstream.omitField(tx.common.core.CommandDump.class, "fos");
+		OperationManager operationManager = 
+			(OperationManager)Class.forName(operationManagerName).getConstructor(new Class[] {}).newInstance(new Object[] {});
 		
-		Operation operation = (Operation)xstream.fromXML(new FileInputStream("exec/operation.xml"));		
+		params = new Properties();
+		params.load(new FileInputStream("conf/"+type.toLowerCase()+".conf"));
+		
+		CommandDump commandDump = new CommandDump("dump/operation.txt");
+		
+		operationManager.connect(params, commandDump);	
+		
+		List<String> devices = new ArrayList<String>();
+		devices.add(device);
+		Operation operation = new Operation(action, devices, null);
 		
 		operationManager.execute(operation);
 		
-		xstream.toXML(operation, new FileOutputStream("dump/"+type(operationManager)+".xml"));		
-		xstream.toXML(operation.getResult(), new FileOutputStream("exec/result.xml"));
-		
 		operationManager.disconnect();
+		
+		new XStream().toXML(operation, new FileOutputStream("dump/operation.xml"));
 		
 	}
 }
