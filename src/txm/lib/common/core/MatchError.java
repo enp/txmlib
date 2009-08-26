@@ -21,7 +21,6 @@ package txm.lib.common.core;
 
 import java.util.Set;
 
-
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
@@ -30,21 +29,22 @@ public class MatchError extends Error {
 
 	private static final long serialVersionUID = -8382392967318903080L;
 	
-	private Set<String> expected;
+	private Set<ExpectedEntry> expected;
 	private String actual;
 	
 	public MatchError() {}
 
 	public MatchError(Set<String> expected, String actual) {
 		super("Unexpected result");
-		this.expected = expected;
+		for(String s : expected)
+			this.expected.add(new ExpectedEntry(s));
 		this.actual = actual;
 	}
 
 	public String getExpected() {
 		String result = "[";
-		for(String pattern : expected)
-			result += ("["+pattern+"]");
+		for(ExpectedEntry pattern : expected)
+			result += ("["+pattern.getEntry()+"]");
 		result += "]";
 		return result;
 	}

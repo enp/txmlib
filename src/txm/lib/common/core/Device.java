@@ -23,43 +23,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class CommandResult {
+public class Device {
 	
 	@SuppressWarnings("unused")
 	private long id;
 	
-	protected String text;	
-	protected List<Attribute> attributes;
-	
-	public CommandResult() {}
+	private String name;
+	private List<Attribute> attributes;
 
-	public CommandResult(String text) {
-		this.text = text;
-	}
-
-	public String getText() {
-		return text;
+	public Device(String name) {
+		this.name = name;
 	}
 	
-	public void addAttribute(String key, String value) {
+	public String getName() {
+		return name;
+	}
+	
+	public void addAttribute(String name, String value) {
 		if (attributes == null)
 			attributes = new ArrayList<Attribute>();
-		attributes.add(new Attribute(key, value));
+		attributes.add(new Attribute(name, value));
 	}
 	
 	public List<Attribute> getAttributes() {
-		return (attributes == null)?null:Collections.unmodifiableList(attributes);
-	}
-	
-	public String getAttribute(String key) {
-		for (Attribute attribute : attributes)
-			if (attribute.getName().equals(key))
-				return attribute.getValue();
-		return null;
+		return Collections.unmodifiableList(attributes);
 	}
 
 }

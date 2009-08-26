@@ -19,28 +19,34 @@
  */
 package txm.lib.common.core;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
  *
  */
-public class OperationResult {
+public class Attribute {
 
-	private Map<String,Map<String,String>> devices;
+	@SuppressWarnings("unused")
+	private long id;
 	
-	public Map<String,Map<String,String>> getDevices() {
-		return Collections.unmodifiableMap(devices);
+	private String name;
+	private String value;
+
+	public Attribute(String name, String value) {
+		this.name = name;
+		this.value = value;
 	}
 	
-	public void addResultEntry(String device, String name, String value) {
-		if (devices == null)
-			devices = new HashMap<String,Map<String,String>>();
-		if (!devices.containsKey(device))
-			devices.put(device, new HashMap<String,String>());
-		devices.get(device).put(name, value);		
+	public String getName() {
+		return name;
 	}
 	
+	public String getValue() {
+		return value;
+	}
+	
+	public String toString() {
+		return name+":"+value;
+	}
+
 }

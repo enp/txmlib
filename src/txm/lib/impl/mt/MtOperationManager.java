@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import txm.lib.common.core.Command;
 import txm.lib.common.core.CommandResult;
 import txm.lib.common.core.CommandResultReader;
+import txm.lib.common.core.Device;
 import txm.lib.common.core.Error;
 import txm.lib.common.core.Operation;
 import txm.lib.common.core.OperationManager;
@@ -37,10 +38,10 @@ public class MtOperationManager extends OperationManager {
 
 	public void linetest(final Operation operation) throws Error {
 		
-		for(final String device : operation.getDevices()) {			
+		for(final Device device : operation.getDevices()) {			
 			executeCommand(operation, new Command("RESET"));
 			executeCommand(operation, new Command("ESAB"),"ESSAI D\"UNE LIGNE D\"ABONNE",null);
-			executeCommand(operation, new Command("ND="+device),"EXC",null);
+			executeCommand(operation, new Command("ND="+device.getName()),"EXC",null);
 			executeCommand(operation, new Command("PH=L"),"(.+L1.+)\r\nEXC",new CommandResultReader(){
 				public void read(CommandResult result) {
 					String names[] = new String[] {"AC A/G","AC B/G","DC A/G","DC B/G","R A/G","R B/G","R A/B","C A/B"};
@@ -49,7 +50,7 @@ public class MtOperationManager extends OperationManager {
 					for(int i=0;i<8;i++) {
 						Matcher m = p.matcher(values[i]);
 						if (m.find())
-							operation.addResultEntry(device, names[i], m.group(1)+" "+m.group(2));							
+							device.addAttribute(names[i], m.group(1)+" "+m.group(2));
 					}
 				}
 			});

@@ -28,15 +28,14 @@ import java.util.List;
  *
  */
 public class Command {
+
+	@SuppressWarnings("unused")
+	private long id;
 	
 	private String text;
-
-	private String pullGroup;
-	
-	private List<CommandResult> results = new ArrayList<CommandResult>();
-	
-	private CommandDump dump;
-	
+	private String pullGroup;	
+	private List<CommandResult> results = new ArrayList<CommandResult>();	
+	private CommandDump dump;	
 	private Error error;
 
 	public Command(String text) {

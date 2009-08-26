@@ -40,7 +40,7 @@ public class DxCommandManager extends SocketCommandManager {
 		resultMatch.put("([^\n]+>)\r\n< ", null);
 		String result = read(resultMatch, 1000, false);
 		command.addResult(result);
-		if (result == null || result == "END OF DIALOGUE SESSION") {
+		if (result == null || result.equals("END OF DIALOGUE SESSION")) {
 			write(new byte[] { 0x0d, 0x00 });
 			result = read("(ENTER PASSWORD) < \b", 1000, false);
 			command.addResult(result);

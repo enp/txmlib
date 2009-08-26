@@ -29,6 +29,9 @@ import java.io.IOException;
  */
 public class CommandDump {
 	
+	@SuppressWarnings("unused")
+	private long id;
+	
 	private String fileName;
 	private FileOutputStream fos;
 	

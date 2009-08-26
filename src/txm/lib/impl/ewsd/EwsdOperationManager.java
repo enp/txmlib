@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import txm.lib.common.core.Command;
 import txm.lib.common.core.CommandResult;
 import txm.lib.common.core.CommandResultReader;
+import txm.lib.common.core.Device;
 import txm.lib.common.core.Error;
 import txm.lib.common.core.Operation;
 import txm.lib.common.core.OperationManager;
@@ -42,7 +43,7 @@ public class EwsdOperationManager extends OperationManager {
 		Command command;
 		Map<String,CommandResultReader> resultMatch;		
 		
-		for(final String device : operation.getDevices()) {			
+		for(final Device device : operation.getDevices()) {			
 			
 			command = new Command("ACTWST:DN=2687534");			
 			resultMatch = new LinkedHashMap<String,CommandResultReader>();
@@ -53,7 +54,7 @@ public class EwsdOperationManager extends OperationManager {
 			executeCommand(operation, command);
 			pullCommand(command, resultMatch);
 			
-			command = new Command("STARTLTEST:LAC=8863,DN="+device);
+			command = new Command("STARTLTEST:LAC=8863,DN="+device.getName());
 			resultMatch = new LinkedHashMap<String,CommandResultReader>();
 			resultMatch.put("COMMAND SUBMITTED", null);
 			resultMatch.put("EXEC'D", null);
@@ -72,9 +73,9 @@ public class EwsdOperationManager extends OperationManager {
 						String[] names = new String[] {"DC","AC","R","C"};
 						String[] rows = m.group(1).split("\n");
 						for(int i=0;i<4;i++) {
-							operation.addResultEntry(device, names[i]+" A/B", removeWhitespaces(rows[i].substring(5, 23).trim()));
-							operation.addResultEntry(device, names[i]+" A/G", removeWhitespaces(rows[i].substring(25, 43).trim()));
-							operation.addResultEntry(device, names[i]+" B/G", removeWhitespaces(rows[i].substring(45, 60).trim()));
+							device.addAttribute(names[i]+" A/B", removeWhitespaces(rows[i].substring(5, 23).trim()));
+							device.addAttribute(names[i]+" A/G", removeWhitespaces(rows[i].substring(25, 43).trim()));
+							device.addAttribute(names[i]+" B/G", removeWhitespaces(rows[i].substring(45, 60).trim()));
 						}
 					}
 				}

@@ -25,6 +25,7 @@ import java.util.Map;
 import txm.lib.common.core.Command;
 import txm.lib.common.core.CommandResult;
 import txm.lib.common.core.CommandResultReader;
+import txm.lib.common.core.Device;
 import txm.lib.common.core.Error;
 import txm.lib.common.core.Operation;
 import txm.lib.common.core.OperationManager;
@@ -37,7 +38,7 @@ public class DxOperationManager extends OperationManager {
 
 	public void linetest(final Operation operation) throws Error {
 		
-		for(final String device : operation.getDevices()) {
+		for(final Device device : operation.getDevices()) {
 			
 			executeCommand(operation, new Command("RESET"));
 			
@@ -49,22 +50,22 @@ public class DxOperationManager extends OperationManager {
 			});
 			resultMatch.put("BUSY", new CommandResultReader() {
 				public void read(CommandResult result) {
-					operation.addResultEntry(device, "STATE", "BUSY");
+					device.addAttribute("STATE", "BUSY");
 				}
 			});
-			resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+device+".+)\r\n", new CommandResultReader() {
+			resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+device.getName()+".+)\r\n", new CommandResultReader() {
 				public void read(CommandResult result) {
-					operation.addResultEntry(device, "STATE", "IDLE");
+					device.addAttribute("STATE", "IDLE");
 					String[] names = new String[] {"AC A/G","AC B/G","DC A/G","DC B/G","R A/B","R A/G","R B/G","C A/B"};
 					String[] units = result.getAttribute("1").split("\\s+");
 					String[] values = result.getAttribute("2").split("\\s+");
 					for(int i=0;i<8;i++)
-						operation.addResultEntry(device, names[i], values[i+2]+" "+units[i+1]);
-					operation.addResultEntry(device, "INTERFACE", values[10]);
+						device.addAttribute(names[i], values[i+2]+" "+units[i+1]);
+					device.addAttribute("INTERFACE", values[10]);
 				}
 			});	
 			
-			executeCommand(operation, new Command("ZPLM:SUB="+device), resultMatch);
+			executeCommand(operation, new Command("ZPLM:SUB="+device.getName()), resultMatch);
 		}
 		
 	}

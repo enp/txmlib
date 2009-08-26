@@ -30,6 +30,9 @@ public class Error extends Exception {
 
 	private static final long serialVersionUID = -3496293905790182660L;
 	
+	@SuppressWarnings("unused")
+	private long id;
+	
 	private String trace;
 	
 	public Error() {}

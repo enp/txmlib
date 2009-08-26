@@ -22,9 +22,6 @@ package txm.lib.common.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import txm.lib.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -32,32 +29,33 @@ import txm.lib.common.core.Error;
  */
 public class Operation {
 
+	@SuppressWarnings("unused")
+	private long id;
+	
 	private String action;
-	private List<String> devices;
-	private Map<String,String> options;
+	private List<Device> devices;
+	private List<Attribute> attributes;
 	private List<Command> commands;
 	private Error error;
-	private CommandDump commandDump;
-	private OperationResult result;
 
 	public Operation() {}
 	
-	public Operation(String action, List<String> devices, Map<String, String> options) {
+	public Operation(String action, List<Device> devices, List<Attribute> attributes) {
 		this.action = action;
 		this.devices = devices;
-		this.options = options;
+		this.attributes = attributes;
 	}	
 	
 	public String getAction() {
 		return action;
 	}
 	
-	public List<String> getDevices() {
+	public List<Device> getDevices() {
 		return devices;
 	}
 	
-	public Map<String, String> getOptions() {
-		return options;
+	public List<Attribute> getAttributes() {
+		return attributes;
 	}
 	
 	public void addCommand(Command command) {
@@ -77,28 +75,6 @@ public class Operation {
 	
 	public Error getError() {
 		return error;
-	}
-
-	public CommandDump getCommandDump() {
-		return commandDump;
-	}
-
-	public void setCommandDump(CommandDump commandDump) {
-		this.commandDump = commandDump;
-	}
-	
-	public OperationResult getResult() {
-		return result;
-	}
-
-	public void setResult(OperationResult result) {
-		this.result = result;
-	}
-	
-	public void addResultEntry(String device, String name, String value) {
-		if (result == null)
-			result = new OperationResult();
-		result.addResultEntry(device, name, value);
 	}
 	
 }

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Properties;
 
 import txm.lib.common.core.CommandDump;
+import txm.lib.common.core.Device;
 import txm.lib.common.core.Operation;
 import txm.lib.common.core.OperationManager;
 
@@ -59,8 +60,8 @@ public class OperationExample {
 		
 		operationManager.connect(params, commandDump);	
 		
-		List<String> devices = new ArrayList<String>();
-		devices.add(device);
+		List<Device> devices = new ArrayList<Device>();
+		devices.add(new Device(device));
 		Operation operation = new Operation(action, devices, null);
 		
 		operationManager.execute(operation);
