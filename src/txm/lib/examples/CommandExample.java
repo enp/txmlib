@@ -68,7 +68,9 @@ public class CommandExample {
 			Properties params = new Properties();
 			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
 			CommandDump dump = new CommandDump("dump/"+type(commandManager)+".txt");
-			commandManager.connect(params, dump);
+			commandManager.setDump(dump);
+			commandManager.setAttributes(params);
+			commandManager.connect();
 			if (commands != null) {
 				for(Command command : commands.keySet()) {
 					System.out.println("[ "+command.getText()+" ]");

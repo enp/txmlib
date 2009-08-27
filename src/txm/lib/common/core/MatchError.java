@@ -19,6 +19,7 @@
  */
 package txm.lib.common.core;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -36,6 +37,7 @@ public class MatchError extends Error {
 
 	public MatchError(Set<String> expected, String actual) {
 		super("Unexpected result");
+		this.expected = new HashSet<ExpectedEntry>();
 		for(String s : expected)
 			this.expected.add(new ExpectedEntry(s));
 		this.actual = actual;

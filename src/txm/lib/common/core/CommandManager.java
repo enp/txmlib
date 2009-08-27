@@ -33,19 +33,47 @@ import java.util.regex.Pattern;
  */
 public abstract class CommandManager {
 
-	protected Properties params;
+	private List<Attribute> attributes;	
+	private CommandDump dump;
 	
-	protected abstract void setDump(CommandDump dump);
-	protected abstract CommandDump getDump();
-
-	protected void reset(Command command) throws Error {}
-	
-	public void connect(Properties params, CommandDump dump) throws Error {
-		this.params = params;
-		setDump(dump);
+	public void setAttributes(List<Attribute> attributes) {
+		this.attributes = attributes;
 	}
 	
+	public void setAttributes(Properties params) {
+		attributes = new ArrayList<Attribute>();
+		for(String name : params.stringPropertyNames())
+			attributes.add(new Attribute(name, params.getProperty(name)));
+	}
+	
+	public void addAttribute(Attribute attribute) {
+		attributes.add(attribute);
+	}
+	
+	public void addAttribute(String name, String value) {
+		attributes.add(new Attribute(name, value));
+	}
+	
+	protected String getAttribute(String name) {
+		for(Attribute attribute : attributes)
+			if (attribute.getName().equals(name))
+				return attribute.getValue();
+		return null;
+	}
+	
+	public void setDump(CommandDump dump) {
+		this.dump = dump;
+	}
+	
+	public CommandDump getDump() {
+		return dump;
+	}
+	
+	public abstract void connect() throws Error;
+	
 	public abstract void disconnect() throws Error;
+
+	protected void reset(Command command) throws Error {}
 	
 	public void execute(Command command) throws Error {
 		command.setDump(getDump());

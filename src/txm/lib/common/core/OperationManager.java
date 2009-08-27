@@ -20,10 +20,10 @@
 package txm.lib.common.core;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import txm.lib.common.core.Error;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -31,13 +31,43 @@ import txm.lib.common.core.Error;
  */
 public class OperationManager {
 	
-	protected CommandManager commandManager;
+	@SuppressWarnings("unused")
+	private long id;
+
+	private List<Attribute> attributes;
+	private CommandDump dump;
 	
-	public void connect(Properties params, CommandDump commandDump) throws Error {
+	private CommandManager commandManager;
+	
+	public void setAttributes(List<Attribute> attributes) {
+		this.attributes = attributes;
+	}
+	
+	public void setAttributes(Properties params) {
+		attributes = new ArrayList<Attribute>();
+		for(String name : params.stringPropertyNames())
+			attributes.add(new Attribute(name, params.getProperty(name)));
+	}
+	
+	public void addAttribute(Attribute attribute) {
+		attributes.add(attribute);
+	}
+	
+	public void addAttribute(String name, String value) {
+		attributes.add(new Attribute(name, value));
+	}
+
+	public void setDump(CommandDump dump) {
+		this.dump = dump;
+	}
+	
+	public void connect() throws Error {
 		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
 		try {
 			commandManager = (CommandManager)Class.forName(commandManagerClass).getConstructor(new Class[] {}).newInstance(new Object[] {});
-			commandManager.connect(params, commandDump);
+			commandManager.setDump(dump);
+			commandManager.setAttributes(attributes);
+			commandManager.connect();
 		} catch (Exception e) {
 			throw new Error(e);
 		}
@@ -48,9 +78,12 @@ public class OperationManager {
 		for (Method method : this.getClass().getDeclaredMethods()) {
 			if (method.getName().equals(operation.getAction())) {
 				try {
+					connect();
 					method.invoke(this, operation);
 				} catch (Exception e) {
 					operation.setError(new Error(e));
+				} finally {
+					disconnect();
 				}
 				return;
 			}
@@ -78,11 +111,10 @@ public class OperationManager {
 		commandManager.pull(command, resultMatch);
 	}
 	
-	public void disconnect() throws Error {
+	public void disconnect() {
 		try {
 			commandManager.disconnect();
 		} catch (Exception e) {
-			throw new Error(e);
 		}
 	}
 }

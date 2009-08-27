@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Properties;
 
-import txm.lib.common.core.CommandDump;
 import txm.lib.common.core.Error;
 
 /**
@@ -37,11 +35,10 @@ public abstract class SocketCommandManager extends StreamCommandManager {
 	private Socket socket = new Socket();
 	
 	@Override
-	public void connect(Properties params, CommandDump dump) throws Error {
-		super.connect(params, dump);
+	public void connect() throws Error {
 		try {
-			InetAddress addr = InetAddress.getByName((String)params.get("host"));
-			int port = Integer.parseInt((String)params.get("port"));
+			InetAddress addr = InetAddress.getByName(getAttribute("host"));
+			int port = Integer.parseInt(getAttribute("port"));
 			socket.connect(new InetSocketAddress(addr, port), 3000);
 			is = socket.getInputStream();
 			os = socket.getOutputStream();

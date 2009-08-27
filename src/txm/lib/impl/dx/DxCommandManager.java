@@ -48,7 +48,7 @@ public class DxCommandManager extends SocketCommandManager {
 				write(new byte[] { 0x0d, 0x00 });
 				command.addResult(read("(ENTER PASSWORD) < \b", 1000));
 			}
-			write(params.get("password")+"\r");
+			write(getAttribute("password")+"\r");
 			command.addResult(read("([^\n]+>)\r\n< ", 1000));
 		}
 	}

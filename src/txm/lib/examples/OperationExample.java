@@ -50,23 +50,22 @@ public class OperationExample {
 		String action = params.getProperty("action");
 		String device = params.getProperty("device");
 		
-		OperationManager operationManager = 
-			(OperationManager)Class.forName(operationManagerName).getConstructor(new Class[] {}).newInstance(new Object[] {});
-		
 		params = new Properties();
 		params.load(new FileInputStream("conf/"+type.toLowerCase()+".conf"));
 		
-		CommandDump commandDump = new CommandDump("dump/operation.txt");
+		CommandDump dump = new CommandDump("dump/operation.txt");		
+
+		OperationManager operationManager = 
+			(OperationManager)Class.forName(operationManagerName).getConstructor(new Class[] {}).newInstance(new Object[] {});
 		
-		operationManager.connect(params, commandDump);	
+		operationManager.setDump(dump);
+		operationManager.setAttributes(params);
 		
 		List<Device> devices = new ArrayList<Device>();
 		devices.add(new Device(device));
-		Operation operation = new Operation(action, devices, null);
+		Operation operation = new Operation(operationManager, action, devices, null);
 		
-		operationManager.execute(operation);
-		
-		operationManager.disconnect();
+		operation.execute();
 		
 		new XStream().toXML(operation, new FileOutputStream("dump/operation.xml"));
 		

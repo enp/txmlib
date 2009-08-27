@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import txm.lib.common.core.CommandDump;
 import txm.lib.common.core.CommandManager;
 import txm.lib.common.core.Error;
 import txm.lib.common.core.MatchError;
@@ -39,27 +38,15 @@ import txm.lib.common.core.MatchError;
  */
 public abstract class StreamCommandManager extends CommandManager {
 	
-	protected CommandDump dump;
-	
 	protected InputStream is;
 	protected OutputStream os;
 	
 	//private long currentChar = 0;
 	
 	@Override
-	protected void setDump(CommandDump dump) {
-		this.dump = dump;
-	}
-	
-	@Override
-	protected CommandDump getDump() {
-		return dump;
-	}
-	
-	@Override
 	public void disconnect() throws Error {
 		try {
-			if (dump != null) dump.close();
+			if (getDump() != null) getDump().close();
 		} catch (IOException e) {
 			throw new Error(e);
 		}
@@ -96,7 +83,7 @@ public abstract class StreamCommandManager extends CommandManager {
         try {
         	int c;
         	while((c = is.read()) != -1)
-				if (dump != null) dump.write(c);
+				if (getDump() != null) getDump().write(c);
 		} catch (SocketTimeoutException e) {
 			return;
 		}
@@ -110,7 +97,7 @@ public abstract class StreamCommandManager extends CommandManager {
 			setTimeout(timeout);
 			while((c = is.read()) != -1) {
 				buffer.append((char)c);
-				if (dump != null) dump.write(c);
+				if (getDump() != null) getDump().write(c);
 				//currentChar++;
 				for(String pattern : resultMatch.keySet()) {
 					Pattern p = Pattern.compile(pattern, Pattern.DOTALL);
@@ -141,39 +128,6 @@ public abstract class StreamCommandManager extends CommandManager {
 			return null;
 		}
 	}
-	
-	/*protected StreamReadResult read(String[] patterns, int timeout, boolean exception) throws Error {
-		int c;
-		long beginChar = currentChar;
-        StringBuilder buffer = new StringBuilder();
-		try {
-			setTimeout(timeout);
-			while((c = is.read()) != -1) {
-				buffer.append((char)c);
-				if (dump != null) dump.write(c);
-				currentChar++;				
-				for (int i=0; i<patterns.length; i++) {
-	            	Pattern pattern = Pattern.compile(patterns[i], Pattern.DOTALL);
-	            	Matcher matcher = pattern.matcher(buffer);
-	            	if (matcher.find())
-	            		if (matcher.groupCount() > 0)
-	            			return new StreamReadResult(i, matcher.group(1), beginChar, currentChar);
-	            		else
-	            			return new StreamReadResult(i, "", beginChar, currentChar);
-	            }
-			}
-		} catch (SocketTimeoutException e) {
-			// go end
-		} catch (IOException e) {
-			new Error(e);
-		}
-		if (exception) {
-			//Error e = new MatchError();
-			throw new StreamReadError(patterns, buffer.toString(), beginChar, currentChar);
-		} else {
-			return null;
-		}
-	}*/
 	
 	protected String read(String[] patterns, int timeout, boolean exception) throws Error {
 		Map<String,StreamReader> resultMatch = new HashMap<String,StreamReader>();

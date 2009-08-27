@@ -19,10 +19,7 @@
  */
 package txm.lib.impl.ewsd;
 
-import java.util.Properties;
-
 import txm.lib.common.core.Command;
-import txm.lib.common.core.CommandDump;
 import txm.lib.common.core.Error;
 import txm.lib.common.stream.SocketCommandManager;
 
@@ -33,15 +30,15 @@ import txm.lib.common.stream.SocketCommandManager;
 public class EwsdCommandManager extends SocketCommandManager {
 
 	@Override
-	public void connect(Properties params, CommandDump dump) throws Error {
-		super.connect(params, dump);
+	public void connect() throws Error {
+		super.connect();
 		String result;
 		read("<<<\n(Welcome to FOS Gateway.+)\n<<<", 1000);
-		write(params.get("nm")+";"+params.get("login")+";RPPW-NO;"+params.get("password")+";\n");
+		write(getAttribute("nm")+";"+getAttribute("login")+";RPPW-NO;"+getAttribute("password")+";\n");
 		result = read("<<<\n(.+)\n<<<", 1000);
 		if (!result.equals("Authorized the client"))
 			throw new Error("Authorization error : "+result);
-		write("GW-SET-UGNE: "+params.get("ug")+","+params.get("ne")+";\n");
+		write("GW-SET-UGNE: "+getAttribute("ug")+","+getAttribute("ne")+";\n");
 		result = read("<<<\n(.+)\n<<<", 1000);
 		if (!result.equals("Assigned UG & NE"))
 			throw new Error("Authentication error : " + result);

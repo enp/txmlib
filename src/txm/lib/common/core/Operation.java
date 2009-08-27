@@ -31,6 +31,8 @@ public class Operation {
 
 	@SuppressWarnings("unused")
 	private long id;
+
+	private OperationManager operationManager;
 	
 	private String action;
 	private List<Device> devices;
@@ -40,7 +42,8 @@ public class Operation {
 
 	public Operation() {}
 	
-	public Operation(String action, List<Device> devices, List<Attribute> attributes) {
+	public Operation(OperationManager operationManager, String action, List<Device> devices, List<Attribute> attributes) {
+		this.operationManager = operationManager;
 		this.action = action;
 		this.devices = devices;
 		this.attributes = attributes;
@@ -75,6 +78,10 @@ public class Operation {
 	
 	public Error getError() {
 		return error;
+	}
+	
+	public void execute() {
+		operationManager.execute(this);
 	}
 	
 }
