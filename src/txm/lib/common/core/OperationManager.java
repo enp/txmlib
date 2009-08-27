@@ -118,7 +118,10 @@ public class OperationManager {
 					connect(operation.getDump());
 					method.invoke(this, operation);
 				} catch (Exception e) {
-					operation.setError(new Error(e));
+					if (e.getCause() instanceof Error)
+						operation.setError((Error)e.getCause());
+					else
+						operation.setError(new Error(e));
 				} finally {
 					disconnect();
 					operation.setEndTime(new Date());
