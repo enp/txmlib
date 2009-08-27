@@ -21,6 +21,7 @@ package txm.lib.common.core;
 
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
+import java.util.Date;
 
 /**
  * @author Eugene Prokopiev <eugene.prokopiev@gmail.com>
@@ -34,14 +35,14 @@ public class Error extends Exception {
 	private long id;
 	
 	private String trace;
-	
-	public Error() {}
+	private Date raiseTime;
 	
 	public Error(String message) {
 		super(message);
 		CharArrayWriter traceWriter = new CharArrayWriter();
         printStackTrace(new PrintWriter(traceWriter));
 		trace = traceWriter.toString();
+		raiseTime = new Date();
 	}
 
 	public Error(Exception e) {
@@ -49,10 +50,19 @@ public class Error extends Exception {
 		CharArrayWriter traceWriter = new CharArrayWriter();
         e.printStackTrace(new PrintWriter(traceWriter));
 		trace = traceWriter.toString();
+		raiseTime = new Date();
 	}
 	
 	public String getTrace() {
 		return trace;
+	}
+
+	public Date getRaiseTime() {
+		return raiseTime;
+	}
+
+	public void setRaiseTime(Date raiseTime) {
+		this.raiseTime = raiseTime;
 	}
 
 }

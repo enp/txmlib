@@ -19,8 +19,10 @@
  */
 package txm.lib.common.core;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,12 +35,46 @@ public class OperationManager {
 	
 	@SuppressWarnings("unused")
 	private long id;
-
+	
+	private String name;
+	private String description;	
+	private String dumpPath;
 	private List<Attribute> attributes;
-	private CommandDump dump;
-	
 	private CommandManager commandManager;
+
+	public void setName(String name) {
+		this.name = name;
+		setDumpPath(null);
+	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getDumpPath() {
+		if (dumpPath != null) {
+			new File(dumpPath).mkdir();
+			return (new File(dumpPath).isDirectory())?dumpPath:null;
+		} else {
+			return null;
+		}
+	}
+
+	public void setDumpPath(String dumpPath) {
+		if (dumpPath == null)
+			this.dumpPath = "dump/"+name;
+		else
+			this.dumpPath = dumpPath;
+	}
+
 	public void setAttributes(List<Attribute> attributes) {
 		this.attributes = attributes;
 	}
@@ -57,11 +93,11 @@ public class OperationManager {
 		attributes.add(new Attribute(name, value));
 	}
 
-	public void setDump(CommandDump dump) {
-		this.dump = dump;
+	public List<Attribute> getAttributes() {
+		return attributes;
 	}
 	
-	public void connect() throws Error {
+	public void connect(CommandDump dump) throws Error {
 		String commandManagerClass = this.getClass().getCanonicalName().replace("Operation", "Command");
 		try {
 			commandManager = (CommandManager)Class.forName(commandManagerClass).getConstructor(new Class[] {}).newInstance(new Object[] {});
@@ -78,12 +114,14 @@ public class OperationManager {
 		for (Method method : this.getClass().getDeclaredMethods()) {
 			if (method.getName().equals(operation.getAction())) {
 				try {
-					connect();
+					operation.setBeginTime(new Date());
+					connect(operation.getDump());
 					method.invoke(this, operation);
 				} catch (Exception e) {
 					operation.setError(new Error(e));
 				} finally {
 					disconnect();
+					operation.setEndTime(new Date());
 				}
 				return;
 			}
@@ -115,6 +153,7 @@ public class OperationManager {
 		try {
 			commandManager.disconnect();
 		} catch (Exception e) {
+			// do nothing
 		}
 	}
 }

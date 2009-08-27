@@ -57,14 +57,14 @@ public class OperationExample {
 
 		OperationManager operationManager = 
 			(OperationManager)Class.forName(operationManagerName).getConstructor(new Class[] {}).newInstance(new Object[] {});
-		
-		operationManager.setDump(dump);
-		operationManager.setAttributes(params);
+		operationManager.setName(type.toLowerCase());
+		operationManager.setAttributes(params);		
 		
 		List<Device> devices = new ArrayList<Device>();
 		devices.add(new Device(device));
-		Operation operation = new Operation(operationManager, action, devices, null);
 		
+		Operation operation = new Operation(operationManager, action, devices, null);
+		operation.setDump(dump);
 		operation.execute();
 		
 		new XStream().toXML(operation, new FileOutputStream("dump/operation.xml"));

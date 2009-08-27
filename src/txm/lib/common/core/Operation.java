@@ -21,6 +21,7 @@ package txm.lib.common.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,36 +30,37 @@ import java.util.List;
  */
 public class Operation {
 
-	@SuppressWarnings("unused")
-	private long id;
+	private long id = 0;
 
 	private OperationManager operationManager;
 	
 	private String action;
 	private List<Device> devices;
 	private List<Attribute> attributes;
-	private List<Command> commands;
+	private List<Command> commands;	
+	private CommandDump dump;	
 	private Error error;
-
-	public Operation() {}
+	
+	private Date beginTime;
+	private Date endTime;
 	
 	public Operation(OperationManager operationManager, String action, List<Device> devices, List<Attribute> attributes) {
 		this.operationManager = operationManager;
 		this.action = action;
 		this.devices = devices;
 		this.attributes = attributes;
-	}	
+	}
 	
 	public String getAction() {
 		return action;
 	}
 	
 	public List<Device> getDevices() {
-		return devices;
+		return Collections.unmodifiableList(devices);
 	}
 	
 	public List<Attribute> getAttributes() {
-		return attributes;
+		return Collections.unmodifiableList(attributes);
 	}
 	
 	public void addCommand(Command command) {
@@ -71,6 +73,22 @@ public class Operation {
 	public List<Command> getCommands() {
 		return Collections.unmodifiableList(commands);
 	}
+
+	public void setDump() throws Exception {
+		String dumpPath = operationManager.getDumpPath();
+		if (dumpPath != null)
+			dump = new CommandDump(operationManager.getDumpPath()+"/"+id);
+		else
+			throw new Exception("Dump path is null");
+	}
+
+	public void setDump(CommandDump dump) {
+		this.dump = dump;
+	}
+
+	public CommandDump getDump() {
+		return dump;
+	}
 	
 	public void setError(Error e) {
 		this.error = e;		
@@ -80,6 +98,22 @@ public class Operation {
 		return error;
 	}
 	
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
 	public void execute() {
 		operationManager.execute(this);
 	}

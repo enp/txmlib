@@ -20,6 +20,7 @@
 package txm.lib.common.core;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,8 +77,9 @@ public abstract class CommandManager {
 	protected void reset(Command command) throws Error {}
 	
 	public void execute(Command command) throws Error {
-		command.setDump(getDump());
+		//command.setDump(getDump());
 		try {
+			command.setBeginTime(new Date());
 			if (command.getText().equals("RESET"))
 				reset(command);
 			else
@@ -85,6 +87,8 @@ public abstract class CommandManager {
 		} catch (Error e) {
 			command.setError(e);
 			throw e;
+		} finally {
+			command.setEndTime(new Date());
 		}
 	}
 	

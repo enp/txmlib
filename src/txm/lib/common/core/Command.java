@@ -21,6 +21,7 @@ package txm.lib.common.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,8 +36,11 @@ public class Command {
 	private String text;
 	private String pullGroup;	
 	private List<CommandResult> results = new ArrayList<CommandResult>();	
-	private CommandDump dump;	
+	//private CommandDump dump;	
 	private Error error;
+	
+	private Date beginTime;
+	private Date endTime;
 
 	public Command(String text) {
 		this.text = text;
@@ -75,13 +79,13 @@ public class Command {
 		return Collections.unmodifiableList(results);
 	}
 
-	public CommandDump getDump() {
+	/*public CommandDump getDump() {
 		return dump;
 	}
 
 	public void setDump(CommandDump dump) {
 		this.dump = dump;
-	}
+	}*/
 
 	public void setError(Error e) {
 		this.error = e;		
@@ -89,6 +93,22 @@ public class Command {
 	
 	public Error getError() {
 		return error;
+	}
+	
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 }

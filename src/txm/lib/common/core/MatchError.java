@@ -32,8 +32,6 @@ public class MatchError extends Error {
 	
 	private Set<ExpectedEntry> expected;
 	private String actual;
-	
-	public MatchError() {}
 
 	public MatchError(Set<String> expected, String actual) {
 		super("Unexpected result");

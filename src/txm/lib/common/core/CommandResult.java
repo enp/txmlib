@@ -34,8 +34,6 @@ public class CommandResult {
 	
 	protected String text;	
 	protected List<Attribute> attributes;
-	
-	public CommandResult() {}
 
 	public CommandResult(String text) {
 		this.text = text;
