@@ -86,11 +86,13 @@ public class OperationManager {
 	}
 	
 	public void addAttribute(Attribute attribute) {
+		if (attributes == null)
+			attributes = new ArrayList<Attribute>();
 		attributes.add(attribute);
 	}
 	
 	public void addAttribute(String name, String value) {
-		attributes.add(new Attribute(name, value));
+		addAttribute(new Attribute(name, value));
 	}
 
 	public List<Attribute> getAttributes() {
