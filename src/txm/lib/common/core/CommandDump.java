@@ -35,6 +35,8 @@ public class CommandDump {
 	private String fileName;
 	private FileOutputStream fos;
 	
+	public CommandDump() {}
+	
 	public CommandDump(String fileName) throws FileNotFoundException {
 		this.fileName = fileName;
 		this.fos = new FileOutputStream(fileName);

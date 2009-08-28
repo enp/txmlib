@@ -35,12 +35,13 @@ public class Command {
 	
 	private String text;
 	private String pullGroup;	
-	private List<CommandResult> results = new ArrayList<CommandResult>();	
-	//private CommandDump dump;	
+	private List<CommandResult> results = new ArrayList<CommandResult>();
 	private Error error;
 	
 	private Date beginTime;
 	private Date endTime;
+	
+	public Command() {}
 
 	public Command(String text) {
 		this.text = text;
@@ -78,14 +79,6 @@ public class Command {
 	public List<CommandResult> getResults() {
 		return Collections.unmodifiableList(results);
 	}
-
-	/*public CommandDump getDump() {
-		return dump;
-	}
-
-	public void setDump(CommandDump dump) {
-		this.dump = dump;
-	}*/
 
 	public void setError(Error e) {
 		this.error = e;		

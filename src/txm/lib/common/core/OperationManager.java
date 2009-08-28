@@ -39,9 +39,9 @@ public class OperationManager {
 	private String name;
 	private String description;	
 	private String dumpPath;
-	private List<Attribute> attributes;
+	private List<Attribute> attributes = new ArrayList<Attribute>();
 	private CommandManager commandManager;
-
+	
 	public void setName(String name) {
 		this.name = name;
 		setDumpPath(null);
@@ -86,8 +86,6 @@ public class OperationManager {
 	}
 	
 	public void addAttribute(Attribute attribute) {
-		if (attributes == null)
-			attributes = new ArrayList<Attribute>();
 		attributes.add(attribute);
 	}
 	

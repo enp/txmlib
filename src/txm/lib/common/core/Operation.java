@@ -35,14 +35,16 @@ public class Operation {
 	private OperationManager operationManager;
 	
 	private String action;
-	private List<Device> devices;
-	private List<Attribute> attributes;
-	private List<Command> commands;	
+	private List<Device> devices = new ArrayList<Device>();
+	private List<Attribute> attributes = new ArrayList<Attribute>();
+	private List<Command> commands = new ArrayList<Command>();	
 	private CommandDump dump;	
 	private Error error;
 	
 	private Date beginTime;
 	private Date endTime;
+	
+	public Operation() {}
 	
 	public Operation(OperationManager operationManager, String action, List<Device> devices, List<Attribute> attributes) {
 		this.operationManager = operationManager;
@@ -64,8 +66,6 @@ public class Operation {
 	}
 	
 	public void addCommand(Command command) {
-		if (commands == null)
-			commands = new ArrayList<Command>();
 		if (command != null)
 			commands.add(command);
 	}

@@ -37,6 +37,8 @@ public class Error extends Exception {
 	private String trace;
 	private Date raiseTime;
 	
+	public Error() {}
+	
 	public Error(String message) {
 		super(message);
 		CharArrayWriter traceWriter = new CharArrayWriter();

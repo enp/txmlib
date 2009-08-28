@@ -24,7 +24,9 @@ public class ExpectedEntry {
 	@SuppressWarnings("unused")
 	private long id;		
 	
-	private String entry;	
+	private String entry;
+	
+	public ExpectedEntry() {}
 	
 	public ExpectedEntry(String entry) {
 		this.entry = entry;

@@ -30,12 +30,13 @@ public class MatchError extends Error {
 
 	private static final long serialVersionUID = -8382392967318903080L;
 	
-	private Set<ExpectedEntry> expected;
+	private Set<ExpectedEntry> expected = new HashSet<ExpectedEntry>();
 	private String actual;
+	
+	public MatchError() {}
 
 	public MatchError(Set<String> expected, String actual) {
 		super("Unexpected result");
-		this.expected = new HashSet<ExpectedEntry>();
 		for(String s : expected)
 			this.expected.add(new ExpectedEntry(s));
 		this.actual = actual;

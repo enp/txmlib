@@ -33,7 +33,7 @@ public class CommandResult {
 	private long id;
 	
 	protected String text;	
-	protected List<Attribute> attributes;
+	protected List<Attribute> attributes = new ArrayList<Attribute>();
 
 	public CommandResult(String text) {
 		this.text = text;
@@ -44,13 +44,11 @@ public class CommandResult {
 	}
 	
 	public void addAttribute(String key, String value) {
-		if (attributes == null)
-			attributes = new ArrayList<Attribute>();
 		attributes.add(new Attribute(key, value));
 	}
 	
 	public List<Attribute> getAttributes() {
-		return (attributes == null)?null:Collections.unmodifiableList(attributes);
+		return Collections.unmodifiableList(attributes);
 	}
 	
 	public String getAttribute(String key) {

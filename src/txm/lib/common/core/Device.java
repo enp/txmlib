@@ -34,7 +34,9 @@ public class Device {
 	private long id;
 	
 	private String name;
-	private List<Attribute> attributes;
+	private List<Attribute> attributes = new ArrayList<Attribute>();
+	
+	public Device() {}
 
 	public Device(String name) {
 		this.name = name;
@@ -45,8 +47,6 @@ public class Device {
 	}
 	
 	public void addAttribute(String name, String value) {
-		if (attributes == null)
-			attributes = new ArrayList<Attribute>();
 		attributes.add(new Attribute(name, value));
 	}
 	

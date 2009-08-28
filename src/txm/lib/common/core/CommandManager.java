@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public abstract class CommandManager {
 
-	private List<Attribute> attributes;	
+	private List<Attribute> attributes = new ArrayList<Attribute>();	
 	private CommandDump dump;
 	
 	public void setAttributes(List<Attribute> attributes) {
@@ -77,7 +77,6 @@ public abstract class CommandManager {
 	protected void reset(Command command) throws Error {}
 	
 	public void execute(Command command) throws Error {
-		//command.setDump(getDump());
 		try {
 			command.setBeginTime(new Date());
 			if (command.getText().equals("RESET"))
