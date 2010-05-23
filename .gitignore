@@ -1,8 +1,7 @@
-bin/
-dist/
-docs/api/
-startup.*
-*.init
-dump/*
-conf/*.conf
-exec/*.xml
+.project
+.classpath
+.settings
+*.iml
+*.ipr
+*.iws
+target
