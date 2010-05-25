@@ -38,18 +38,18 @@ public class DxCommandManager extends SocketCommandManager {
 		Map<String,StreamReader> resultMatch = new HashMap<String,StreamReader>();
 		resultMatch.put("(END OF DIALOGUE SESSION)\r\n\b\n", null);
 		resultMatch.put("([^\n]+>)\r\n< ", null);
-		String result = read(resultMatch, 1000, false);
+		String result = read(resultMatch, 2000, false);
 		command.addResult(result);
 		if (result == null || result.equals("END OF DIALOGUE SESSION")) {
 			write(new byte[] { 0x0d, 0x00 });
-			result = read("(ENTER PASSWORD) < \b", 1000, false);
+			result = read("(ENTER PASSWORD) < \b", 2000, false);
 			command.addResult(result);
 			if (result == null) {					// first password attempt fails sometimes  
 				write(new byte[] { 0x0d, 0x00 });
-				command.addResult(read("(ENTER PASSWORD) < \b", 1000));
+				command.addResult(read("(ENTER PASSWORD) < \b", 2000));
 			}
 			write(getAttribute("password")+"\r");
-			command.addResult(read("([^\n]+>)\r\n< ", 1000));
+			command.addResult(read("([^\n]+>)\r\n< ", 2000));
 		}
 	}
 

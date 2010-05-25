@@ -1,6 +1,6 @@
 /*
  * Copyright 2009-2010 Eugene Prokopiev <enp@itx.ru>
- * 
+ *
  * This file is part of TXMLib (Telephone eXchange Management Library).
  *
  * TXMLib is free software: you can redistribute it and/or modify
@@ -15,58 +15,51 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with TXMLib. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
-package ru.itx.txmlib.examples;
+package ru.itx.txmlib.tests;
 
-import java.io.FileInputStream;
+import org.junit.Test;
+import ru.itx.txmlib.common.core.*;
+
+import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
-
-import ru.itx.txmlib.common.core.Command;
-import ru.itx.txmlib.common.core.CommandDump;
-import ru.itx.txmlib.common.core.CommandManager;
-import ru.itx.txmlib.common.core.CommandResult;
-import ru.itx.txmlib.common.core.CommandResultReader;
-import ru.itx.txmlib.common.core.MatchError;
 
 /**
  * @author Eugene Prokopiev <enp@itx.ru>
  *
  */
-public class CommandExample {
-	
-	private Properties params;
-	private CommandManager commandManager;
-	
-	public CommandExample(CommandManager commandManager) throws Exception {
-		this.commandManager = commandManager;
-		params = new Properties();
-		params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));	
-	}
-	
-	public String getParam(String param) {
+abstract public class CommandTest {
+
+	private Properties params = new Properties();
+	private CommandManager commandManager = getCommandManager();
+
+	abstract protected CommandManager getCommandManager();
+	abstract protected Map<Command,Map<String,CommandResultReader>> getCommands();
+
+	protected boolean pull() { return false; }
+
+	protected String getParam(String param) {
 		return (String)params.get(param);
 	}
-	
+
 	private String type(CommandManager commandManager) {
 		return commandManager.getClass().getSimpleName().replace("CommandManager", "").toLowerCase();
 	}
-	
+
 	private void processMatchError(MatchError e) {
 		System.err.println("<<<");
 		System.err.println("COMMAND RESULT ERROR");
-		System.err.println("-----------------");	
+		System.err.println("-----------------");
 		System.err.println("Expected       : "+e.getExpected());
 		System.err.println("Actual         : "+e.getActual());
 		System.err.println(">>>");
 		e.printStackTrace();
 	}
-	
-	public void execute(Map<Command,Map<String,CommandResultReader>> commands, boolean pool) throws Exception {
+
+	private void execute(Map<Command,Map<String,CommandResultReader>> commands, boolean pull) throws Exception {
 		try {
-			Properties params = new Properties();
-			params.load(new FileInputStream("conf/"+type(commandManager)+".conf"));			
 			CommandDump dump = new CommandDump("dump/"+type(commandManager)+".txt");
 			commandManager.setDump(dump);
 			commandManager.setAttributes(params);
@@ -74,7 +67,7 @@ public class CommandExample {
 			if (commands != null) {
 				for(Command command : commands.keySet()) {
 					System.out.println("[ "+command.getText()+" ]");
-					if (pool) {
+					if (pull) {
 						commandManager.execute(command, null);
 						commandManager.pull(command, commands.get(command));
 					} else {
@@ -96,8 +89,27 @@ public class CommandExample {
 			processMatchError(e);
 		}
 	}
-	
-	public void execute(Map<Command,Map<String,CommandResultReader>> commands) throws Exception {
+
+	private void execute(Map<Command,Map<String,CommandResultReader>> commands) throws Exception {
 		execute(commands, false);
+	}
+
+	@Test
+	public void run() {
+		try {
+			String resource = "conf/"+type(commandManager)+".conf";
+			URL url = ClassLoader.getSystemResource(resource);
+			if (url != null) {
+				params.load(url.openStream());
+				String enable = getParam("enable");
+				if (enable != null && enable.equals("yes"))
+					execute(getCommands(), pull());
+			} else {
+				System.out.println("Error loading resource "+resource);
+			}
+		} catch (Exception e) {
+			System.out.println("ERROR:");
+			e.printStackTrace();
+		}
 	}
 }

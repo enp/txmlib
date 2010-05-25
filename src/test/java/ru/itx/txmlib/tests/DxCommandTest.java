@@ -1,6 +1,6 @@
 /*
  * Copyright 2009-2010 Eugene Prokopiev <enp@itx.ru>
- * 
+ *
  * This file is part of TXMLib (Telephone eXchange Management Library).
  *
  * TXMLib is free software: you can redistribute it and/or modify
@@ -15,39 +15,43 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with TXMLib. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
-package ru.itx.txmlib.examples;
+package ru.itx.txmlib.tests;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import org.junit.Test;
 import ru.itx.txmlib.common.core.Command;
+import ru.itx.txmlib.common.core.CommandManager;
 import ru.itx.txmlib.common.core.CommandResult;
 import ru.itx.txmlib.common.core.CommandResultReader;
 import ru.itx.txmlib.impl.dx.DxCommandManager;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Eugene Prokopiev <enp@itx.ru>
  *
  */
-public class DxCommandExample {
+public class DxCommandTest extends CommandTest {
 
-	public static void main(String[] args) throws Exception {
-		
-		CommandExample commandExample = new CommandExample(new DxCommandManager());
-		
-		String phone = commandExample.getParam("device");
-		
+	protected CommandManager getCommandManager() {
+		return new DxCommandManager();
+	}
+
+	protected Map<Command, Map<String, CommandResultReader>> getCommands() {
+
+		String device = getParam("device");
+
 		Command command;
-		Map<String,CommandResultReader> resultMatch;		
-		
+		Map<String,CommandResultReader> resultMatch;
+
 		Map<Command,Map<String,CommandResultReader>> commands = new LinkedHashMap<Command,Map<String,CommandResultReader>>();
-		
-		command = new Command("RESET");	
+
+		command = new Command("RESET");
 		commands.put(command, null);
-		
-		command = new Command("ZPLM:SUB="+phone);		
+
+		command = new Command("ZPLM:SUB="+device);
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("INCORRECT DIRECTORY NUMBER", new CommandResultReader() {
 			public void read(CommandResult result) {
@@ -59,16 +63,14 @@ public class DxCommandExample {
 				System.out.println("{{{ BUSY }}}");
 			}
 		});
-		resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+phone+".+)\r\n", new CommandResultReader() {
+		resultMatch.put("NUMBER.+\r\n(.+)\r\n(.+"+device+".+)\r\n", new CommandResultReader() {
 			public void read(CommandResult result) {
 				System.out.println("{{{ units  : "+result.getAttribute("1")+"}}}");
 				System.out.println("{{{ values : "+result.getAttribute("2")+"}}}");
 			}
-		});	
+		});
 		commands.put(command, resultMatch);
-		
-		commandExample.execute(commands);
-		
-	}
 
+		return commands;
+	}
 }

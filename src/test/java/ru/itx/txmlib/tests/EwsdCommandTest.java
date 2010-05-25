@@ -1,6 +1,6 @@
 /*
  * Copyright 2009-2010 Eugene Prokopiev <enp@itx.ru>
- * 
+ *
  * This file is part of TXMLib (Telephone eXchange Management Library).
  *
  * TXMLib is free software: you can redistribute it and/or modify
@@ -15,38 +15,46 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with TXMLib. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
-package ru.itx.txmlib.examples;
+package ru.itx.txmlib.tests;
+
+import ru.itx.txmlib.common.core.Command;
+import ru.itx.txmlib.common.core.CommandManager;
+import ru.itx.txmlib.common.core.CommandResult;
+import ru.itx.txmlib.common.core.CommandResultReader;
+import ru.itx.txmlib.impl.dx.DxCommandManager;
+import ru.itx.txmlib.impl.ewsd.EwsdCommandManager;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru.itx.txmlib.common.core.Command;
-import ru.itx.txmlib.common.core.CommandResult;
-import ru.itx.txmlib.common.core.CommandResultReader;
-import ru.itx.txmlib.impl.ewsd.EwsdCommandManager;
-
 /**
  * @author Eugene Prokopiev <enp@itx.ru>
  *
  */
-public class EwsdCommandExample {
+public class EwsdCommandTest extends CommandTest {
 
-	public static void main(String[] args) throws Exception {
-		
-		CommandExample commandExample = new CommandExample(new EwsdCommandManager());
-		
-		String wst = commandExample.getParam("wst");
-		String lac = commandExample.getParam("lac");
-		String dn  = commandExample.getParam("dn");		
-		
+	protected boolean pull() {
+		return true;
+	}
+
+	protected CommandManager getCommandManager() {
+		return new EwsdCommandManager();
+	}
+
+	protected Map<Command, Map<String, CommandResultReader>> getCommands() {
+
+		String wst = getParam("wst");
+		String lac = getParam("lac");
+		String dn  = getParam("dn");
+
 		Map<Command,Map<String,CommandResultReader>> commands = new LinkedHashMap<Command,Map<String,CommandResultReader>>();
-		
+
 		Map<String,CommandResultReader> resultMatch;
-		
+
 		//resultMatch = new LinkedHashMap<String,CommandExecution>();
 		//resultMatch.put("TASK SUBMITTED", null);
 		//resultMatch.put("TASK EXECUTED", null);
@@ -63,19 +71,19 @@ public class EwsdCommandExample {
 		//	}
 		//});
 		//commands.put(new Command("DISPTIME"), resultMatch);
-		
+
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("ACCEPTED", null);
 		resultMatch.put("EXEC'D", null);
 		resultMatch.put("NEXT CALLTYPE FOR ACCEPTANCE", null);
 		commands.put(new Command("ACTWST:DN="+wst), resultMatch);
-		
+
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("STARTLTEST:LAC="+lac+",DN="+dn), resultMatch);
-		
+
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("ACCEPTED", null);
@@ -87,19 +95,17 @@ public class EwsdCommandExample {
 			}
 		});
 		commands.put(new Command("TESTLINE:FCT=GT"), resultMatch);
-		
+
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("TESTLINE:FCT=GR"), resultMatch);
-		
+
 		resultMatch = new LinkedHashMap<String,CommandResultReader>();
 		resultMatch.put("COMMAND SUBMITTED", null);
 		resultMatch.put("EXEC'D", null);
 		commands.put(new Command("DACTWST"), resultMatch);
-		
-		commandExample.execute(commands, true);
-		
-	}
 
+		return commands;
+	}
 }

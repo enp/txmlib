@@ -1,3 +1,5 @@
+enable=yes
 host=192.168.0.1
 port=2000
+password=secret
 device=1234567
